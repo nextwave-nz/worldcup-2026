@@ -142,7 +142,7 @@
 
   .brand-title {
     font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(15px, 4vw, 19px);
+    font-size: clamp(13px, 3.5vw, 19px);
     letter-spacing: -.02em;
     line-height: 1;
     color: var(--ink);
@@ -159,17 +159,29 @@
     margin-top: 5px;
   }
 
+  /* Hide brand subtitle on very narrow screens to prevent overlap */
+  @media (max-width: 380px) {
+    .brand-sub { display: none; }
+    .brand-mark { width: 36px; height: 36px; }
+    .brand-mark span { font-size: 16px; }
+  }
+
   .topbar-right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
   }
 
   .nz-clock {
     text-align: right;
-    padding-left: 14px;
+    padding-left: 12px;
     border-left: 1px solid var(--line);
+  }
+
+  /* Hide NZ clock on narrow screens — saves space */
+  @media (max-width: 480px) {
+    .nz-clock { display: none; }
   }
 
   .nz-clock .label {
@@ -205,6 +217,12 @@
     transition: all .15s;
     text-transform: uppercase;
     box-shadow: 0 4px 12px rgba(255, 184, 0, .25);
+  }
+
+  /* Smaller pill on mobile */
+  @media (max-width: 480px) {
+    .stats-pill { padding: 6px 8px; font-size: 10px; gap: 4px; }
+    .stats-pill .pts { padding: 1px 4px; font-size: 9px; }
   }
 
   .stats-pill:hover {
@@ -1656,6 +1674,192 @@
   }
 
   /* =========================================================
+     STANDINGS VIEW
+     ========================================================= */
+  .standings-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  @media (min-width: 800px) {
+    .standings-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1200px) {
+    .standings-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  .standings-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    overflow: hidden;
+  }
+
+  .standings-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .standings-card-header h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 16px;
+    color: var(--gold);
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+  }
+
+  .standings-progress {
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 700;
+  }
+
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .standings-table thead th {
+    text-align: left;
+    padding: 6px 4px;
+    color: var(--ink-faint);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .standings-table tbody td {
+    padding: 8px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, .04);
+    color: var(--ink);
+    text-align: center;
+  }
+
+  .standings-table tbody tr:last-child td { border-bottom: none; }
+
+  .standings-table .standings-flag { font-size: 18px; padding: 4px; }
+  .standings-table .standings-team {
+    text-align: left;
+    font-weight: 700;
+    padding-left: 0;
+    white-space: nowrap;
+  }
+  .standings-table .standings-rank { padding-left: 0; padding-right: 4px; }
+  .standings-table .standings-gd { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .standings-table .standings-pts {
+    font-family: 'Archivo Black', sans-serif;
+    color: var(--gold);
+    font-size: 13px;
+  }
+
+  /* Highlight rows */
+  .standings-row-winner { background: rgba(255, 184, 0, .08); }
+  .standings-row-runner { background: rgba(255, 184, 0, .04); }
+  .standings-row-third  { background: rgba(255, 255, 255, .02); }
+  .standings-row-out    { opacity: .55; }
+
+  .standings-badge {
+    display: inline-block;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    letter-spacing: .04em;
+  }
+  .standings-badge.winner { background: var(--gold); color: var(--black); }
+  .standings-badge.runner { background: rgba(255,184,0,.25); color: var(--gold); border: 1px solid var(--gold); }
+  .standings-badge.third  { background: var(--surface-2); color: var(--ink-dim); border: 1px solid var(--line); }
+  .standings-badge.out    { background: transparent; color: var(--ink-faint); }
+  .standings-badge.winner-live, .standings-badge.runner-live {
+    background: transparent;
+    color: var(--gold);
+    font-size: 11px;
+  }
+
+  .third-row-advance { background: rgba(255, 184, 0, .06); }
+  .third-row-out { opacity: .5; }
+
+  /* Bracket */
+  .bracket-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 8px 4px 14px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bracket-stage {
+    flex: 0 0 auto;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bracket-stage-label {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 11px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    margin-bottom: 6px;
+    text-align: center;
+    padding: 6px;
+    background: var(--black-3);
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+
+  .bracket-match {
+    background: var(--black-3);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .bracket-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+
+  .bracket-team:last-child { border-bottom: none; }
+
+  .bracket-team.winner { background: rgba(255, 184, 0, .1); }
+  .bracket-team.winner .bracket-name { color: var(--gold); font-weight: 800; }
+  .bracket-team.loser { opacity: .5; }
+  .bracket-team.tbd .bracket-name {
+    color: var(--ink-faint);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 11px;
+  }
+  .bracket-team.tbd .bracket-flag { opacity: .3; }
+
+  .bracket-flag { font-size: 16px; }
+  .bracket-name { flex: 1; color: var(--ink); font-weight: 700; }
+  .bracket-score {
+    font-family: 'Archivo Black', sans-serif;
+    color: var(--gold);
+    font-size: 14px;
+  }
+
+  /* =========================================================
      RESPONSIVE
      ========================================================= */
   @media (min-width: 720px) {
@@ -1769,11 +1973,11 @@
     <div class="view-toggle-wrap" role="group" aria-label="View mode">
       <button class="view-toggle active" data-view="cards" aria-pressed="true">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Cards
+        Schedule
       </button>
-      <button class="view-toggle" data-view="table" aria-pressed="false">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        Table
+      <button class="view-toggle" data-view="standings" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><path d="M4 19h4v-8H4zM10 19h4V5h-4zM16 19h4v-12h-4z"/></svg>
+        Standings
       </button>
     </div>
     <button class="clear-btn" id="clear-filters">Clear</button>
@@ -1845,7 +2049,7 @@
 <div class="modal-overlay" id="login-overlay" role="dialog" aria-labelledby="login-title">
   <div class="modal-panel" style="max-width: 500px; min-height: auto;">
     <div class="modal-header">
-      <h2 id="login-title">🔐 Admin Sign In<small>Magic link — no password needed</small></h2>
+      <h2 id="login-title">🔐 Admin Sign In</h2>
       <button class="modal-close" id="login-close" aria-label="Close">×</button>
     </div>
     <div class="modal-body">
@@ -1889,8 +2093,8 @@
    If left as empty strings, the app falls back to localStorage-only.
    See supabase/SETUP.md for setup instructions.
    ============================================================ */
-const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co'; 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY'; 
+const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
 const SUPABASE_ENABLED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 let db = null; // Supabase client — initialized in init() if enabled.
                // Renamed from `supabase` to avoid collision with the
@@ -2529,94 +2733,141 @@ function renderCards(filtered, root) {
 }
 
 /* ============================================================
-   TABLE VIEW
+   STANDINGS VIEW
    ============================================================ */
-function buildMatchRowHTML(m) {
-  const matchDate = new Date(m.et);
-  const status = matchStatus(matchDate, state.now, m.no);
-  const todayKey = nzDateKey(state.now);
-  const matchKey = nzDateKey(matchDate);
-  const isToday = matchKey === todayKey;
+function renderStandings(root) {
+  let html = `
+    <section style="max-width:1100px; margin:0 auto;">
+      <header style="margin: 8px 0 28px; text-align:center;">
+        <h2 style="font-family:'Archivo Black',sans-serif; font-size: clamp(28px, 5vw, 40px); letter-spacing:-.02em; color:var(--ink); text-transform:uppercase; margin-bottom:8px;">Standings &amp; Bracket</h2>
+        <p style="color:var(--ink-dim); font-size:13px;">Live tables — auto-calculated as match results come in. Top 2 from each group + 8 best 3rd-place teams advance.</p>
+      </header>
+  `;
 
-  const stadium = STADIUMS[m.venue] || { city: '', country: '', capacity: 0 };
-  const home = resolveSlot(m.home);
-  const away = resolveSlot(m.away);
-  const homeFlag = FLAGS[home] || '';
-  const awayFlag = FLAGS[away] || '';
+  // Group standings tables (12 groups, 2 columns on desktop, 1 on mobile)
+  html += `<div class="standings-grid">`;
+  Object.keys(GROUPS).forEach(g => {
+    html += buildGroupStandingsCard(g);
+  });
+  html += `</div>`;
 
-  let rowClass = '';
-  if (status === 'live') rowClass = 'row-live';
-  else if (isToday) rowClass = 'row-today';
-  if (state.team && (home === state.team || away === state.team)) {
-    rowClass += ' row-highlighted';
+  // Best third-place table — only show if at least one group has any results
+  const anyResults = MATCHES.some(m => m.stage === 'Group' && MATCH_RESULTS[m.no]);
+  if (anyResults) {
+    html += buildThirdPlaceTable();
   }
 
-  const stageLabel = m.stage === 'Group' ? `Group ${m.group}` : getStageLabel(m.stage);
-  const result = MATCH_RESULTS[m.no];
-  const winner = getMatchWinner(m.no);
+  // Knockout bracket visualization
+  html += buildKnockoutBracket();
 
-  const homeNameCls = winner === 'home' ? ' winner-name' : '';
-  const awayNameCls = winner === 'away' ? ' winner-name' : '';
+  html += `</section>`;
+  root.innerHTML = html;
+}
 
-  let centerCell;
-  if (result) {
-    centerCell = `<span class="table-score">${result.home} - ${result.away}</span>`;
-  } else {
-    centerCell = `<span class="vs-mini">vs</span>`;
-  }
+function buildGroupStandingsCard(g) {
+  const standings = computeGroupStandings(g);
+  const teams = GROUPS[g];
+  const matchesPlayed = MATCHES.filter(m => m.stage === 'Group' && m.group === g && MATCH_RESULTS[m.no]).length;
+  const totalMatches = 6;
+  const isComplete = matchesPlayed === totalMatches;
 
-  let liveBadge = '';
-  if (status === 'live') liveBadge = ` <span class="live-tag"><span class="live-dot"></span>LIVE</span>`;
-  else if (status === 'finished') liveBadge = ` <span class="ft-tag">FT</span>`;
+  let rowsHTML = '';
+  standings.forEach((row, i) => {
+    const flag = FLAGS[row.team] || '';
+    let rowCls = '';
+    let badge = '';
+    if (isComplete) {
+      if (i === 0) { rowCls = 'standings-row-winner'; badge = '<span class="standings-badge winner">1st</span>'; }
+      else if (i === 1) { rowCls = 'standings-row-runner'; badge = '<span class="standings-badge runner">2nd</span>'; }
+      else if (i === 2) { rowCls = 'standings-row-third'; badge = '<span class="standings-badge third">3rd</span>'; }
+      else { rowCls = 'standings-row-out'; badge = '<span class="standings-badge out">4th</span>'; }
+    } else if (matchesPlayed > 0) {
+      // Mid-tournament: highlight current top 2 in gold (live ranking)
+      if (i === 0) badge = '<span class="standings-badge winner-live">▲</span>';
+      else if (i === 1) badge = '<span class="standings-badge runner-live">▲</span>';
+    }
+    rowsHTML += `
+      <tr class="${rowCls}">
+        <td class="standings-rank">${badge}</td>
+        <td class="standings-flag">${flag}</td>
+        <td class="standings-team">${escapeHtml(row.team)}</td>
+        <td>${row.played}</td>
+        <td>${row.wins}</td>
+        <td>${row.draws}</td>
+        <td>${row.losses}</td>
+        <td>${row.gf}</td>
+        <td>${row.ga}</td>
+        <td class="standings-gd">${row.gd > 0 ? '+' : ''}${row.gd}</td>
+        <td class="standings-pts">${row.pts}</td>
+      </tr>
+    `;
+  });
 
   return `
-    <tr class="${rowClass}">
-      <td><span class="table-no">M${String(m.no).padStart(2,'0')}</span></td>
-      <td><span class="table-time">${fmtNZTime(matchDate)}</span></td>
-      <td><span class="table-stage">${stageLabel}</span></td>
-      <td class="table-teams">
-        <span class="tflag">${homeFlag}</span><span class="${homeNameCls}">${escapeHtml(home)}</span>
-        ${centerCell}
-        <span class="tflag">${awayFlag}</span><span class="${awayNameCls}">${escapeHtml(away)}</span>
-        ${liveBadge}
-      </td>
-      <td class="table-venue">
-        <strong>${escapeHtml(m.venue)}</strong>
-        ${escapeHtml(stadium.city)}, ${stadium.country}
-      </td>
-      <td><span class="table-cap">${stadium.capacity ? stadium.capacity.toLocaleString() : '—'}</span></td>
-    </tr>
+    <div class="standings-card">
+      <div class="standings-card-header">
+        <h3>Group ${g}</h3>
+        <span class="standings-progress">${matchesPlayed}/${totalMatches} matches ${isComplete ? '✓' : ''}</span>
+      </div>
+      <table class="standings-table">
+        <thead>
+          <tr>
+            <th></th><th></th><th>Team</th>
+            <th title="Played">P</th>
+            <th title="Wins">W</th>
+            <th title="Draws">D</th>
+            <th title="Losses">L</th>
+            <th title="Goals For">GF</th>
+            <th title="Goals Against">GA</th>
+            <th title="Goal Difference">GD</th>
+            <th title="Points">Pts</th>
+          </tr>
+        </thead>
+        <tbody>${rowsHTML}</tbody>
+      </table>
+    </div>
   `;
 }
 
-function renderTable(filtered, root) {
-  const days = groupByDay(filtered);
-  const todayKey = nzDateKey(state.now);
+function buildThirdPlaceTable() {
+  const ranked = rankAllThirdPlaceTeams();
+  if (ranked.length === 0) return '';
+  const allDone = allGroupsComplete();
 
   let rows = '';
-  days.forEach(day => {
-    const isToday = day.key === todayKey;
-    const dayLabel = `${fmtNZDateShort(day.date)} — ${day.matches.length} match${day.matches.length === 1 ? '' : 'es'}${isToday ? ' · TODAY' : ''}`;
-    const dividerCls = isToday ? 'row-day-divider is-today' : 'row-day-divider';
+  ranked.forEach((t, i) => {
+    const flag = FLAGS[t.team] || '';
+    const advances = i < 8;
+    const cls = advances ? 'third-row-advance' : 'third-row-out';
     rows += `
-      <tr class="${dividerCls}" id="day-${day.key}">
-        <td colspan="6">${dayLabel}</td>
+      <tr class="${cls}">
+        <td class="standings-rank">${i + 1}</td>
+        <td class="standings-flag">${flag}</td>
+        <td class="standings-team">${escapeHtml(t.team)} <span style="color:var(--ink-faint);font-size:11px;">(Group ${t.group})</span></td>
+        <td>${t.played}</td>
+        <td>${t.wins}</td>
+        <td>${t.draws}</td>
+        <td>${t.losses}</td>
+        <td>${t.gf}</td>
+        <td>${t.ga}</td>
+        <td class="standings-gd">${t.gd > 0 ? '+' : ''}${t.gd}</td>
+        <td class="standings-pts">${t.pts}</td>
+        <td style="text-align:right; padding-right:12px; font-weight:800; font-size:10px; letter-spacing:.1em; color:${advances ? 'var(--gold)' : 'var(--ink-faint)'}">${advances ? 'ADV' : 'OUT'}</td>
       </tr>
     `;
-    rows += day.matches.map(buildMatchRowHTML).join('');
   });
 
-  root.innerHTML = `
-    <div class="table-wrap">
-      <table class="schedule">
+  return `
+    <div class="standings-card" style="grid-column: 1 / -1; margin-top: 10px;">
+      <div class="standings-card-header">
+        <h3>🥉 Best Third-Placed Teams ${allDone ? '— Final Ranking' : '— Live'}</h3>
+        <span class="standings-progress">Top 8 of ${ranked.length} advance to R32</span>
+      </div>
+      <table class="standings-table">
         <thead>
           <tr>
-            <th style="width:60px;">Match</th>
-            <th style="width:90px;">NZ Time</th>
-            <th style="width:90px;">Stage</th>
-            <th>Match-up</th>
-            <th>Venue</th>
-            <th style="width:90px;">Capacity</th>
+            <th>#</th><th></th><th>Team</th>
+            <th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th></th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
@@ -2625,13 +2876,79 @@ function renderTable(filtered, root) {
   `;
 }
 
+function buildKnockoutBracket() {
+  // Show R32 → R16 → QF → SF → Final progression with team names if known
+  const stages = [
+    { key: 'R32', label: 'Round of 32', count: 16 },
+    { key: 'R16', label: 'Round of 16', count: 8 },
+    { key: 'QF', label: 'Quarterfinals', count: 4 },
+    { key: 'SF', label: 'Semifinals', count: 2 },
+    { key: 'Final', label: 'Final', count: 1 }
+  ];
+
+  const anyKnockoutStarted = MATCHES.some(m => ['R32','R16','QF','SF','Final'].includes(m.stage) && MATCH_RESULTS[m.no]);
+  const groupsDone = allGroupsComplete();
+  if (!anyKnockoutStarted && !groupsDone) return ''; // Don't show bracket before anything's known
+
+  let html = `
+    <div class="standings-card" style="grid-column: 1 / -1; margin-top: 18px;">
+      <div class="standings-card-header">
+        <h3>🏆 Knockout Bracket</h3>
+        <span class="standings-progress">Auto-updates as results come in</span>
+      </div>
+      <div class="bracket-scroll">
+  `;
+
+  stages.forEach(stage => {
+    const stageMatches = MATCHES.filter(m => m.stage === stage.key).sort((a, b) => a.no - b.no);
+    html += `<div class="bracket-stage">
+      <div class="bracket-stage-label">${stage.label}</div>`;
+    stageMatches.forEach(m => {
+      const home = resolveSlot(m.home);
+      const away = resolveSlot(m.away);
+      const homeFlag = FLAGS[home] || '';
+      const awayFlag = FLAGS[away] || '';
+      const homeIsTBD = isPlaceholderTeam(home);
+      const awayIsTBD = isPlaceholderTeam(away);
+      const result = MATCH_RESULTS[m.no];
+      const winner = getMatchWinner(m.no);
+      const homeWinCls = winner === 'home' ? 'bracket-team winner' : (winner === 'away' ? 'bracket-team loser' : 'bracket-team');
+      const awayWinCls = winner === 'away' ? 'bracket-team winner' : (winner === 'home' ? 'bracket-team loser' : 'bracket-team');
+      html += `
+        <div class="bracket-match">
+          <div class="${homeWinCls}${homeIsTBD ? ' tbd' : ''}">
+            <span class="bracket-flag">${homeFlag}</span>
+            <span class="bracket-name">${escapeHtml(home)}</span>
+            ${result ? `<span class="bracket-score">${result.home}</span>` : ''}
+          </div>
+          <div class="${awayWinCls}${awayIsTBD ? ' tbd' : ''}">
+            <span class="bracket-flag">${awayFlag}</span>
+            <span class="bracket-name">${escapeHtml(away)}</span>
+            ${result ? `<span class="bracket-score">${result.away}</span>` : ''}
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+
+  html += `</div></div>`;
+  return html;
+}
+
 /* ============================================================
    RENDER
    ============================================================ */
 function render() {
-  const filtered = applyFilters();
   const root = document.getElementById('matches');
 
+  // Standings view doesn't use match filters
+  if (state.view === 'standings') {
+    renderStandings(root);
+    return;
+  }
+
+  const filtered = applyFilters();
   if (filtered.length === 0) {
     root.innerHTML = `
       <div class="empty">
@@ -2643,8 +2960,7 @@ function render() {
     return;
   }
 
-  if (state.view === 'cards') renderCards(filtered, root);
-  else renderTable(filtered, root);
+  renderCards(filtered, root);
 }
 
 function jumpToTodayOrNext() {
