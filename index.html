@@ -341,49 +341,119 @@
     box-shadow: 0 4px 12px rgba(255, 184, 0, .25);
   }
 
-  /* Theme toggle button — cycles through 3 themes */
-  .theme-toggle {
-    background: transparent;
-    color: var(--ink-dim);
+  /* =========================================================
+     THEME PICKER — three dots, one per theme.
+     Visually obvious that there are 3 options, each is directly clickable,
+     and the active one is highlighted.
+     ========================================================= */
+  .theme-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: var(--surface);
     border: 1px solid var(--line);
-    width: 38px;
-    height: 38px;
-    border-radius: 6px;
+    border-radius: 24px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  /* Subtle pulsing border to draw the eye on first visit (turned off
+     once user has clicked any dot — see .theme-picker.calmed below) */
+  .theme-picker:not(.calmed) {
+    animation: themePickerPulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes themePickerPulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(255, 184, 0, .35),
+                  0 4px 12px rgba(0, 0, 0, .15);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(255, 184, 0, 0),
+                  0 4px 12px rgba(0, 0, 0, .15);
+    }
+  }
+
+  .theme-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: var(--black-3);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: all .2s ease;
+    padding: 0;
+    font-family: inherit;
+  }
+
+  .theme-dot-emoji {
+    font-size: 14px;
+    line-height: 1;
+    filter: grayscale(.6);
+    opacity: .55;
     transition: all .2s;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
   }
 
-  .theme-toggle:hover {
-    color: var(--gold);
+  .theme-dot:hover {
+    transform: scale(1.12);
     border-color: var(--gold);
-    transform: rotate(15deg);
   }
 
-  /* Each theme shows a different icon — only the active theme's icon shows */
-  .theme-toggle .theme-icon { display: none; font-size: 18px; line-height: 1; }
-  /* Default (no data-theme attribute) = Stadium Night = moon icon */
-  .theme-toggle .theme-icon-night { display: block; }
-  [data-theme="pitch"] .theme-toggle .theme-icon-night { display: none; }
-  [data-theme="pitch"] .theme-toggle .theme-icon-pitch { display: block; }
-  [data-theme="gold"]  .theme-toggle .theme-icon-night { display: none; }
-  [data-theme="gold"]  .theme-toggle .theme-icon-gold  { display: block; }
-
-  /* Smooth icon transition on theme change */
-  @keyframes themeIconPop {
-    0% { transform: scale(0.4) rotate(-90deg); opacity: 0; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  .theme-dot:hover .theme-dot-emoji {
+    filter: grayscale(0);
+    opacity: 1;
   }
-  .theme-toggle .theme-icon { animation: themeIconPop .35s ease-out; }
+
+  /* Active state: bright, gold border, slightly larger */
+  .theme-dot.active {
+    border-color: var(--gold);
+    background: rgba(255, 184, 0, .15);
+    transform: scale(1.05);
+  }
+
+  .theme-dot.active .theme-dot-emoji {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+
+  /* First-visit hint — appears next to the picker for 6 seconds */
+  .theme-hint {
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+    align-self: center;
+  }
+
+  .theme-hint.visible {
+    opacity: 1;
+    animation: themeHintBob 1.6s ease-in-out infinite;
+  }
+
+  @keyframes themeHintBob {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  @media (max-width: 600px) {
+    .theme-hint { display: none; }
+  }
 
   @media (max-width: 480px) {
-    .theme-toggle { width: 34px; height: 34px; }
+    .theme-picker { padding: 3px; gap: 2px; }
+    .theme-dot { width: 26px; height: 26px; }
+    .theme-dot-emoji { font-size: 12px; }
   }
+
 
   /* Smaller pill on mobile */
   @media (max-width: 480px) {
@@ -2438,11 +2508,12 @@
       </div>
     </div>
     <div class="topbar-right">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Cycle theme" title="Cycle theme">
-        <span class="theme-icon theme-icon-night">🌙</span>
-        <span class="theme-icon theme-icon-pitch">⚽</span>
-        <span class="theme-icon theme-icon-gold">🏆</span>
-      </button>
+      <div class="theme-picker" id="theme-picker" role="radiogroup" aria-label="Choose theme">
+        <button class="theme-dot theme-dot-night" data-theme-pick="dark" role="radio" aria-checked="true" aria-label="Stadium Night theme" title="Stadium Night"><span class="theme-dot-emoji">🌙</span></button>
+        <button class="theme-dot theme-dot-pitch" data-theme-pick="pitch" role="radio" aria-checked="false" aria-label="Emerald Pitch theme" title="Emerald Pitch"><span class="theme-dot-emoji">⚽</span></button>
+        <button class="theme-dot theme-dot-gold" data-theme-pick="gold" role="radio" aria-checked="false" aria-label="Trophy Gold theme" title="Trophy Gold"><span class="theme-dot-emoji">🏆</span></button>
+      </div>
+      <span class="theme-hint" id="theme-hint" aria-hidden="true">← Try a theme</span>
       <button class="stats-pill" id="open-stats" aria-label="My predictions">
         🎯 <span id="topbar-pts" class="pts">0</span>
       </button>
@@ -2653,7 +2724,7 @@
    If left as empty strings, the app falls back to localStorage-only.
    See supabase/SETUP.md for setup instructions.
    ============================================================ */
-const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co'; 
+const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';  
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
 const SUPABASE_ENABLED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 let db = null; // Supabase client — initialized in init() if enabled.
@@ -3019,13 +3090,14 @@ let userPredictions = {};
 let predictionsGraded = {}; // tracks which predictions we've already celebrated for
 
 /* Theme: 'dark' (Stadium Night, default) | 'pitch' (Emerald Pitch) | 'gold' (Trophy Gold)
-   Cycles in the order: dark → pitch → gold → dark → ... */
+   Picked directly via the 3-dot picker in the topbar. */
 const THEMES = ['dark', 'pitch', 'gold'];
 const THEME_LABELS = {
   dark:  '🌙 Stadium Night',
   pitch: '⚽ Emerald Pitch',
   gold:  '🏆 Trophy Gold'
 };
+const THEME_PICKER_SEEN_KEY = 'wc2026_theme_picker_seen';
 
 function getStoredTheme() {
   try {
@@ -3040,19 +3112,52 @@ function applyTheme(theme) {
   } else {
     document.documentElement.setAttribute('data-theme', theme);
   }
+  // Update active state on the dots
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    const isActive = dot.dataset.themePick === theme || (theme === 'dark' && dot.dataset.themePick === 'dark');
+    dot.classList.toggle('active', isActive);
+    dot.setAttribute('aria-checked', isActive ? 'true' : 'false');
+  });
 }
 
 function initTheme() {
   applyTheme(getStoredTheme());
 }
 
-function toggleTheme() {
-  const current = getStoredTheme();
-  const idx = THEMES.indexOf(current);
-  const next = THEMES[(idx + 1) % THEMES.length];
-  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
-  applyTheme(next);
-  showToast(THEME_LABELS[next]);
+function pickTheme(theme) {
+  if (!THEMES.includes(theme)) return;
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  applyTheme(theme);
+  // Stop the picker pulse animation once user has interacted
+  const picker = document.getElementById('theme-picker');
+  const hint = document.getElementById('theme-hint');
+  if (picker) picker.classList.add('calmed');
+  if (hint) hint.classList.remove('visible');
+  try { localStorage.setItem(THEME_PICKER_SEEN_KEY, '1'); } catch (e) {}
+  showToast(THEME_LABELS[theme]);
+}
+
+/* Show a one-time hint near the theme picker for 6 seconds on first visit
+   so users notice they can change the theme. After they click any dot
+   (or wait 6s), the hint disappears and never returns. */
+function maybeShowThemeHint() {
+  let seen = false;
+  try { seen = localStorage.getItem(THEME_PICKER_SEEN_KEY) === '1'; } catch (e) {}
+  if (seen) {
+    // Already seen — calm the picker animation immediately
+    const picker = document.getElementById('theme-picker');
+    if (picker) picker.classList.add('calmed');
+    return;
+  }
+  // Show the hint after 1.5 seconds (let page settle), hide after 6 seconds
+  setTimeout(() => {
+    const hint = document.getElementById('theme-hint');
+    if (hint) hint.classList.add('visible');
+  }, 1500);
+  setTimeout(() => {
+    const hint = document.getElementById('theme-hint');
+    if (hint) hint.classList.remove('visible');
+  }, 7500);
 }
 
 function loadUserData() {
@@ -5490,11 +5595,16 @@ async function init() {
   initMute();
   initShare();
 
-  // Theme toggle
-  const themeBtn = document.getElementById('theme-toggle');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', toggleTheme);
-  }
+  // Theme picker — wire each of the 3 dots
+  document.querySelectorAll('.theme-dot[data-theme-pick]').forEach(dot => {
+    dot.addEventListener('click', () => {
+      pickTheme(dot.dataset.themePick);
+    });
+  });
+  // Apply current theme to set the active dot state
+  applyTheme(getStoredTheme());
+  // Show first-visit hint near the picker
+  maybeShowThemeHint();
 
   // Clock + render loop
   tickClock();
