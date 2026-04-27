@@ -440,15 +440,51 @@
     cursor: pointer;
     flex: 1 1 200px;
     box-shadow: 0 4px 16px rgba(255, 184, 0, .3);
-    transition: all .15s;
+    transition: transform .15s, box-shadow .15s;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     text-transform: uppercase;
+    position: relative;
+    animation: jumpBtnPulse 2.4s ease-in-out infinite;
   }
 
-  .jump-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 184, 0, .5); }
+  .jump-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(255, 184, 0, .65);
+    animation-play-state: paused;
+  }
+
+  /* Animated chevron next to the lightning bolt */
+  .jump-btn .jump-arrow {
+    display: inline-block;
+    animation: jumpArrowBounce 1.6s ease-in-out infinite;
+  }
+
+  @keyframes jumpBtnPulse {
+    0%, 100% {
+      box-shadow: 0 4px 16px rgba(255, 184, 0, .3),
+                  0 0 0 0 rgba(255, 184, 0, .5);
+    }
+    50% {
+      box-shadow: 0 8px 24px rgba(255, 184, 0, .55),
+                  0 0 0 8px rgba(255, 184, 0, 0);
+    }
+  }
+
+  @keyframes jumpArrowBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  /* Stop animation once user clicks it (we'll add this class via JS) */
+  .jump-btn.calmed {
+    animation: none;
+  }
+  .jump-btn.calmed .jump-arrow {
+    animation: none;
+  }
 
   .clear-btn {
     background: transparent;
@@ -1674,6 +1710,64 @@
   }
 
   /* =========================================================
+     SCROLL-TO-TOP BUTTON
+     ========================================================= */
+  .scroll-top {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(255, 184, 0, .4),
+                0 2px 8px rgba(0, 0, 0, .3);
+    z-index: 240;
+    opacity: 0;
+    transform: translateY(20px) scale(.8);
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease, box-shadow .15s;
+  }
+
+  .scroll-top.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    animation: scrollTopFloat 3s ease-in-out infinite;
+  }
+
+  .scroll-top:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 184, 0, .6),
+                0 4px 12px rgba(0, 0, 0, .4);
+    animation-play-state: paused;
+  }
+
+  .scroll-top:active {
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  @keyframes scrollTopFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @media (max-width: 480px) {
+    .scroll-top {
+      right: 14px;
+      bottom: 14px;
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  /* =========================================================
      STANDINGS VIEW
      ========================================================= */
   .standings-grid {
@@ -1969,7 +2063,7 @@
     </select>
   </div>
   <div class="actions-row">
-    <button class="jump-btn" id="jump-today">⚡ Today / Next Match</button>
+    <button class="jump-btn" id="jump-today">⚡ Today / Next Match <span class="jump-arrow">→</span></button>
     <div class="view-toggle-wrap" role="group" aria-label="View mode">
       <button class="view-toggle active" data-view="cards" aria-pressed="true">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -2038,8 +2132,15 @@
 <!-- ========== TOAST ========== -->
 <div class="toast" id="toast"></div>
 
+<!-- Scroll-to-top button — appears after scrolling -->
+<button class="scroll-top" id="scroll-top" aria-label="Scroll to top of page" title="Back to top">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
 <footer>
-  <p><strong>Built by Next Wave</strong> · AI-powered digital marketing in New Zealand</p>
+  <p><strong><a href="https://www.nextwave.nz/" target="_blank" rel="noopener noreferrer" style="color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s;" onmouseover="this.style.borderBottomColor='var(--gold)'" onmouseout="this.style.borderBottomColor='transparent'">Built by Next Wave ↗</a></strong> · AI-powered digital marketing in New Zealand</p>
   <p>Schedule data current as of April 2026 · Times auto-converted to NZ local time</p>
   <p>Source: FIFA · Stadium capacities are tournament configurations</p>
   <p style="margin-top:14px;"><a href="#" id="admin-link" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dotted var(--ink-faint);font-size:10px;">Admin</a></p>
@@ -4439,7 +4540,11 @@ async function init() {
   document.getElementById('status-filter').addEventListener('change', e => { state.status = e.target.value; render(); });
 
   // Action buttons
-  document.getElementById('jump-today').addEventListener('click', jumpToTodayOrNext);
+  document.getElementById('jump-today').addEventListener('click', () => {
+    jumpToTodayOrNext();
+    // Stop the attention-grabbing pulse once they've used it
+    document.getElementById('jump-today').classList.add('calmed');
+  });
   document.getElementById('clear-filters').addEventListener('click', () => {
     state.team = ''; state.stage = ''; state.status = '';
     teamSelect.value = '';
@@ -4489,8 +4594,28 @@ async function init() {
   updateTopbarStats();
   render();
 
-  // Auto-jump to today/next on first load
-  setTimeout(jumpToTodayOrNext, 250);
+  // Scroll-to-top button: show after scrolling 400px
+  const scrollTopBtn = document.getElementById('scroll-top');
+  if (scrollTopBtn) {
+    let ticking = false;
+    const updateScrollBtn = () => {
+      if (window.scrollY > 400) scrollTopBtn.classList.add('visible');
+      else scrollTopBtn.classList.remove('visible');
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollBtn);
+        ticking = true;
+      }
+    }, { passive: true });
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Don't auto-jump on load — let user start at the top of the page.
+  // The pulsing "Today / Next Match" button invites them to jump.
 
   // Check for any newly-graded correct predictions on load (e.g. results
   // were entered between sessions). Stagger the celebrations.
