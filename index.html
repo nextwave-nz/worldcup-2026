@@ -1838,14 +1838,50 @@
   <p><strong>Built by Next Wave</strong> · AI-powered digital marketing in New Zealand</p>
   <p>Schedule data current as of April 2026 · Times auto-converted to NZ local time</p>
   <p>Source: FIFA · Stadium capacities are tournament configurations</p>
+  <p style="margin-top:14px;"><a href="#" id="admin-link" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dotted var(--ink-faint);font-size:10px;">Admin</a></p>
 </footer>
+
+<!-- ========== ADMIN LOGIN MODAL ========== -->
+<div class="modal-overlay" id="login-overlay" role="dialog" aria-labelledby="login-title">
+  <div class="modal-panel" style="max-width: 500px; min-height: auto;">
+    <div class="modal-header">
+      <h2 id="login-title">🔐 Admin Sign In<small>Magic link — no password needed</small></h2>
+      <button class="modal-close" id="login-close" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h3>Sign in with email</h3>
+        <p class="desc">Enter the email address that's registered as an admin. We'll email you a one-click sign-in link.</p>
+        <div class="modal-field">
+          <label>Email address</label>
+          <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email"
+            style="width:100%;background:var(--black-3);color:var(--ink);border:1px solid var(--line);padding:12px 14px;border-radius:6px;font-family:inherit;font-size:14px;" />
+        </div>
+        <div id="login-message" style="margin-top:12px; font-size:13px; color:var(--ink-dim); min-height:20px;"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="login-cancel">Cancel</button>
+      <button class="modal-btn modal-btn-primary" id="login-submit">Send magic link</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ============================================================
-   ADMIN PASSWORD (change this!)
-   Visit yoursite.com/?edit=YOUR_PASSWORD to unlock
+   ADMIN AUTHENTICATION
+   We use Supabase Auth (email magic link) instead of a hard-coded
+   password. There are NO secrets in this file. To become admin:
+     1. Click "Admin" in the footer
+     2. Enter your email
+     3. Click the link Supabase sends to your inbox
+   You're then signed in. The DATABASE itself enforces that only
+   users in the admin_users table can write to results/bracket —
+   not the JavaScript here. So even if someone hacks this code,
+   they can't write to your database.
    ============================================================ */
-const ADMIN_PASSWORD = 'nextwave2026';
+// (Legacy ADMIN_PASSWORD removed. Admin status now comes from a Supabase
+// Auth session and the admin_users table.)
 
 /* ============================================================
    SUPABASE CONFIGURATION
@@ -1853,8 +1889,8 @@ const ADMIN_PASSWORD = 'nextwave2026';
    If left as empty strings, the app falls back to localStorage-only.
    See supabase/SETUP.md for setup instructions.
    ============================================================ */
-const SUPABASE_URL  = '';   // e.g. 'https://abcdefgh.supabase.co'
-const SUPABASE_ANON_KEY = ''; // e.g. 'eyJhbGc...'
+const SUPABASE_URL  = '';   // e.g. 'https://tjihuaxfyouxheqymzpl.supabase.co'
+const SUPABASE_ANON_KEY = ''; // e.g. 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY'
 const SUPABASE_ENABLED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 let db = null; // Supabase client — initialized in init() if enabled.
                // Renamed from `supabase` to avoid collision with the
@@ -2900,10 +2936,57 @@ function showToast(msg, ms = 2400) {
    ============================================================ */
 let adminTab = 'results';
 let isAdminMode = false;
+let currentUser = null; // Supabase Auth user object once signed in
 
-function checkAdminMode() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('edit') === ADMIN_PASSWORD;
+async function checkAdminMode() {
+  // Admin status is determined by:
+  //   1. Are you signed into Supabase Auth?
+  //   2. Is your user_id in the admin_users table?
+  // We rely on the database's RLS policy "admin_users readable by admins only"
+  // — if the query returns a row, you're an admin. If it returns nothing,
+  // you're not (either not signed in, or signed in but not in admin_users).
+  if (!SUPABASE_ENABLED || !db) return false;
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    if (!user) return false;
+    currentUser = user;
+    // Check admin_users table
+    const { data, error } = await db
+      .from('admin_users')
+      .select('user_id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (error) return false;
+    return !!data;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function adminSignInWithEmail(email) {
+  // Sends a magic link. User clicks the link, comes back signed in.
+  if (!SUPABASE_ENABLED || !db) {
+    return { ok: false, error: 'Supabase not configured' };
+  }
+  try {
+    const { error } = await db.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin + window.location.pathname }
+    });
+    if (error) throw error;
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e?.message || 'Failed to send link' };
+  }
+}
+
+async function adminSignOut() {
+  if (!SUPABASE_ENABLED || !db) return;
+  await db.auth.signOut();
+  currentUser = null;
+  isAdminMode = false;
+  // Reload to reset admin UI
+  window.location.href = window.location.pathname;
 }
 
 function loadAdminData() {
@@ -2986,10 +3069,46 @@ function buildResultsTab() {
 function buildBracketTab() {
   const total = 24 + 8 + 16 + 8 + 4 + 2 + 2;
   const filled = Object.keys(BRACKET_RESULTS).length;
+  const groupsDone = allGroupsComplete();
+  const groupResultsCount = MATCHES.filter(m => m.stage === 'Group' && MATCH_RESULTS[m.no]).length;
+  const knockoutResultsCount = MATCHES.filter(m =>
+    ['R32','R16','QF','SF'].includes(m.stage) && MATCH_RESULTS[m.no]
+  ).length;
 
   let html = `
     <div class="modal-stage-info">
-      ${filled} of ~${total} bracket slots filled. Pick winners from dropdowns — only relevant teams appear.
+      ${filled} of ~${total} bracket slots filled. Use auto-advance below — or pick winners manually from dropdowns.
+    </div>
+
+    <div class="modal-section" style="border-color: var(--gold); background: linear-gradient(135deg, var(--surface), rgba(255,184,0,.04));">
+      <h3 style="color: var(--gold);">⚡ Auto-Advance Bracket</h3>
+      <p class="desc">Automatically fills bracket slots from the match scores you've entered. Standings calculated using FIFA tiebreaker rules (points → goal difference → goals scored).</p>
+
+      <div style="display:grid; gap:10px; margin-top:14px;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="modal-btn modal-btn-primary" id="auto-fill-groups"${groupsDone ? '' : ' disabled style="opacity:.5;cursor:not-allowed;"'}>
+            ① Auto-fill group winners + runners-up
+          </button>
+          <span style="color:var(--ink-faint); font-size:11px;">
+            ${groupResultsCount}/72 group matches scored ${groupsDone ? '✓' : '— need all 72'}
+          </span>
+        </div>
+
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="modal-btn" id="auto-advance-ko"${knockoutResultsCount === 0 ? ' disabled style="opacity:.5;cursor:not-allowed;"' : ''}>
+            ② Auto-advance knockout winners
+          </button>
+          <span style="color:var(--ink-faint); font-size:11px;">
+            ${knockoutResultsCount} knockout match${knockoutResultsCount === 1 ? '' : 'es'} scored
+          </span>
+        </div>
+      </div>
+
+      ${groupsDone ? buildBest3Helper() : ''}
+
+      <p class="desc" style="margin-top:14px; font-size:11px;">
+        💡 Best-3rd assignments still require your input — FIFA's matrix has 495 scenarios. We'll show the ranked third-place teams below to make it easy.
+      </p>
     </div>
   `;
 
@@ -3137,6 +3256,42 @@ function wireAdminInputs() {
       }, 800);
     });
   });
+
+  // Auto-fill group stage button
+  const autoFillBtn = document.getElementById('auto-fill-groups');
+  if (autoFillBtn) {
+    autoFillBtn.addEventListener('click', async () => {
+      const result = autoFillGroupStage();
+      if (!result.ok) {
+        showToast(`✗ ${result.reason}`, 3000);
+        return;
+      }
+      saveAdminData();
+      const synced = await saveBracketBatch();
+      render();
+      updateTopbarStats();
+      buildAdminUI();
+      showToast(`✓ Auto-filled ${result.filled} group slots${synced ? ' (synced to cloud)' : ' (local only — cloud sync failed)'}`, 3500);
+    });
+  }
+
+  // Auto-advance knockouts button
+  const autoAdvanceBtn = document.getElementById('auto-advance-ko');
+  if (autoAdvanceBtn) {
+    autoAdvanceBtn.addEventListener('click', async () => {
+      const result = autoAdvanceKnockouts();
+      if (result.filled === 0) {
+        showToast('No new knockout winners to advance — enter scores first.', 3000);
+        return;
+      }
+      saveAdminData();
+      const synced = await saveBracketBatch();
+      render();
+      updateTopbarStats();
+      buildAdminUI();
+      showToast(`✓ Advanced ${result.filled} knockout slot${result.filled === 1 ? '' : 's'}${synced ? ' (synced)' : ''}`, 3500);
+    });
+  }
 }
 
 function countGroupResults() {
@@ -3153,6 +3308,185 @@ function countBest3Results() {
 function countWinners(stage) {
   return MATCHES.filter(m => m.stage === stage)
     .filter(m => BRACKET_RESULTS['W-' + m.no]).length;
+}
+
+/* ============================================================
+   AUTO-ADVANCE BRACKET
+   Calculates group standings + best-3rd teams + propagates
+   knockout winners — all from the MATCH_RESULTS table.
+   ============================================================ */
+
+// Compute standings for one group: returns array sorted top→bottom
+function computeGroupStandings(groupLetter) {
+  const teams = GROUPS[groupLetter];
+  const stats = {};
+  teams.forEach(t => {
+    stats[t] = { team: t, played: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0, pts: 0 };
+  });
+
+  // Find all group matches with results
+  const groupMatches = MATCHES.filter(
+    m => m.stage === 'Group' && m.group === groupLetter && MATCH_RESULTS[m.no]
+  );
+  groupMatches.forEach(m => {
+    const r = MATCH_RESULTS[m.no];
+    const home = stats[m.home];
+    const away = stats[m.away];
+    if (!home || !away) return;
+    home.played++; away.played++;
+    home.gf += r.home; home.ga += r.away;
+    away.gf += r.away; away.ga += r.home;
+    if (r.home > r.away) { home.wins++; home.pts += 3; away.losses++; }
+    else if (r.away > r.home) { away.wins++; away.pts += 3; home.losses++; }
+    else { home.draws++; home.pts++; away.draws++; away.pts++; }
+  });
+
+  // Add goal difference for sorting
+  Object.values(stats).forEach(s => { s.gd = s.gf - s.ga; });
+
+  // FIFA group-stage tiebreakers (in order):
+  //   1. Most points
+  //   2. Goal difference
+  //   3. Goals scored
+  //   4. Head-to-head points (between tied teams) — partial impl
+  //   5. Fair play (we don't track cards — fall through)
+  //   6. FIFA ranking (we don't have it — fall through)
+  const sorted = Object.values(stats).sort((a, b) => {
+    if (b.pts !== a.pts) return b.pts - a.pts;
+    if (b.gd !== a.gd) return b.gd - a.gd;
+    if (b.gf !== a.gf) return b.gf - a.gf;
+    return 0; // can't break further automatically
+  });
+
+  return sorted;
+}
+
+// Are all 6 group matches in this group resolved?
+function groupComplete(groupLetter) {
+  const groupMatches = MATCHES.filter(
+    m => m.stage === 'Group' && m.group === groupLetter
+  );
+  return groupMatches.every(m => MATCH_RESULTS[m.no]);
+}
+
+// All 72 group matches resolved?
+function allGroupsComplete() {
+  return Object.keys(GROUPS).every(g => groupComplete(g));
+}
+
+// Rank all 12 third-place teams by FIFA criteria
+function rankAllThirdPlaceTeams() {
+  const thirdTeams = [];
+  Object.keys(GROUPS).forEach(g => {
+    if (!groupComplete(g)) return;
+    const standings = computeGroupStandings(g);
+    if (standings.length >= 3) {
+      thirdTeams.push({ ...standings[2], group: g });
+    }
+  });
+  thirdTeams.sort((a, b) => {
+    if (b.pts !== a.pts) return b.pts - a.pts;
+    if (b.gd !== a.gd) return b.gd - a.gd;
+    if (b.gf !== a.gf) return b.gf - a.gf;
+    return 0;
+  });
+  return thirdTeams;
+}
+
+// Auto-fill group winners + runners-up
+function autoFillGroupStage() {
+  if (!allGroupsComplete()) {
+    return { ok: false, reason: 'Not all 72 group matches have scores yet.' };
+  }
+  let filled = 0;
+  Object.keys(GROUPS).forEach(g => {
+    const standings = computeGroupStandings(g);
+    if (standings.length >= 2) {
+      BRACKET_RESULTS['W-' + g] = standings[0].team;
+      BRACKET_RESULTS['RU-' + g] = standings[1].team;
+      filled += 2;
+    }
+  });
+  return { ok: true, filled };
+}
+
+// Auto-advance knockout matches based on scores
+// (R32 → W-73 etc., R16, QF, SF + 3rd place loser)
+function autoAdvanceKnockouts() {
+  let filled = 0;
+  // Process all knockout stages
+  ['R32', 'R16', 'QF', 'SF'].forEach(stage => {
+    MATCHES.filter(m => m.stage === stage).forEach(m => {
+      const r = MATCH_RESULTS[m.no];
+      if (!r) return;
+      const home = resolveSlot(m.home);
+      const away = resolveSlot(m.away);
+      // Need both teams resolved (not still placeholders)
+      if (isPlaceholderTeam(home) || isPlaceholderTeam(away)) return;
+      let winner = null, loser = null;
+      if (r.home > r.away) { winner = home; loser = away; }
+      else if (r.away > r.home) { winner = away; loser = home; }
+      else return; // Tie without penalty result — can't auto-advance
+      const winSlot = 'W-' + m.no;
+      const loseSlot = 'L-' + m.no;
+      if (BRACKET_RESULTS[winSlot] !== winner) {
+        BRACKET_RESULTS[winSlot] = winner;
+        filled++;
+      }
+      // For SF, we also need the loser (3rd place match)
+      if (stage === 'SF' && BRACKET_RESULTS[loseSlot] !== loser) {
+        BRACKET_RESULTS[loseSlot] = loser;
+        filled++;
+      }
+    });
+  });
+  return { filled };
+}
+
+// Helper UI shown after group stage is complete: ranked 3rd-place teams
+function buildBest3Helper() {
+  const ranked = rankAllThirdPlaceTeams();
+  if (ranked.length === 0) return '';
+  let html = `<div style="margin-top:18px; padding:14px; background:var(--black-3); border-radius:8px; border:1px solid var(--line);">
+    <h4 style="font-family:'Archivo Black',sans-serif; font-size:12px; color:var(--gold); margin-bottom:10px; letter-spacing:.1em; text-transform:uppercase;">📊 Third-Place Standings (top 8 advance)</h4>
+    <p style="color:var(--ink-faint); font-size:11px; margin-bottom:10px;">Ranked by points, then goal difference, then goals scored.</p>
+    <div style="display:grid; gap:4px;">`;
+  ranked.forEach((t, i) => {
+    const advances = i < 8;
+    const flag = FLAGS[t.team] || '';
+    html += `
+      <div style="display:grid; grid-template-columns: 30px 30px 1fr 50px 50px 50px; gap:8px; align-items:center; padding:6px 10px; background:${advances ? 'rgba(255,184,0,.08)' : 'transparent'}; border-radius:5px; font-size:12px;">
+        <span style="color:${advances ? 'var(--gold)' : 'var(--ink-faint)'}; font-family:'Archivo Black',sans-serif;">${i + 1}</span>
+        <span>${flag}</span>
+        <span style="color:var(--ink); font-weight:600;">${escapeHtml(t.team)} <span style="color:var(--ink-faint); font-size:10px;">(${t.group})</span></span>
+        <span style="color:var(--gold); font-family:'JetBrains Mono',monospace; text-align:right;">${t.pts} pts</span>
+        <span style="color:var(--ink-dim); font-family:'JetBrains Mono',monospace; text-align:right;">GD ${t.gd >= 0 ? '+' : ''}${t.gd}</span>
+        <span style="color:${advances ? 'var(--gold)' : 'var(--ink-faint)'}; font-size:10px; text-align:right;">${advances ? 'ADVANCES' : 'OUT'}</span>
+      </div>
+    `;
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+// Save all bracket results to Supabase in one batch
+async function saveBracketBatch() {
+  if (!SUPABASE_ENABLED || !db) return false;
+  try {
+    const rows = Object.keys(BRACKET_RESULTS).map(slot_code => ({
+      slot_code,
+      team_name: BRACKET_RESULTS[slot_code]
+    }));
+    if (rows.length === 0) return true;
+    const { error } = await db
+      .from('bracket_results')
+      .upsert(rows, { onConflict: 'slot_code' });
+    if (error) throw error;
+    return true;
+  } catch (e) {
+    console.warn('Batch bracket save failed:', e?.message);
+    return false;
+  }
 }
 
 function downloadUpdatedHTML() {
@@ -3203,6 +3537,64 @@ function downloadUpdatedHTML() {
 }
 
 function initAdmin() {
+  // Wire up the footer "Admin" link — visible to everyone
+  const adminLink = document.getElementById('admin-link');
+  const loginOverlay = document.getElementById('login-overlay');
+  if (adminLink && loginOverlay) {
+    adminLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isAdminMode) {
+        // Already signed in — open admin editor
+        buildAdminUI();
+        document.getElementById('admin-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Show login modal
+        loginOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('login-email')?.focus(), 100);
+      }
+    });
+
+    // Login modal handlers
+    const closeLogin = () => {
+      loginOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      document.getElementById('login-message').textContent = '';
+    };
+    document.getElementById('login-close').addEventListener('click', closeLogin);
+    document.getElementById('login-cancel').addEventListener('click', closeLogin);
+    loginOverlay.addEventListener('click', e => {
+      if (e.target === loginOverlay) closeLogin();
+    });
+
+    document.getElementById('login-submit').addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value.trim();
+      const msgEl = document.getElementById('login-message');
+      const submitBtn = document.getElementById('login-submit');
+      if (!email || !/.+@.+\..+/.test(email)) {
+        msgEl.style.color = 'var(--can-red-2)';
+        msgEl.textContent = 'Please enter a valid email address.';
+        return;
+      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      msgEl.style.color = 'var(--ink-dim)';
+      msgEl.textContent = 'Sending magic link...';
+      const result = await adminSignInWithEmail(email);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send magic link';
+      if (result.ok) {
+        msgEl.style.color = 'var(--gold)';
+        msgEl.textContent = '✓ Check your inbox! Click the link to sign in. (You can close this dialog.)';
+      } else {
+        msgEl.style.color = 'var(--can-red-2)';
+        msgEl.textContent = '✗ ' + (result.error || 'Failed to send link');
+      }
+    });
+  }
+
+  // The rest of initAdmin only applies if signed in as admin
   if (!isAdminMode) return;
 
   document.getElementById('admin-bar').classList.add('show');
@@ -3215,8 +3607,10 @@ function initAdmin() {
   });
   document.getElementById('admin-close').addEventListener('click', closeAdmin);
   document.getElementById('admin-cancel').addEventListener('click', closeAdmin);
-  document.getElementById('admin-exit').addEventListener('click', () => {
-    window.location.href = window.location.pathname;
+  document.getElementById('admin-exit').addEventListener('click', async () => {
+    if (confirm('Sign out of admin mode?')) {
+      await adminSignOut();
+    }
   });
   document.getElementById('admin-reset').addEventListener('click', () => {
     if (!confirm('Reset all bracket results AND match scores? This cannot be undone.')) return;
@@ -3693,9 +4087,7 @@ async function supabaseLoadLeaderboard(limit = 50) {
    INIT — entry point
    ============================================================ */
 async function init() {
-  isAdminMode = checkAdminMode();
   loadUserData();
-  if (isAdminMode) loadAdminData();
 
   // Initialize Supabase if configured (graceful fallback to local-only)
   if (SUPABASE_ENABLED && window.supabase) {
@@ -3711,6 +4103,10 @@ async function init() {
       db = null;
     }
   }
+
+  // Check admin status (requires db to be initialized)
+  isAdminMode = await checkAdminMode();
+  if (isAdminMode) loadAdminData();
 
   // Populate team dropdown
   const teamSelect = document.getElementById('team-filter');
