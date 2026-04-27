@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WE ARE 26 — FIFA World Cup Schedule (NZ Time)</title>
+<title>The Road to Glory — FIFA World Cup 2026 (NZ Time)</title>
 <meta name="description" content="FIFA World Cup 2026 schedule in New Zealand time. Predict winners, track your record, filter by team, switch views." />
 <meta name="theme-color" content="#000000" />
 
@@ -45,6 +45,131 @@
     --shadow-sm:  0 4px 12px rgba(0, 0, 0, .5);
     --shadow:     0 24px 60px rgba(0, 0, 0, .7);
     --glow-gold:  0 0 24px rgba(255, 184, 0, .4);
+
+    --topbar-bg:  rgba(0, 0, 0, .92);
+    --day-header-bg: rgba(0, 0, 0, .94);
+    --modal-overlay-bg: rgba(0, 0, 0, .85);
+
+    /* Text color that always sits ON the gold accent (always dark for contrast) */
+    --on-gold:    #000000;
+
+    /* Body background gradient — different for each theme */
+    --bg-gradient:
+      radial-gradient(700px 500px at 5% 0%, rgba(255, 184, 0, .07), transparent 50%),
+      radial-gradient(600px 400px at 95% 0%, rgba(229, 29, 37, .04), transparent 50%),
+      radial-gradient(500px 400px at 50% 100%, rgba(0, 166, 81, .03), transparent 50%),
+      var(--black);
+
+    --pattern-dot: rgba(255, 255, 255, .02);
+  }
+
+  /* =========================================================
+     EMERALD PITCH — deep saturated forest green theme
+     The look: a freshly-cut World Cup pitch under stadium floodlights.
+     Rich emerald base, warm gold accents, subtle "mowing stripe" gradient.
+     ========================================================= */
+  [data-theme="pitch"] {
+    --black:      #052b1f;            /* Deep emerald — base */
+    --black-2:    #073624;
+    --black-3:    #0a4030;
+    --surface:    #0e4a38;            /* Card surfaces */
+    --surface-2:  #115640;
+    --line:       rgba(255, 255, 255, .08);
+    --line-2:     rgba(255, 255, 255, .15);
+
+    --gold:       #ffb800;
+    --gold-2:     #ffd560;
+    --gold-deep:  #c08800;
+
+    --can-red:    #ff4955;
+    --can-red-2:  #ff6b75;
+    --mex-green:  #4cd388;
+    --mex-green-2:#7ee0a3;
+    --usa-blue:   #5b8def;
+    --usa-blue-2: #7ba6f5;
+
+    --ink:        #ffffff;
+    --ink-dim:    #c8d8d0;
+    --ink-faint:  #7a9588;
+
+    --shadow-sm:  0 4px 12px rgba(0, 0, 0, .4);
+    --shadow:     0 24px 60px rgba(0, 0, 0, .5);
+    --glow-gold:  0 0 24px rgba(255, 184, 0, .35);
+
+    --topbar-bg:  rgba(5, 43, 31, .92);
+    --day-header-bg: rgba(5, 43, 31, .94);
+    --modal-overlay-bg: rgba(0, 20, 12, .85);
+
+    --on-gold:    #052b1f;            /* Deep emerald reads cleaner on gold than pure black */
+
+    /* Emerald pitch gradient — subtle horizontal "mown stripe" bands
+       to evoke a freshly-cut pitch viewed from the stands */
+    --bg-gradient:
+      linear-gradient(180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(255, 255, 255, .025) 12.5%,
+        rgba(0, 0, 0, 0) 25%,
+        rgba(255, 255, 255, .025) 37.5%,
+        rgba(0, 0, 0, 0) 50%,
+        rgba(255, 255, 255, .025) 62.5%,
+        rgba(0, 0, 0, 0) 75%,
+        rgba(255, 255, 255, .025) 87.5%,
+        rgba(0, 0, 0, 0) 100%
+      ),
+      radial-gradient(900px 500px at 5% 0%, rgba(255, 184, 0, .12), transparent 50%),
+      radial-gradient(700px 400px at 95% 100%, rgba(76, 211, 136, .15), transparent 55%),
+      var(--black);
+
+    --pattern-dot: rgba(255, 255, 255, .025);
+  }
+
+  /* =========================================================
+     TROPHY GOLD — warm cream + emerald + gold theme
+     The look: FIFA trophy on a cream marble plinth, glossy magazine spread.
+     Cream surfaces (not pure white), deep emerald accents, premium gold.
+     ========================================================= */
+  [data-theme="gold"] {
+    --black:      #faf6e8;            /* Warm cream base */
+    --black-2:    #f5f0dc;
+    --black-3:    #ede5c8;
+    --surface:    #ffffff;
+    --surface-2:  #faf6e8;
+    --line:       rgba(46, 40, 20, .12);
+    --line-2:     rgba(46, 40, 20, .22);
+
+    --gold:       #b8841a;            /* Deep premium gold for contrast on cream */
+    --gold-2:     #d99500;
+    --gold-deep:  #8a6010;
+
+    --can-red:    #c4151c;
+    --can-red-2:  #a30d14;
+    --mex-green:  #00874a;
+    --mex-green-2:#006438;
+    --usa-blue:   #0f3d9c;
+    --usa-blue-2: #0a2d75;
+
+    --ink:        #1a1612;            /* Near-black with warm tint */
+    --ink-dim:    #4a4338;
+    --ink-faint:  #8a8270;
+
+    --shadow-sm:  0 4px 12px rgba(184, 132, 26, .15);
+    --shadow:     0 24px 60px rgba(184, 132, 26, .2);
+    --glow-gold:  0 0 24px rgba(184, 132, 26, .3);
+
+    --topbar-bg:  rgba(250, 246, 232, .94);
+    --day-header-bg: rgba(250, 246, 232, .95);
+    --modal-overlay-bg: rgba(40, 30, 10, .55);
+
+    --on-gold:    #1a1612;            /* Dark warm color that reads cleanly on gold buttons */
+
+    /* Trophy gold gradient: warm gold corner glows + emerald pitch undertone */
+    --bg-gradient:
+      radial-gradient(1000px 600px at 5% 0%, rgba(184, 132, 26, .12), transparent 55%),
+      radial-gradient(800px 500px at 95% 100%, rgba(0, 135, 74, .08), transparent 55%),
+      radial-gradient(600px 400px at 50% 50%, rgba(184, 132, 26, .04), transparent 60%),
+      var(--black);
+
+    --pattern-dot: rgba(46, 40, 20, .05);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -60,25 +185,22 @@
     min-height: 100vh;
   }
 
-  /* Background — refined, classy, not noisy */
+  /* Background — theme-aware via CSS variables */
   body {
-    background:
-      radial-gradient(700px 500px at 5% 0%, rgba(255, 184, 0, .07), transparent 50%),
-      radial-gradient(600px 400px at 95% 0%, rgba(229, 29, 37, .04), transparent 50%),
-      radial-gradient(500px 400px at 50% 100%, rgba(0, 166, 81, .03), transparent 50%),
-      var(--black);
+    background: var(--bg-gradient);
     background-attachment: fixed;
     position: relative;
+    transition: background .4s ease;
   }
 
-  /* Subtle "26" pattern echo — very low opacity */
+  /* Subtle dot pattern — theme-aware */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     background-image:
-      radial-gradient(rgba(255, 255, 255, .02) 1px, transparent 1px);
+      radial-gradient(var(--pattern-dot) 1px, transparent 1px);
     background-size: 30px 30px;
     z-index: 1;
   }
@@ -92,7 +214,7 @@
      ========================================================= */
   .topbar {
     padding: 14px 18px;
-    background: rgba(0, 0, 0, .92);
+    background: var(--topbar-bg);
     border-bottom: 1px solid var(--line);
     backdrop-filter: blur(20px);
     position: sticky;
@@ -131,7 +253,7 @@
 
   .brand-mark span {
     font-family: 'Archivo Black', sans-serif;
-    color: var(--black);
+    color: #000000;  /* Always black for contrast against the gold square */
     font-size: 20px;
     line-height: .85;
     text-align: center;
@@ -203,7 +325,7 @@
   /* My stats button in topbar */
   .stats-pill {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     border: none;
     padding: 8px 12px;
     border-radius: 6px;
@@ -219,6 +341,50 @@
     box-shadow: 0 4px 12px rgba(255, 184, 0, .25);
   }
 
+  /* Theme toggle button — cycles through 3 themes */
+  .theme-toggle {
+    background: transparent;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-toggle:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+    transform: rotate(15deg);
+  }
+
+  /* Each theme shows a different icon — only the active theme's icon shows */
+  .theme-toggle .theme-icon { display: none; font-size: 18px; line-height: 1; }
+  /* Default (no data-theme attribute) = Stadium Night = moon icon */
+  .theme-toggle .theme-icon-night { display: block; }
+  [data-theme="pitch"] .theme-toggle .theme-icon-night { display: none; }
+  [data-theme="pitch"] .theme-toggle .theme-icon-pitch { display: block; }
+  [data-theme="gold"]  .theme-toggle .theme-icon-night { display: none; }
+  [data-theme="gold"]  .theme-toggle .theme-icon-gold  { display: block; }
+
+  /* Smooth icon transition on theme change */
+  @keyframes themeIconPop {
+    0% { transform: scale(0.4) rotate(-90deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .theme-toggle .theme-icon { animation: themeIconPop .35s ease-out; }
+
+  @media (max-width: 480px) {
+    .theme-toggle { width: 34px; height: 34px; }
+  }
+
   /* Smaller pill on mobile */
   @media (max-width: 480px) {
     .stats-pill { padding: 6px 8px; font-size: 10px; gap: 4px; }
@@ -231,7 +397,7 @@
   }
 
   .stats-pill .pts {
-    background: var(--black);
+    background: rgba(0, 0, 0, .85);
     color: var(--gold);
     padding: 2px 6px;
     border-radius: 3px;
@@ -276,21 +442,31 @@
 
   .hero h1 {
     font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(56px, 16vw, 140px);
-    line-height: .85;
+    font-size: clamp(48px, 13vw, 120px);
+    line-height: .92;
     letter-spacing: -.04em;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     color: var(--ink);
     text-transform: uppercase;
   }
 
-  .hero h1 .we { color: var(--ink); }
-  .hero h1 .are { color: var(--ink); }
-  .hero h1 .num {
+  .hero h1 .hero-glory {
     color: var(--gold);
     font-style: italic;
-    margin-left: 8px;
-    text-shadow: 0 4px 24px rgba(255, 184, 0, .35);
+    text-shadow: 0 4px 32px rgba(255, 184, 0, .4),
+                 0 0 80px rgba(255, 184, 0, .15);
+    background: linear-gradient(180deg, var(--gold-2) 0%, var(--gold) 60%, var(--gold-deep) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Fallback for browsers without background-clip:text */
+    color: var(--gold);
+  }
+
+  /* In Trophy Gold (light) theme, the gradient text needs a subtle outline
+     so the gold doesn't disappear into the cream background */
+  [data-theme="gold"] .hero h1 .hero-glory {
+    text-shadow: 0 2px 12px rgba(184, 132, 26, .25);
   }
 
   /* Country flag bar — references CAN/MEX/USA hosts */
@@ -430,7 +606,7 @@
 
   .jump-btn {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     border: none;
     padding: 13px 18px;
     border-radius: 8px;
@@ -561,7 +737,7 @@
   .day-header {
     position: sticky;
     top: 70px;
-    background: rgba(0, 0, 0, .94);
+    background: var(--day-header-bg);
     backdrop-filter: blur(16px);
     z-index: 10;
     padding: 14px 0;
@@ -609,7 +785,7 @@
 
   .day-badge.today {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     box-shadow: var(--glow-gold);
   }
 
@@ -736,11 +912,11 @@
 
   .group-tag.knockout {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
   }
   .group-tag.final {
     background: linear-gradient(135deg, var(--gold), var(--gold-2));
-    color: var(--black);
+    color: var(--on-gold);
     box-shadow: 0 2px 8px rgba(255, 184, 0, .4);
   }
 
@@ -761,6 +937,51 @@
     letter-spacing: .15em;
     font-weight: 800;
     margin-top: 4px;
+  }
+
+  /* Live countdown — shown on cards within 24h of kickoff */
+  .match-countdown {
+    text-align: right;
+  }
+
+  .countdown-label {
+    font-size: 8px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .countdown-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -.02em;
+  }
+
+  .countdown-time {
+    font-size: 9px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    font-weight: 800;
+    margin-top: 5px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Pulse + warm color when under 1 hour */
+  .countdown-value.countdown-imminent {
+    color: var(--gold);
+    animation: countdownPulse 1s ease-in-out infinite;
+  }
+
+  @keyframes countdownPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .7; }
   }
 
   .teams {
@@ -929,6 +1150,40 @@
     color: var(--gold);
   }
 
+  .predict-prompt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .predict-prompt-row .predict-prompt {
+    margin-bottom: 0;
+  }
+
+  .share-btn {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all .15s;
+  }
+
+  .share-btn:hover {
+    background: var(--gold);
+    color: var(--on-gold);
+  }
+
   .predict-buttons {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -962,7 +1217,7 @@
 
   .predict-btn.selected {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     border-color: var(--gold);
   }
 
@@ -1024,7 +1279,7 @@
 
   table.schedule td {
     padding: 13px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, .04);
+    border-bottom: 1px solid var(--line);
     vertical-align: middle;
   }
 
@@ -1177,7 +1432,7 @@
      ========================================================= */
   .admin-bar {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     padding: 8px 18px;
     text-align: center;
     font-size: 11px;
@@ -1193,7 +1448,7 @@
   .admin-bar.show { display: block; }
 
   .admin-bar button {
-    background: var(--black);
+    background: rgba(0, 0, 0, .85);
     color: var(--gold);
     border: none;
     padding: 5px 12px;
@@ -1207,7 +1462,7 @@
     font-family: inherit;
   }
 
-  .admin-bar button:hover { background: rgba(0, 0, 0, .8); }
+  .admin-bar button:hover { background: rgba(0, 0, 0, 1); }
 
   /* =========================================================
      MODAL — shared styling for admin panel + stats panel
@@ -1215,7 +1470,7 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, .85);
+    background: var(--modal-overlay-bg);
     backdrop-filter: blur(8px);
     display: none;
     align-items: flex-start;
@@ -1240,7 +1495,7 @@
   .modal-header {
     background: var(--gold);
     padding: 20px 24px;
-    color: var(--black);
+    color: var(--on-gold);
     position: sticky;
     top: 0;
     z-index: 5;
@@ -1270,7 +1525,7 @@
   }
 
   .modal-close {
-    background: var(--black);
+    background: rgba(0, 0, 0, .85);
     color: var(--gold);
     border: none;
     width: 36px; height: 36px;
@@ -1282,7 +1537,7 @@
     font-weight: 800;
   }
 
-  .modal-close:hover { background: rgba(0, 0, 0, .8); }
+  .modal-close:hover { background: rgba(0, 0, 0, 1); }
 
   .modal-body { padding: 24px; }
 
@@ -1431,7 +1686,7 @@
   .modal-actions {
     position: sticky;
     bottom: 0;
-    background: rgba(0, 0, 0, .98);
+    background: var(--black);
     border-top: 1px solid var(--line-2);
     padding: 16px 24px;
     display: flex;
@@ -1460,7 +1715,7 @@
 
   .modal-btn-primary {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     border-color: var(--gold);
   }
 
@@ -1501,7 +1756,7 @@
 
   .modal-tab.active {
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
   }
 
   .counter-pill {
@@ -1710,6 +1965,28 @@
   }
 
   /* =========================================================
+     TWEMOJI FLAGS — SVG rendering for cross-platform support
+     Without this, Windows/Chrome shows flag emojis as letter codes (MX, ZA…).
+     With Twemoji, they appear as proper SVG flags everywhere.
+     ========================================================= */
+  img.emoji {
+    height: 1em;
+    width: auto;
+    vertical-align: -0.15em;
+    display: inline-block;
+    margin: 0 .05em;
+  }
+  /* On the larger flag-emoji elements, scale to match font size */
+  .team-flag img.emoji,
+  .standings-flag img.emoji,
+  .tree-flag img.emoji,
+  .bracket-flag img.emoji {
+    height: 1em;
+    width: auto;
+    vertical-align: middle;
+  }
+
+  /* =========================================================
      SCROLL-TO-TOP BUTTON
      ========================================================= */
   .scroll-top {
@@ -1720,7 +1997,7 @@
     height: 48px;
     border-radius: 50%;
     background: var(--gold);
-    color: var(--black);
+    color: var(--on-gold);
     border: none;
     cursor: pointer;
     display: flex;
@@ -1836,7 +2113,7 @@
 
   .standings-table tbody td {
     padding: 8px 4px;
-    border-bottom: 1px solid rgba(255, 255, 255, .04);
+    border-bottom: 1px solid var(--line);
     color: var(--ink);
     text-align: center;
   }
@@ -1861,7 +2138,7 @@
   /* Highlight rows */
   .standings-row-winner { background: rgba(255, 184, 0, .08); }
   .standings-row-runner { background: rgba(255, 184, 0, .04); }
-  .standings-row-third  { background: rgba(255, 255, 255, .02); }
+  .standings-row-third  { background: var(--line); }
   .standings-row-out    { opacity: .55; }
 
   .standings-badge {
@@ -1872,7 +2149,7 @@
     border-radius: 3px;
     letter-spacing: .04em;
   }
-  .standings-badge.winner { background: var(--gold); color: var(--black); }
+  .standings-badge.winner { background: var(--gold); color: var(--on-gold); }
   .standings-badge.runner { background: rgba(255,184,0,.25); color: var(--gold); border: 1px solid var(--gold); }
   .standings-badge.third  { background: var(--surface-2); color: var(--ink-dim); border: 1px solid var(--line); }
   .standings-badge.out    { background: transparent; color: var(--ink-faint); }
@@ -1885,73 +2162,228 @@
   .third-row-advance { background: rgba(255, 184, 0, .06); }
   .third-row-out { opacity: .5; }
 
-  /* Bracket */
-  .bracket-scroll {
-    display: flex;
-    gap: 14px;
+  /* =========================================================
+     BRACKET TREE — symmetric tournament tree
+     Each round halves the matches and doubles the spacing
+     so children visually line up with their parent matches.
+     ========================================================= */
+  .bracket-tree-wrap {
     overflow-x: auto;
-    padding: 8px 4px 14px;
+    padding: 8px 0 14px;
     -webkit-overflow-scrolling: touch;
   }
 
-  .bracket-stage {
-    flex: 0 0 auto;
-    min-width: 200px;
+  .bracket-tree {
     display: flex;
-    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
     gap: 8px;
+    min-width: 1200px;
+    padding: 0 8px;
   }
 
-  .bracket-stage-label {
+  .tree-col {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 0 0 auto;
+  }
+
+  .tree-col-label {
     font-family: 'Archivo Black', sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--gold);
     text-transform: uppercase;
-    letter-spacing: .12em;
-    margin-bottom: 6px;
+    letter-spacing: .14em;
+    margin-bottom: 10px;
     text-align: center;
-    padding: 6px;
+    padding: 5px 4px;
     background: var(--black-3);
     border-radius: 4px;
     border: 1px solid var(--line);
   }
 
-  .bracket-match {
-    background: var(--black-3);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
+  .tree-col-matches {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-around;
   }
 
-  .bracket-team {
+  .tree-cell {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    font-size: 12px;
-    border-bottom: 1px solid rgba(255,255,255,.04);
+    flex: 1;
+    padding: 4px 0;
   }
 
-  .bracket-team:last-child { border-bottom: none; }
+  /* Round-specific column widths */
+  .tree-col-left .tree-r32, .tree-col-right .tree-r32 { width: 130px; }
+  .tree-col-left .tree-r16, .tree-col-right .tree-r16 { width: 130px; }
+  .tree-col-left .tree-qf,  .tree-col-right .tree-qf  { width: 130px; }
+  .tree-col-left .tree-sf,  .tree-col-right .tree-sf  { width: 130px; }
 
-  .bracket-team.winner { background: rgba(255, 184, 0, .1); }
-  .bracket-team.winner .bracket-name { color: var(--gold); font-weight: 800; }
-  .bracket-team.loser { opacity: .5; }
-  .bracket-team.tbd .bracket-name {
+  .tree-match {
+    background: var(--black-3);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    overflow: hidden;
+    flex: 1;
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tree-match.tree-final {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold), 0 8px 24px rgba(255, 184, 0, .25);
+    background: linear-gradient(135deg, var(--surface), var(--black-3));
+  }
+
+  .tree-team {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    border-bottom: 1px solid var(--line);
+    min-height: 28px;
+  }
+
+  .tree-team:last-child { border-bottom: none; }
+
+  .tree-team.winner { background: rgba(255, 184, 0, .12); }
+  .tree-team.winner .tree-name { color: var(--gold); font-weight: 800; }
+  .tree-team.loser { opacity: .5; }
+  .tree-team.tbd .tree-name {
     color: var(--ink-faint);
     font-style: italic;
     font-weight: 500;
-    font-size: 11px;
+    font-size: 10px;
   }
-  .bracket-team.tbd .bracket-flag { opacity: .3; }
+  .tree-team.tbd .tree-flag { opacity: .3; }
 
-  .bracket-flag { font-size: 16px; }
-  .bracket-name { flex: 1; color: var(--ink); font-weight: 700; }
-  .bracket-score {
+  .tree-flag { font-size: 14px; flex-shrink: 0; }
+  .tree-name {
+    flex: 1;
+    color: var(--ink);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .tree-score {
     font-family: 'Archivo Black', sans-serif;
     color: var(--gold);
-    font-size: 14px;
+    font-size: 13px;
+    flex-shrink: 0;
   }
+
+  /* Final tile in centre is bigger */
+  .tree-match.tree-final .tree-team {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 36px;
+  }
+  .tree-match.tree-final .tree-name { font-size: 12px; }
+  .tree-match.tree-final .tree-flag { font-size: 18px; }
+  .tree-match.tree-final .tree-score { font-size: 16px; }
+
+  /* Centre column with Final + Champion + 3rd place */
+  .tree-col-center {
+    width: 200px;
+    justify-content: flex-start;
+  }
+
+  .tree-final-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding-top: 60px;
+  }
+
+  .tree-champion {
+    text-align: center;
+    padding: 14px 10px;
+    background: linear-gradient(135deg, rgba(255, 184, 0, .12), rgba(255, 184, 0, .03));
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(255, 184, 0, .2);
+  }
+
+  .tree-champion-trophy {
+    font-size: 36px;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 0 12px rgba(255, 184, 0, .6));
+  }
+
+  .tree-champion-flag {
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+
+  .tree-champion-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 14px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+    margin-bottom: 4px;
+  }
+
+  .tree-champion-label {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 9px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: .25em;
+  }
+
+  .tree-champion-empty {
+    background: transparent;
+    border: 1px dashed var(--line-2);
+    box-shadow: none;
+  }
+  .tree-champion-empty .tree-champion-trophy { opacity: .25; filter: none; }
+
+  .tree-third-place {
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line-2);
+  }
+
+  .tree-third-label {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 9px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .tree-match.tree-third {
+    border-color: var(--line);
+    box-shadow: none;
+    background: var(--black-3);
+  }
+
+  /* Mobile bracket — collapse to vertical stack with simpler layout */
+  @media (max-width: 800px) {
+    .bracket-tree-wrap {
+      overflow-x: auto;
+    }
+    .bracket-tree { min-width: 1100px; }
+    .tree-col-left .tree-r32, .tree-col-right .tree-r32,
+    .tree-col-left .tree-r16, .tree-col-right .tree-r16,
+    .tree-col-left .tree-qf,  .tree-col-right .tree-qf,
+    .tree-col-left .tree-sf,  .tree-col-right .tree-sf  { width: 110px; }
+    .tree-col-center { width: 160px; }
+    .tree-name { font-size: 10px; }
+  }
+
+
 
   /* =========================================================
      RESPONSIVE
@@ -1986,6 +2418,7 @@
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -2005,6 +2438,11 @@
       </div>
     </div>
     <div class="topbar-right">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Cycle theme" title="Cycle theme">
+        <span class="theme-icon theme-icon-night">🌙</span>
+        <span class="theme-icon theme-icon-pitch">⚽</span>
+        <span class="theme-icon theme-icon-gold">🏆</span>
+      </button>
       <button class="stats-pill" id="open-stats" aria-label="My predictions">
         🎯 <span id="topbar-pts" class="pts">0</span>
       </button>
@@ -2018,7 +2456,7 @@
 
 <section class="hero">
   <div class="hero-tag">23rd Edition · Canada · USA · Mexico</div>
-  <h1>WE ARE<span class="num">26</span></h1>
+  <h1>The Road to<br><span class="hero-glory">Glory</span></h1>
   <div class="host-bar" aria-hidden="true">
     <div class="host-bar-stripe can"></div>
     <div class="host-bar-stripe mex"></div>
@@ -2129,6 +2567,27 @@
   <div class="celebration-sub" id="celebration-sub">+10 PTS</div>
 </div>
 
+<!-- ========== SHARE PREDICTION MODAL ========== -->
+<div class="modal-overlay" id="share-overlay" role="dialog" aria-labelledby="share-title">
+  <div class="modal-panel" style="max-width: 520px; min-height: auto;">
+    <div class="modal-header">
+      <h2 id="share-title">📣 Share your prediction</h2>
+      <button class="modal-close" id="share-close" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section" style="text-align:center; padding: 18px;">
+        <canvas id="share-canvas" width="800" height="800" style="width:100%; max-width:380px; height:auto; border-radius:12px; box-shadow: var(--shadow);"></canvas>
+        <p class="desc" style="margin-top:12px; font-size:12px;">Save the image, then share it on WhatsApp, Twitter, Instagram — wherever your friends are.</p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="share-cancel">Close</button>
+      <button class="modal-btn" id="share-copy">📋 Copy link</button>
+      <button class="modal-btn modal-btn-primary" id="share-download">📥 Save image</button>
+    </div>
+  </div>
+</div>
+
 <!-- ========== TOAST ========== -->
 <div class="toast" id="toast"></div>
 
@@ -2194,7 +2653,7 @@
    If left as empty strings, the app falls back to localStorage-only.
    See supabase/SETUP.md for setup instructions.
    ============================================================ */
-const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
+const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co'; 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
 const SUPABASE_ENABLED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 let db = null; // Supabase client — initialized in init() if enabled.
@@ -2440,6 +2899,67 @@ function fmtNZDateShort(date) {
   });
 }
 
+/* Returns either:
+   - A countdown block "KICKS OFF IN \n 02:14:36" if match within 24h
+   - Otherwise the regular time + day display
+   The countdown element has data-countdown-target so a separate
+   ticker can update it every second without re-rendering the card. */
+function buildCountdownOrTime(matchDate, status) {
+  const now = new Date();
+  const msUntil = matchDate.getTime() - now.getTime();
+  const hoursUntil = msUntil / (1000 * 60 * 60);
+
+  // Show countdown when match is in the future and within 24 hours
+  if (status === 'upcoming' && hoursUntil > 0 && hoursUntil < 24) {
+    const targetTs = matchDate.getTime();
+    return `
+      <div class="match-countdown" data-countdown-target="${targetTs}">
+        <div class="countdown-label">Kicks off in</div>
+        <div class="countdown-value">${formatCountdown(msUntil)}</div>
+        <div class="countdown-time">${fmtNZTime(matchDate)} NZ</div>
+      </div>
+    `;
+  }
+
+  // Default: kickoff time + date
+  return `
+    <div class="nz-time">${fmtNZTime(matchDate)}</div>
+    <div class="nz-day">${fmtNZDateShort(matchDate)}</div>
+  `;
+}
+
+function formatCountdown(ms) {
+  if (ms <= 0) return 'KICKING OFF';
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (hours > 0) {
+    return `${hours}h ${String(minutes).padStart(2,'0')}m`;
+  }
+  return `${minutes}m ${String(seconds).padStart(2,'0')}s`;
+}
+
+function tickCountdowns() {
+  const now = Date.now();
+  document.querySelectorAll('[data-countdown-target]').forEach(el => {
+    const target = parseInt(el.dataset.countdownTarget, 10);
+    const ms = target - now;
+    const valEl = el.querySelector('.countdown-value');
+    if (!valEl) return;
+    if (ms <= 0) {
+      valEl.textContent = 'KICKING OFF ⚽';
+      valEl.classList.add('countdown-imminent');
+    } else {
+      valEl.textContent = formatCountdown(ms);
+      // Pulse + warm color when under 1 hour
+      if (ms < 60 * 60 * 1000) {
+        valEl.classList.add('countdown-imminent');
+      }
+    }
+  });
+}
+
 function nzDateKey(date) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: NZ_TZ, year: 'numeric', month: '2-digit', day: '2-digit'
@@ -2491,11 +3011,49 @@ function getMatchWinner(matchNo) {
 const PREDICTIONS_KEY = 'wc2026_user_predictions';
 const PREDICTIONS_GRADED_KEY = 'wc2026_predictions_graded';
 const MUTE_KEY = 'wc2026_muted';
+const THEME_KEY = 'wc2026_theme';
 const ADMIN_BRACKET_KEY = 'wc2026_bracket_results';
 const ADMIN_RESULTS_KEY = 'wc2026_match_results';
 
 let userPredictions = {};
 let predictionsGraded = {}; // tracks which predictions we've already celebrated for
+
+/* Theme: 'dark' (Stadium Night, default) | 'pitch' (Emerald Pitch) | 'gold' (Trophy Gold)
+   Cycles in the order: dark → pitch → gold → dark → ... */
+const THEMES = ['dark', 'pitch', 'gold'];
+const THEME_LABELS = {
+  dark:  '🌙 Stadium Night',
+  pitch: '⚽ Emerald Pitch',
+  gold:  '🏆 Trophy Gold'
+};
+
+function getStoredTheme() {
+  try {
+    const t = localStorage.getItem(THEME_KEY);
+    return THEMES.includes(t) ? t : 'dark';
+  } catch (e) { return 'dark'; }
+}
+
+function applyTheme(theme) {
+  if (theme === 'dark' || !THEMES.includes(theme)) {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+}
+
+function initTheme() {
+  applyTheme(getStoredTheme());
+}
+
+function toggleTheme() {
+  const current = getStoredTheme();
+  const idx = THEMES.indexOf(current);
+  const next = THEMES[(idx + 1) % THEMES.length];
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  applyTheme(next);
+  showToast(THEME_LABELS[next]);
+}
 
 function loadUserData() {
   try {
@@ -2711,9 +3269,19 @@ function buildMatchCardHTML(m) {
     const drawBtn = m.stage === 'Group'
       ? `<button class="predict-btn draw${drawSelected}" data-predict="${m.no}" data-pick="draw">DRAW</button>`
       : `<div></div>`;
+    // Show share button if user has locked in a pick
+    const shareBtnHTML = userPick
+      ? `<button class="share-btn" data-share="${m.no}" title="Share your prediction">
+           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+           Share
+         </button>`
+      : '';
     predictHTML = `
       <div class="predict-section">
-        <div class="predict-prompt">${userPick ? 'Your pick' : 'Predict the winner'}</div>
+        <div class="predict-prompt-row">
+          <div class="predict-prompt">${userPick ? 'Your pick' : 'Predict the winner'}</div>
+          ${shareBtnHTML}
+        </div>
         <div class="predict-buttons">
           <button class="predict-btn${homeSelected}" data-predict="${m.no}" data-pick="home">${homeFlag} ${escapeHtml(home)}</button>
           ${drawBtn}
@@ -2759,8 +3327,7 @@ function buildMatchCardHTML(m) {
           ${statusTag}
         </div>
         <div class="match-time">
-          <div class="nz-time">${fmtNZTime(matchDate)}</div>
-          <div class="nz-day">${fmtNZDateShort(matchDate)}</div>
+          ${buildCountdownOrTime(matchDate, status)}
         </div>
       </div>
       <div class="teams">
@@ -2829,6 +3396,15 @@ function renderCards(filtered, root) {
       const matchNo = parseInt(btn.dataset.predict, 10);
       const pick = btn.dataset.pick;
       setPrediction(matchNo, pick);
+    });
+  });
+
+  // Wire share buttons
+  root.querySelectorAll('button[data-share]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const matchNo = parseInt(btn.dataset.share, 10);
+      openShareCard(matchNo);
     });
   });
 }
@@ -2978,63 +3554,138 @@ function buildThirdPlaceTable() {
 }
 
 function buildKnockoutBracket() {
-  // Show R32 → R16 → QF → SF → Final progression with team names if known
-  const stages = [
-    { key: 'R32', label: 'Round of 32', count: 16 },
-    { key: 'R16', label: 'Round of 16', count: 8 },
-    { key: 'QF', label: 'Quarterfinals', count: 4 },
-    { key: 'SF', label: 'Semifinals', count: 2 },
-    { key: 'Final', label: 'Final', count: 1 }
-  ];
+  // Always show the bracket tree — even before matches start, visitors can
+  // see the tournament structure with placeholder slots ("Winner Group A" etc.).
+  // As matches happen, real team names + scores fill in automatically.
 
-  const anyKnockoutStarted = MATCHES.some(m => ['R32','R16','QF','SF','Final'].includes(m.stage) && MATCH_RESULTS[m.no]);
-  const groupsDone = allGroupsComplete();
-  if (!anyKnockoutStarted && !groupsDone) return ''; // Don't show bracket before anything's known
+  // The bracket structure based on M101=W97vsW98, M102=W99vsW100:
+  // LEFT HALF (top):  R32: [73,75,74,77,83,84,81,82] → R16: [90,89,93,94] → QF: [97,98] → SF: 101 → Final L
+  // RIGHT HALF (btm): R32: [85,87,86,88,79,80,76,78] → R16: [96,95,91,92] → QF: [100,99] → SF: 102 → Final R
 
-  let html = `
-    <div class="standings-card" style="grid-column: 1 / -1; margin-top: 18px;">
-      <div class="standings-card-header">
-        <h3>🏆 Knockout Bracket</h3>
-        <span class="standings-progress">Auto-updates as results come in</span>
-      </div>
-      <div class="bracket-scroll">
-  `;
+  // Order R32 matches so each pair feeds the right R16 match
+  // R16 M90: W-73 vs W-75, M89: W-74 vs W-77, M93: W-83 vs W-84, M94: W-81 vs W-82
+  // R16 M91: W-76 vs W-78, M92: W-79 vs W-80, M95: W-86 vs W-88, M96: W-85 vs W-87
+  const leftR32  = [73, 75, 74, 77, 83, 84, 81, 82];   // top→bottom of left side
+  const rightR32 = [85, 87, 86, 88, 79, 80, 76, 78];   // top→bottom of right side
+  const leftR16  = [90, 89, 93, 94];                    // pairs: (90 from 73+75), (89 from 74+77), (93 from 83+84), (94 from 81+82)
+  const rightR16 = [96, 95, 91, 92];                    // pairs: (96 from 85+87), (95 from 86+88), (91 from 76+78), (92 from 79+80)
+  const leftQF   = [97, 98];                            // 97 = 89+90, 98 = 93+94
+  const rightQF  = [100, 99];                           // 100 = 95+96, 99 = 91+92
+  const leftSF   = 101;                                 // 97+98
+  const rightSF  = 102;                                 // 99+100
+  const finalNo  = 104;
+  const thirdNo  = 103;                                 // L101 vs L102
 
-  stages.forEach(stage => {
-    const stageMatches = MATCHES.filter(m => m.stage === stage.key).sort((a, b) => a.no - b.no);
-    html += `<div class="bracket-stage">
-      <div class="bracket-stage-label">${stage.label}</div>`;
-    stageMatches.forEach(m => {
-      const home = resolveSlot(m.home);
-      const away = resolveSlot(m.away);
-      const homeFlag = FLAGS[home] || '';
-      const awayFlag = FLAGS[away] || '';
-      const homeIsTBD = isPlaceholderTeam(home);
-      const awayIsTBD = isPlaceholderTeam(away);
-      const result = MATCH_RESULTS[m.no];
-      const winner = getMatchWinner(m.no);
-      const homeWinCls = winner === 'home' ? 'bracket-team winner' : (winner === 'away' ? 'bracket-team loser' : 'bracket-team');
-      const awayWinCls = winner === 'away' ? 'bracket-team winner' : (winner === 'home' ? 'bracket-team loser' : 'bracket-team');
-      html += `
-        <div class="bracket-match">
-          <div class="${homeWinCls}${homeIsTBD ? ' tbd' : ''}">
-            <span class="bracket-flag">${homeFlag}</span>
-            <span class="bracket-name">${escapeHtml(home)}</span>
-            ${result ? `<span class="bracket-score">${result.home}</span>` : ''}
-          </div>
-          <div class="${awayWinCls}${awayIsTBD ? ' tbd' : ''}">
-            <span class="bracket-flag">${awayFlag}</span>
-            <span class="bracket-name">${escapeHtml(away)}</span>
-            ${result ? `<span class="bracket-score">${result.away}</span>` : ''}
-          </div>
+  const matchByNo = {};
+  MATCHES.forEach(m => { matchByNo[m.no] = m; });
+
+  // Build a single match tile (compact, for tree)
+  function tile(matchNo, opts = {}) {
+    const m = matchByNo[matchNo];
+    if (!m) return '';
+    const home = resolveSlot(m.home);
+    const away = resolveSlot(m.away);
+    const homeFlag = FLAGS[home] || '';
+    const awayFlag = FLAGS[away] || '';
+    const homeIsTBD = isPlaceholderTeam(home);
+    const awayIsTBD = isPlaceholderTeam(away);
+    const result = MATCH_RESULTS[matchNo];
+    const winner = getMatchWinner(matchNo);
+    const homeCls = winner === 'home' ? 'tree-team winner' : (winner === 'away' ? 'tree-team loser' : 'tree-team');
+    const awayCls = winner === 'away' ? 'tree-team winner' : (winner === 'home' ? 'tree-team loser' : 'tree-team');
+    const sizeCls = opts.size || '';
+    return `
+      <div class="tree-match ${sizeCls}" title="Match ${matchNo}">
+        <div class="${homeCls}${homeIsTBD ? ' tbd' : ''}">
+          <span class="tree-flag">${homeFlag}</span>
+          <span class="tree-name">${escapeHtml(home)}</span>
+          ${result ? `<span class="tree-score">${result.home}</span>` : ''}
         </div>
-      `;
-    });
-    html += `</div>`;
-  });
+        <div class="${awayCls}${awayIsTBD ? ' tbd' : ''}">
+          <span class="tree-flag">${awayFlag}</span>
+          <span class="tree-name">${escapeHtml(away)}</span>
+          ${result ? `<span class="tree-score">${result.away}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
 
-  html += `</div></div>`;
-  return html;
+  // Build a column of matches with appropriate spacers/connectors
+  // Each "round" doubles the spacing between matches, so they line up with parent matches
+  function column(matchNos, label, side, sizeCls = '') {
+    let matchesHTML = '';
+    matchNos.forEach((no, idx) => {
+      matchesHTML += `<div class="tree-cell">${tile(no, { size: sizeCls })}</div>`;
+    });
+    return `
+      <div class="tree-col tree-col-${side}">
+        <div class="tree-col-label">${label}</div>
+        <div class="tree-col-matches">${matchesHTML}</div>
+      </div>
+    `;
+  }
+
+  // Champion display in the centre — shows the winner of the final, or trophy placeholder
+  const finalResult = MATCH_RESULTS[finalNo];
+  const finalWinner = getMatchWinner(finalNo);
+  let championHTML = '';
+  if (finalWinner) {
+    const m = matchByNo[finalNo];
+    const champName = finalWinner === 'home' ? resolveSlot(m.home) : resolveSlot(m.away);
+    const champFlag = FLAGS[champName] || '🏆';
+    championHTML = `
+      <div class="tree-champion">
+        <div class="tree-champion-trophy">🏆</div>
+        <div class="tree-champion-flag">${champFlag}</div>
+        <div class="tree-champion-name">${escapeHtml(champName)}</div>
+        <div class="tree-champion-label">CHAMPIONS</div>
+      </div>
+    `;
+  } else {
+    championHTML = `
+      <div class="tree-champion tree-champion-empty">
+        <div class="tree-champion-trophy">🏆</div>
+        <div class="tree-champion-label">CHAMPION</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="standings-card" style="grid-column: 1 / -1; margin-top: 18px; padding: 18px 14px;">
+      <div class="standings-card-header">
+        <h3>🏆 Bracket Tree</h3>
+        <span class="standings-progress">Auto-fills as match results come in</span>
+      </div>
+      <div class="bracket-tree-wrap">
+        <div class="bracket-tree">
+          <!-- Left half: R32 → R16 → QF → SF -->
+          ${column(leftR32, 'R32', 'left', 'tree-r32')}
+          ${column(leftR16, 'R16', 'left', 'tree-r16')}
+          ${column(leftQF,  'QF',  'left', 'tree-qf')}
+          ${column([leftSF],'SF',  'left', 'tree-sf')}
+
+          <!-- Centre: Final + Champion + 3rd Place -->
+          <div class="tree-col tree-col-center">
+            <div class="tree-col-label">Final</div>
+            <div class="tree-final-wrap">
+              ${tile(finalNo, { size: 'tree-final' })}
+              ${championHTML}
+              <div class="tree-third-place">
+                <div class="tree-third-label">3rd Place Match</div>
+                ${tile(thirdNo, { size: 'tree-third' })}
+              </div>
+            </div>
+          </div>
+
+          <!-- Right half: SF → QF → R16 → R32 (mirrored) -->
+          ${column([rightSF],'SF', 'right', 'tree-sf')}
+          ${column(rightQF,  'QF', 'right', 'tree-qf')}
+          ${column(rightR16, 'R16','right', 'tree-r16')}
+          ${column(rightR32, 'R32','right', 'tree-r32')}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 /* ============================================================
@@ -3046,6 +3697,7 @@ function render() {
   // Standings view doesn't use match filters
   if (state.view === 'standings') {
     renderStandings(root);
+    parseEmojiTo(root);
     return;
   }
 
@@ -3058,10 +3710,27 @@ function render() {
         <p>Try adjusting your filters or clear them to see all matches.</p>
       </div>
     `;
+    parseEmojiTo(root);
     return;
   }
 
   renderCards(filtered, root);
+  parseEmojiTo(root);
+}
+
+/* Replace emoji flags with Twemoji SVG images for cross-platform rendering.
+   Without this, Windows/Chrome shows regional indicator flags as letter
+   codes (e.g. 🇲🇽 → "MX"). Twemoji turns them into colored SVGs that work
+   everywhere. Safe no-op if Twemoji failed to load. */
+function parseEmojiTo(node) {
+  if (!node || typeof twemoji === 'undefined' || !twemoji.parse) return;
+  try {
+    twemoji.parse(node, {
+      folder: 'svg',
+      ext: '.svg',
+      base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/'
+    });
+  } catch (e) { /* graceful fallback to native emoji */ }
 }
 
 function jumpToTodayOrNext() {
@@ -3346,6 +4015,253 @@ function showToast(msg, ms = 2400) {
   t.classList.add('show');
   clearTimeout(showToast._h);
   showToast._h = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+/* ============================================================
+   SHARE PREDICTION CARD
+   Renders a 1080x1080 (Instagram-friendly square) PNG showing the
+   user's prediction, with WC 2026 branding. Uses HTML5 Canvas.
+   ============================================================ */
+let shareCurrentMatch = null;
+
+function openShareCard(matchNo) {
+  const m = MATCHES.find(x => x.no === matchNo);
+  if (!m) return;
+  const pick = userPredictions[matchNo];
+  if (!pick) {
+    showToast('Make a prediction first!');
+    return;
+  }
+  shareCurrentMatch = m;
+  renderShareCard(m, pick);
+  document.getElementById('share-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeShareCard() {
+  document.getElementById('share-overlay').classList.remove('open');
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+  shareCurrentMatch = null;
+}
+
+function renderShareCard(m, pick) {
+  const canvas = document.getElementById('share-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+
+  const home = resolveSlot(m.home);
+  const away = resolveSlot(m.away);
+  const homeFlag = FLAGS[home] || '';
+  const awayFlag = FLAGS[away] || '';
+  const pickedTeam = pick === 'home' ? home : pick === 'away' ? away : 'Draw';
+  const pickedFlag = pick === 'home' ? homeFlag : pick === 'away' ? awayFlag : '🤝';
+  const stadium = STADIUMS[m.venue] || { city: '', country: '' };
+  const matchDate = new Date(m.et);
+
+  // === Background — black with gold gradient corner ===
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, W, H);
+
+  // Corner gold radial
+  const grad = ctx.createRadialGradient(W * 0.85, H * 0.15, 0, W * 0.85, H * 0.15, W * 0.6);
+  grad.addColorStop(0, 'rgba(255, 184, 0, 0.18)');
+  grad.addColorStop(1, 'rgba(255, 184, 0, 0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Bottom left subtle accent
+  const grad2 = ctx.createRadialGradient(W * 0.1, H * 0.85, 0, W * 0.1, H * 0.85, W * 0.5);
+  grad2.addColorStop(0, 'rgba(0, 166, 81, 0.08)');
+  grad2.addColorStop(1, 'rgba(0, 166, 81, 0)');
+  ctx.fillStyle = grad2;
+  ctx.fillRect(0, 0, W, H);
+
+  // === Top tag — "FIFA WORLD CUP 2026 PREDICTION" ===
+  ctx.fillStyle = '#ffb800';
+  ctx.font = '900 22px "Archivo Black", system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('• MY WORLD CUP 26 PICK •', W / 2, 80);
+
+  // === Host country stripe (CAN red / MEX green / USA blue) ===
+  const stripeY = 100;
+  const stripeW = 240;
+  const stripeH = 6;
+  const stripeX = W / 2 - stripeW / 2;
+  ctx.fillStyle = '#e61d25'; ctx.fillRect(stripeX, stripeY, stripeW / 3, stripeH);
+  ctx.fillStyle = '#00a651'; ctx.fillRect(stripeX + stripeW / 3, stripeY, stripeW / 3, stripeH);
+  ctx.fillStyle = '#1d4ed8'; ctx.fillRect(stripeX + (stripeW * 2) / 3, stripeY, stripeW / 3, stripeH);
+
+  // === Match number + stage ===
+  ctx.fillStyle = '#707070';
+  ctx.font = '800 16px Inter, system-ui, sans-serif';
+  ctx.fillText(`MATCH ${String(m.no).padStart(2, '0')} · ${m.stage === 'Group' ? 'GROUP ' + m.group : m.stage.toUpperCase()}`, W / 2, 150);
+
+  // === Team matchup ===
+  // Home team flag big
+  ctx.font = '120px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText(homeFlag, W / 4, 320);
+
+  // VS in middle
+  ctx.fillStyle = '#ffb800';
+  ctx.font = '900 56px "Archivo Black", system-ui, sans-serif';
+  ctx.fillText('VS', W / 2, 310);
+
+  // Away team flag
+  ctx.fillStyle = '#000';
+  ctx.font = '120px system-ui';
+  ctx.fillText(awayFlag, (W * 3) / 4, 320);
+
+  // Team names
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 32px "Archivo Black", system-ui, sans-serif';
+  ctx.fillText(home.toUpperCase(), W / 4, 400);
+  ctx.fillText(away.toUpperCase(), (W * 3) / 4, 400);
+
+  // === Centre divider line ===
+  ctx.strokeStyle = '#1f1f1f';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(120, 470);
+  ctx.lineTo(W - 120, 470);
+  ctx.stroke();
+
+  // === "MY PICK" label ===
+  ctx.fillStyle = '#707070';
+  ctx.font = '800 18px Inter, system-ui, sans-serif';
+  ctx.fillText('MY PICK', W / 2, 520);
+
+  // === Picked team highlight box ===
+  const boxX = W / 2 - 280;
+  const boxY = 555;
+  const boxW = 560;
+  const boxH = 130;
+
+  // Gold filled box with rounded corners
+  ctx.fillStyle = '#ffb800';
+  roundedRect(ctx, boxX, boxY, boxW, boxH, 12);
+  ctx.fill();
+
+  // Picked flag
+  ctx.font = '70px system-ui';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#000';
+  ctx.fillText(pickedFlag, boxX + 30, boxY + 92);
+
+  // Picked team name
+  ctx.fillStyle = '#000000';
+  ctx.font = '900 44px "Archivo Black", system-ui, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(pickedTeam.toUpperCase(), boxX + 130, boxY + 88);
+
+  // === Match details (date + venue) ===
+  ctx.fillStyle = '#b8b8b8';
+  ctx.font = '700 18px Inter, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  const dateStr = matchDate.toLocaleDateString('en-NZ', {
+    timeZone: NZ_TZ, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+  });
+  const timeStr = fmtNZTime(matchDate);
+  ctx.fillText(`${dateStr} · ${timeStr} NZ`, W / 2, 730);
+  ctx.fillStyle = '#707070';
+  ctx.font = '600 16px Inter, system-ui, sans-serif';
+  ctx.fillText(`${m.venue} · ${stadium.city}, ${stadium.country}`, W / 2, 758);
+
+  // === Footer brand ===
+  ctx.fillStyle = '#ffb800';
+  ctx.font = '900 20px "Archivo Black", system-ui, sans-serif';
+  ctx.fillText('worldcup.nextwave.nz', W / 2, 778);
+}
+
+function roundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y,     x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x,     y + h, r);
+  ctx.arcTo(x,     y + h, x,     y,     r);
+  ctx.arcTo(x,     y,     x + w, y,     r);
+  ctx.closePath();
+}
+
+async function downloadShareCard() {
+  const canvas = document.getElementById('share-canvas');
+  if (!canvas || !shareCurrentMatch) return;
+  const m = shareCurrentMatch;
+  const home = resolveSlot(m.home).replace(/[^a-z0-9]/gi, '');
+  const away = resolveSlot(m.away).replace(/[^a-z0-9]/gi, '');
+  const filename = `wc2026-pick-${home}-vs-${away}.png`;
+
+  // Try Web Share API on mobile (allows native share sheet)
+  if (navigator.canShare && navigator.share) {
+    try {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], filename, { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: 'My World Cup 2026 prediction',
+              text: 'Check out my pick!'
+            });
+            return;
+          } catch (e) {
+            // User cancelled or share failed — fall through to download
+          }
+        }
+        // Fallback: trigger download
+        triggerDownload(blob, filename);
+      }, 'image/png');
+      return;
+    } catch (e) { /* fall through */ }
+  }
+
+  // Desktop fallback: download directly
+  canvas.toBlob((blob) => {
+    if (blob) triggerDownload(blob, filename);
+  }, 'image/png');
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('✓ Image saved');
+}
+
+function copyShareLink() {
+  const url = window.location.origin + window.location.pathname;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(
+      () => showToast('✓ Link copied to clipboard'),
+      () => showToast('✗ Could not copy link')
+    );
+  } else {
+    showToast('Copy this URL: ' + url);
+  }
+}
+
+function initShare() {
+  // Modal close handlers
+  const overlay = document.getElementById('share-overlay');
+  if (!overlay) return;
+  document.getElementById('share-close')?.addEventListener('click', closeShareCard);
+  document.getElementById('share-cancel')?.addEventListener('click', closeShareCard);
+  document.getElementById('share-download')?.addEventListener('click', downloadShareCard);
+  document.getElementById('share-copy')?.addEventListener('click', copyShareLink);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeShareCard(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeShareCard();
+  });
 }
 
 /* ============================================================
@@ -4572,10 +5488,22 @@ async function init() {
   initAdmin();
   initStats();
   initMute();
+  initShare();
+
+  // Theme toggle
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', toggleTheme);
+  }
 
   // Clock + render loop
   tickClock();
   setInterval(tickClock, 30000);
+
+  // Countdown timers — tick every second (no re-render, just text updates)
+  tickCountdowns();
+  setInterval(tickCountdowns, 1000);
+
   setInterval(() => {
     render();
     checkForCelebrations();
@@ -4617,6 +5545,10 @@ async function init() {
   // Don't auto-jump on load — let user start at the top of the page.
   // The pulsing "Today / Next Match" button invites them to jump.
 
+  // Twemoji-parse the static parts of the page (header, hero, footer)
+  // The dynamic parts get parsed inside render(). This runs once on init.
+  parseEmojiTo(document.body);
+
   // Check for any newly-graded correct predictions on load (e.g. results
   // were entered between sessions). Stagger the celebrations.
   setTimeout(checkForCelebrations, 800);
@@ -4646,6 +5578,9 @@ function checkForCelebrations() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Apply theme immediately to prevent flash on initial render
+initTheme();
 
 // Handle window resize for fireworks canvas
 window.addEventListener('resize', () => {
