@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Road to Glory — FIFA World Cup 2026 (NZ Time)</title>
+<title>The Road to Glory - FIFA World Cup 2026 (NZ Time)</title>
 <meta name="description" content="FIFA World Cup 2026 schedule in New Zealand time. Predict winners, track your record, filter by team, switch views." />
 <meta name="theme-color" content="#000000" />
 
@@ -183,6 +183,8 @@
     -webkit-font-smoothing: antialiased;
     line-height: 1.5;
     min-height: 100vh;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   /* Background — theme-aware via CSS variables */
@@ -281,11 +283,17 @@
     margin-top: 5px;
   }
 
-  /* Hide brand subtitle on very narrow screens to prevent overlap */
-  @media (max-width: 380px) {
+  /* Hide brand subtitle on narrow screens to prevent overlap with topbar buttons */
+  @media (max-width: 540px) {
     .brand-sub { display: none; }
     .brand-mark { width: 36px; height: 36px; }
     .brand-mark span { font-size: 16px; }
+    .brand-title { font-size: clamp(11px, 3vw, 14px); }
+  }
+
+  /* On really narrow screens, also hide the brand title text and keep just the "26" mark */
+  @media (max-width: 380px) {
+    .brand-title { display: none; }
   }
 
   .topbar-right {
@@ -1757,7 +1765,9 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 0;
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: min(100vh, 100%);
   }
 
   .modal-header {
@@ -1807,7 +1817,7 @@
 
   .modal-close:hover { background: rgba(0, 0, 0, 1); }
 
-  .modal-body { padding: 24px; }
+  .modal-body { padding: 24px; flex: 1 1 auto; }
 
   .modal-section {
     margin-bottom: 24px;
@@ -1961,7 +1971,6 @@
     gap: 10px;
     justify-content: flex-end;
     flex-wrap: wrap;
-    margin: 0 -24px -24px;
   }
 
   .modal-btn {
@@ -2714,7 +2723,7 @@
     }
     .actions-row > * { width: 100%; }
     .view-toggle-wrap { order: 2; }
-    .jump-btn { order: 1; }
+    .jump-btn { order: 1; padding: 10px 14px; font-size: 11px; }
     .clear-btn { order: 3; }
     .mute-toggle { order: 4; align-self: flex-end; }
   }
@@ -2776,17 +2785,28 @@
       align-items: stretch;
     }
     .modal-panel {
-      max-width: 100%;
-      min-height: 100%;
+      max-width: 100vw;
+      width: 100vw;
+      min-height: 100vh;
       border-radius: 0;
       margin: 0;
+      overflow-x: hidden;
     }
     .modal-actions {
       flex-direction: column-reverse;
       gap: 8px;
     }
     .modal-actions .modal-btn { width: 100%; }
-    .modal-body { padding: 16px; }
+    .modal-body { padding: 16px; overflow-x: hidden; }
+
+    /* Prevent any inner content from forcing horizontal scroll */
+    .modal-body * { max-width: 100%; }
+    .modal-body table { max-width: 100%; display: block; overflow-x: auto; }
+    .modal-body input, .modal-body select, .modal-body textarea { max-width: 100%; box-sizing: border-box; }
+
+    /* Modal header tighter on phone */
+    .modal-header { padding: 14px 16px; }
+    .modal-header h2 { font-size: 16px; }
   }
 
   /* Standings table on narrow screens — tighter padding, smaller text */
@@ -2879,7 +2899,7 @@
     <div class="host-bar-stripe mex"></div>
     <div class="host-bar-stripe usa"></div>
   </div>
-  <p class="hero-sub">48 nations. 104 matches. Every kickoff in NZ time. Pick your winners and watch the trophies pile up. June 11 — July 19, 2026.</p>
+  <p class="hero-sub">48 nations. 104 matches. Every kickoff in NZ time. Pick your winners and watch the trophies pile up. June 11 - July 19, 2026.</p>
 
   <!-- Tournament countdown (auto-hides once tournament begins) -->
   <div class="tournament-countdown" id="tournament-countdown" data-target="2026-06-11T19:00:00Z">
@@ -3029,7 +3049,7 @@
     <div class="modal-body">
       <div class="modal-section" style="text-align:center; padding: 18px;">
         <canvas id="share-canvas" width="800" height="800" style="width:100%; max-width:380px; height:auto; border-radius:12px; box-shadow: var(--shadow);"></canvas>
-        <p class="desc" style="margin-top:12px; font-size:12px;">Save the image, then share it on WhatsApp, Twitter, Instagram — wherever your friends are.</p>
+        <p class="desc" style="margin-top:12px; font-size:12px;">Save the image, then share it on WhatsApp, Twitter, Instagram - wherever your friends are.</p>
       </div>
     </div>
     <div class="modal-actions">
@@ -3052,7 +3072,7 @@
       <!-- HOME VIEW: list of joined leagues + Create/Join buttons -->
       <div id="leagues-home-view">
         <div class="modal-section">
-          <p class="desc" style="margin-bottom: 16px;">Compete with friends in private leagues. Create one, share the code, and track your group's predictions in a private leaderboard. Stakes are settled offline — the app never handles money.</p>
+          <p class="desc" style="margin-bottom: 16px;">Compete with friends in private leagues. Create one, share the code, and track your group's predictions in a private leaderboard. Stakes are settled offline - the app never handles money.</p>
 
           <div id="leagues-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;"></div>
 
@@ -3077,7 +3097,7 @@
 
           <label style="display: block; font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin: 14px 0 6px;">Stakes (optional)</label>
           <input type="text" id="league-create-stakes" maxlength="200" placeholder="e.g. $10 each, loser buys pizza" class="modal-input">
-          <p style="font-size: 11px; color: var(--ink-faint); margin-top: 6px;">⚠️ Display only — the app does NOT handle money. Settle in person, on Splitwise, etc.</p>
+          <p style="font-size: 11px; color: var(--ink-faint); margin-top: 6px;">⚠️ Display only - the app does NOT handle money. Settle in person, on Splitwise, etc.</p>
 
           <div id="league-create-message" style="margin-top: 12px; font-size: 12px; min-height: 1.5em;"></div>
 
@@ -3124,7 +3144,7 @@
 <!-- ========== TOAST ========== -->
 <div class="toast" id="toast"></div>
 
-<!-- Scroll-to-top button — appears after scrolling -->
+<!-- Scroll-to-top button - appears after scrolling -->
 <button class="scroll-top" id="scroll-top" aria-label="Scroll to top of page" title="Back to top">
   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <polyline points="18 15 12 9 6 15"></polyline>
@@ -3132,9 +3152,8 @@
 </button>
 
 <footer>
-  <p><strong><a href="https://www.nextwave.nz/" target="_blank" rel="noopener noreferrer" style="color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s;" onmouseover="this.style.borderBottomColor='var(--gold)'" onmouseout="this.style.borderBottomColor='transparent'">Built by Next Wave ↗</a></strong> · AI-powered digital marketing in New Zealand</p>
-  <p>Schedule data current as of April 2026 · Times auto-converted to NZ local time</p>
-  <p>Source: FIFA · Stadium capacities are tournament configurations</p>
+  <p>Schedule data current as of April 2026. Times auto-converted to NZ local time.</p>
+  <p>Source: FIFA. Stadium capacities are tournament configurations.</p>
 </footer>
 
 <!-- ========== ADMIN LOGIN MODAL ========== -->
@@ -3186,7 +3205,7 @@
    Configuration is set during build/deploy.
    ============================================================ */
 const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
-const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
+const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY'; 
 const CLOUD_ENABLED = !!(CLOUD_API_URL && CLOUD_API_KEY);
 let db = null; // Cloud client — initialized in init() if enabled.
                // Renamed to avoid global name collision.
@@ -3646,7 +3665,11 @@ let userPredictions = {};
 let predictionsGraded = {}; // tracks which predictions we've already celebrated for
 
 /* Theme: 'dark' (Stadium Night, default) | 'pitch' (Emerald Pitch) | 'gold' (Trophy Gold)
-   Picked directly via the 3-dot picker in the topbar. */
+   Picked directly via the 3-dot picker in the topbar.
+
+   Auto-rotation: if the visitor has never clicked a theme dot, the app picks
+   a random theme on each page load. Once they click any dot, their choice
+   is saved and respected on subsequent visits. */
 const THEMES = ['dark', 'pitch', 'gold'];
 const THEME_LABELS = {
   dark:  '🌙 Stadium Night',
@@ -3654,12 +3677,37 @@ const THEME_LABELS = {
   gold:  '🏆 Trophy Gold'
 };
 const THEME_PICKER_SEEN_KEY = 'wc2026_theme_picker_seen';
+const THEME_LAST_AUTO_KEY = 'wc2026_theme_last_auto';
+
+function hasUserPickedTheme() {
+  try { return localStorage.getItem(THEME_PICKER_SEEN_KEY) === '1'; }
+  catch (e) { return false; }
+}
 
 function getStoredTheme() {
   try {
     const t = localStorage.getItem(THEME_KEY);
     return THEMES.includes(t) ? t : 'dark';
   } catch (e) { return 'dark'; }
+}
+
+/* Pick a random theme, avoiding repeating the last auto-rotated one
+   (so visitors actually see variety, not the same one twice in a row). */
+function getRandomTheme() {
+  let last = null;
+  try { last = localStorage.getItem(THEME_LAST_AUTO_KEY); } catch (e) {}
+  const choices = last ? THEMES.filter(t => t !== last) : THEMES;
+  const next = choices[Math.floor(Math.random() * choices.length)];
+  try { localStorage.setItem(THEME_LAST_AUTO_KEY, next); } catch (e) {}
+  return next;
+}
+
+/* What theme should this page load show?
+   - If user has explicitly picked one, honor that choice.
+   - Otherwise, pick a fresh random one (different from last time). */
+function getInitialTheme() {
+  if (hasUserPickedTheme()) return getStoredTheme();
+  return getRandomTheme();
 }
 
 function applyTheme(theme) {
@@ -3677,19 +3725,22 @@ function applyTheme(theme) {
 }
 
 function initTheme() {
-  applyTheme(getStoredTheme());
+  applyTheme(getInitialTheme());
 }
 
 function pickTheme(theme) {
   if (!THEMES.includes(theme)) return;
-  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+    // Mark that the user has made an explicit choice — stops auto-rotation
+    localStorage.setItem(THEME_PICKER_SEEN_KEY, '1');
+  } catch (e) {}
   applyTheme(theme);
   // Stop the picker pulse animation once user has interacted
   const picker = document.getElementById('theme-picker');
   const hint = document.getElementById('theme-hint');
   if (picker) picker.classList.add('calmed');
   if (hint) hint.classList.remove('visible');
-  try { localStorage.setItem(THEME_PICKER_SEEN_KEY, '1'); } catch (e) {}
   showToast(THEME_LABELS[theme]);
 }
 
@@ -3743,7 +3794,7 @@ function setPrediction(matchNo, choice) {
   const matchDate = new Date(m.et);
   const realNow = new Date();
   if (realNow >= matchDate) {
-    showToast('🔒 Predictions closed — match has started');
+    showToast('🔒 Predictions closed - match has started');
     render(); // re-render to update the UI lock state
     return;
   }
@@ -4178,7 +4229,7 @@ function renderStandings(root) {
     <section style="max-width:1100px; margin:0 auto;">
       <header style="margin: 8px 0 28px; text-align:center;">
         <h2 style="font-family:'Archivo Black',sans-serif; font-size: clamp(28px, 5vw, 40px); letter-spacing:-.02em; color:var(--ink); text-transform:uppercase; margin-bottom:8px;">Standings &amp; Bracket</h2>
-        <p style="color:var(--ink-dim); font-size:13px;">Live tables — auto-calculated as match results come in. Top 2 from each group + 8 best 3rd-place teams advance.</p>
+        <p style="color:var(--ink-dim); font-size:13px;">Live tables - auto-calculated as match results come in. Top 2 from each group + 8 best 3rd-place teams advance.</p>
       </header>
   `;
 
@@ -4298,7 +4349,7 @@ function buildThirdPlaceTable() {
   return `
     <div class="standings-card" style="grid-column: 1 / -1; margin-top: 10px;">
       <div class="standings-card-header">
-        <h3>🥉 Best Third-Placed Teams ${allDone ? '— Final Ranking' : '— Live'}</h3>
+        <h3>🥉 Best Third-Placed Teams ${allDone ? ' - Final Ranking' : ' - Live'}</h3>
         <span class="standings-progress">Top 8 of ${ranked.length} advance to R32</span>
       </div>
       <table class="standings-table">
@@ -5171,7 +5222,7 @@ function buildBracketTab() {
 
   let html = `
     <div class="modal-stage-info">
-      ${filled} of ~${total} bracket slots filled. Use auto-advance below — or pick winners manually from dropdowns.
+      ${filled} of ~${total} bracket slots filled. Use auto-advance below - or pick winners manually from dropdowns.
     </div>
 
     <div class="modal-section" style="border-color: var(--gold); background: linear-gradient(135deg, var(--surface), rgba(255,184,0,.04));">
@@ -5184,7 +5235,7 @@ function buildBracketTab() {
             ① Auto-fill group winners + runners-up
           </button>
           <span style="color:var(--ink-faint); font-size:11px;">
-            ${groupResultsCount}/72 group matches scored ${groupsDone ? '✓' : '— need all 72'}
+            ${groupResultsCount}/72 group matches scored ${groupsDone ? '✓' : ' - need all 72'}
           </span>
         </div>
 
@@ -5201,7 +5252,7 @@ function buildBracketTab() {
       ${groupsDone ? buildBest3Helper() : ''}
 
       <p class="desc" style="margin-top:14px; font-size:11px;">
-        💡 Best-3rd assignments still require your input — FIFA's matrix has 495 scenarios. We'll show the ranked third-place teams below to make it easy.
+        💡 Best-3rd assignments still require your input - FIFA's matrix has 495 scenarios. We'll show the ranked third-place teams below to make it easy.
       </p>
     </div>
   `;
@@ -5216,11 +5267,11 @@ function buildBracketTab() {
     const teams = GROUPS[g];
     html += `
       <div class="modal-field">
-        <label>Group <strong>${g}</strong> — Winner</label>
+        <label>Group <strong>${g}</strong> - Winner</label>
         ${buildSelect('W-' + g, teams)}
       </div>
       <div class="modal-field">
-        <label>Group <strong>${g}</strong> — Runner-up</label>
+        <label>Group <strong>${g}</strong> - Runner-up</label>
         ${buildSelect('RU-' + g, teams)}
       </div>
     `;
@@ -5284,7 +5335,7 @@ function buildBracketTab() {
 function buildSelect(slot, options, disabled = false) {
   const current = BRACKET_RESULTS[slot] || '';
   const filledCls = current ? ' filled' : '';
-  let opts = `<option value="">— select —</option>`;
+  let opts = `<option value=""> - select - </option>`;
   options.forEach(team => {
     const flag = FLAGS[team] || '';
     const sel = team === current ? ' selected' : '';
@@ -5365,7 +5416,7 @@ function wireAdminInputs() {
       render();
       updateTopbarStats();
       buildAdminUI();
-      showToast(`✓ Auto-filled ${result.filled} group slots${synced ? ' (synced to cloud)' : ' (local only — cloud sync failed)'}`, 3500);
+      showToast(`✓ Auto-filled ${result.filled} group slots${synced ? ' (synced to cloud)' : ' (local only - cloud sync failed)'}`, 3500);
     });
   }
 
@@ -5375,7 +5426,7 @@ function wireAdminInputs() {
     autoAdvanceBtn.addEventListener('click', async () => {
       const result = autoAdvanceKnockouts();
       if (result.filled === 0) {
-        showToast('No new knockout winners to advance — enter scores first.', 3000);
+        showToast('No new knockout winners to advance - enter scores first.', 3000);
         return;
       }
       saveAdminData();
@@ -5611,7 +5662,7 @@ function downloadUpdatedHTML() {
   const resultsRegex = /const MATCH_RESULTS = \{[\s\S]*?\n\};/;
 
   if (!bracketRegex.test(fullHTML) || !resultsRegex.test(fullHTML)) {
-    alert('Could not locate BRACKET_RESULTS or MATCH_RESULTS in the HTML — please copy values manually.');
+    alert('Could not locate BRACKET_RESULTS or MATCH_RESULTS in the HTML - please copy values manually.');
     return;
   }
 
@@ -5627,7 +5678,7 @@ function downloadUpdatedHTML() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast('✓ index.html downloaded — upload to publish');
+  showToast('✓ index.html downloaded - upload to publish');
 }
 
 function initAdmin() {
@@ -6109,7 +6160,7 @@ function buildAccountSectionHTML() {
     <div class="modal-section" style="border: 1px dashed var(--gold); background: rgba(255, 184, 0, .03);">
       <h3 style="color: var(--gold);">💾 Save your picks across devices</h3>
       <p class="desc">Your picks currently live only in this browser. If you clear your browser or switch devices, you'll lose them.</p>
-      <p class="desc" style="margin-top: 6px;">Add your email to sync your picks across all your devices. We'll only use it for sign-in — no spam, no marketing.</p>
+      <p class="desc" style="margin-top: 6px;">Add your email to sync your picks across all your devices. We'll only use it for sign-in - no spam, no marketing.</p>
       <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
         <input type="email" id="account-email-input" placeholder="your.email@example.com"
           class="modal-input" style="flex: 1; min-width: 200px;" />
@@ -6143,7 +6194,7 @@ function wireAccountSection() {
       signinBtn.textContent = 'Send magic link';
       if (result.ok) {
         msgEl.style.color = 'var(--gold)';
-        msgEl.textContent = '✓ Check your inbox — click the link to finish signing in';
+        msgEl.textContent = '✓ Check your inbox - click the link to finish signing in';
       } else {
         msgEl.style.color = 'var(--can-red-2)';
         msgEl.textContent = '✗ ' + (result.error || 'Failed to send link');
@@ -6613,7 +6664,7 @@ function renderLeagueDetail(detail) {
     const text = document.getElementById('settle-output').textContent;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(
-        () => showToast('✓ Settlement copied — paste it in your group chat'),
+        () => showToast('✓ Settlement copied - paste it in your group chat'),
         () => showToast('✗ Copy failed')
       );
     }
@@ -6631,11 +6682,11 @@ function generateSettlementText(detail, amount, currency) {
   const losers = members.slice(1);
   const totalPot = amount * losers.length;
   let lines = [];
-  lines.push(`🏆 ${league.name} — World Cup 2026 Settlement`);
+  lines.push(`🏆 ${league.name} - World Cup 2026 Settlement`);
   lines.push('');
   lines.push(`Stake: ${currency}${amount} per person`);
   lines.push('');
-  lines.push(`🥇 1st place: ${winner.display_name} (${winner.points} pts) — wins ${currency}${totalPot}`);
+  lines.push(`🥇 1st place: ${winner.display_name} (${winner.points} pts) - wins ${currency}${totalPot}`);
   lines.push('');
   lines.push('Everyone else pays the winner:');
   losers.forEach((loser, i) => {
