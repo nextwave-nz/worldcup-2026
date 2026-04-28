@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Road to Glory | FIFA World Cup 2026 (NZ Time)</title>
+<title>The Road to Glory - FIFA World Cup 2026 (NZ Time)</title>
 <meta name="description" content="FIFA World Cup 2026 schedule in New Zealand time. Predict winners, track your record, filter by team, switch views." />
 <meta name="theme-color" content="#000000" />
 
@@ -2446,17 +2446,21 @@
      ========================================================= */
   .bracket-tree-wrap {
     overflow-x: auto;
+    overflow-y: hidden;
     padding: 8px 0 14px;
     -webkit-overflow-scrolling: touch;
+    /* Subtle inset border to visually frame the scrollable area */
+    background: var(--surface);
+    border-radius: 6px;
   }
 
   .bracket-tree {
     display: flex;
     align-items: stretch;
-    justify-content: center;
-    gap: 8px;
-    min-width: 1200px;
-    padding: 0 8px;
+    justify-content: flex-start;
+    gap: 10px;
+    min-width: max-content;
+    padding: 0 16px;
   }
 
   .tree-col {
@@ -2494,11 +2498,11 @@
     padding: 4px 0;
   }
 
-  /* Round-specific column widths */
-  .tree-col-left .tree-r32, .tree-col-right .tree-r32 { width: 130px; }
-  .tree-col-left .tree-r16, .tree-col-right .tree-r16 { width: 130px; }
-  .tree-col-left .tree-qf,  .tree-col-right .tree-qf  { width: 130px; }
-  .tree-col-left .tree-sf,  .tree-col-right .tree-sf  { width: 130px; }
+  /* Round-specific column widths — wide enough to fit "Winner Group XYZ" placeholders */
+  .tree-col-left .tree-r32, .tree-col-right .tree-r32 { width: 150px; }
+  .tree-col-left .tree-r16, .tree-col-right .tree-r16 { width: 150px; }
+  .tree-col-left .tree-qf,  .tree-col-right .tree-qf  { width: 150px; }
+  .tree-col-left .tree-sf,  .tree-col-right .tree-sf  { width: 150px; }
 
   .tree-match {
     background: var(--black-3);
@@ -2646,18 +2650,16 @@
     background: var(--black-3);
   }
 
-  /* Mobile bracket — collapse to vertical stack with simpler layout */
+  /* Mobile bracket — narrower columns but still allow "Winner Group X" labels to fit */
   @media (max-width: 800px) {
-    .bracket-tree-wrap {
-      overflow-x: auto;
-    }
-    .bracket-tree { min-width: 1100px; }
+    .bracket-tree { min-width: max-content; }
     .tree-col-left .tree-r32, .tree-col-right .tree-r32,
     .tree-col-left .tree-r16, .tree-col-right .tree-r16,
     .tree-col-left .tree-qf,  .tree-col-right .tree-qf,
-    .tree-col-left .tree-sf,  .tree-col-right .tree-sf  { width: 110px; }
-    .tree-col-center { width: 160px; }
+    .tree-col-left .tree-sf,  .tree-col-right .tree-sf  { width: 130px; }
+    .tree-col-center { width: 150px; }
     .tree-name { font-size: 10px; }
+    .tree-team { padding: 5px 6px; }
   }
 
 
@@ -3204,8 +3206,8 @@
    If left as empty strings, the app falls back to localStorage-only.
    Configuration is set during build/deploy.
    ============================================================ */
-const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
-const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY'; 
+const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co'; 
+const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
 const CLOUD_ENABLED = !!(CLOUD_API_URL && CLOUD_API_KEY);
 let db = null; // Cloud client — initialized in init() if enabled.
                // Renamed to avoid global name collision.
@@ -4468,6 +4470,9 @@ function buildKnockoutBracket() {
         <h3>🏆 Bracket Tree</h3>
         <span class="standings-progress">Auto-fills as match results come in</span>
       </div>
+      <p style="font-size: 11px; color: var(--ink-faint); margin: -6px 0 10px; letter-spacing: .04em;">
+        ↔ Scroll horizontally to see the full bracket
+      </p>
       <div class="bracket-tree-wrap">
         <div class="bracket-tree">
           <!-- Left half: R32 → R16 → QF → SF -->
