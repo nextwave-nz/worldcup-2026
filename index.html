@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Road to Glory | FIFA World Cup 2026 (NZ Time)</title>
+<title>The Road to Glory — FIFA World Cup 2026 (NZ Time)</title>
 <meta name="description" content="FIFA World Cup 2026 schedule in New Zealand time. Predict winners, track your record, filter by team, switch views." />
 <meta name="theme-color" content="#000000" />
 
@@ -341,6 +341,77 @@
     box-shadow: 0 4px 12px rgba(255, 184, 0, .25);
   }
 
+  /* Leagues icon button in topbar */
+  .leagues-pill {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all .15s;
+    flex-shrink: 0;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .leagues-pill:hover {
+    background: var(--gold);
+    color: var(--on-gold);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 480px) {
+    .leagues-pill { padding: 4px 8px; font-size: 14px; height: 30px; }
+  }
+
+  /* League card in the leagues home view */
+  .league-card {
+    width: 100%;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+    cursor: pointer;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all .15s;
+  }
+
+  .league-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Reusable modal-input style for league forms */
+  .modal-input {
+    width: 100%;
+    background: var(--black-3);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color .15s;
+    box-sizing: border-box;
+  }
+
+  .modal-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .modal-input::placeholder {
+    color: var(--ink-faint);
+  }
+
   /* =========================================================
      THEME PICKER — three dots, one per theme.
      Visually obvious that there are 3 options, each is directly clickable,
@@ -570,6 +641,133 @@
     max-width: 540px;
     margin: 0 auto 32px;
     font-weight: 500;
+  }
+
+  /* =========================================================
+     TOURNAMENT COUNTDOWN — giant timer until June 11 / June 12 NZ
+     ========================================================= */
+  .tournament-countdown {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    padding: 22px 18px;
+    background: linear-gradient(135deg, rgba(255, 184, 0, .1), rgba(255, 184, 0, .04));
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255, 184, 0, .12);
+  }
+
+  .tc-label {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .tc-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 12px;
+    flex-wrap: nowrap;
+  }
+
+  .tc-cell {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .tc-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(32px, 9vw, 64px);
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 4px 16px rgba(255, 184, 0, .15);
+  }
+
+  .tc-unit {
+    font-size: clamp(8px, 2vw, 11px);
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+
+  .tc-sep {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(28px, 8vw, 56px);
+    color: var(--gold);
+    line-height: 1;
+    padding-bottom: 16px;
+    opacity: .6;
+    animation: tcBlink 1.6s ease-in-out infinite;
+    flex: 0 0 auto;
+  }
+
+  @keyframes tcBlink {
+    0%, 100% { opacity: .35; }
+    50% { opacity: .9; }
+  }
+
+  .tc-footer {
+    font-size: 12px;
+    color: var(--ink-dim);
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  /* On very small screens, stack the values 2x2 instead of 4 across */
+  @media (max-width: 420px) {
+    .tournament-countdown { padding: 16px 12px; }
+    .tc-grid { gap: 2px; }
+    .tc-sep { font-size: 22px; padding-bottom: 12px; }
+  }
+
+  /* On really tiny screens (<340px), hide the seconds column to fit */
+  @media (max-width: 340px) {
+    .tc-cell:last-of-type, .tc-sep:last-of-type { display: none; }
+    .tc-num { font-size: 36px; }
+  }
+
+  /* Next match banner (shows during tournament when there's a gap before next match) */
+  .next-match-banner {
+    max-width: 540px;
+    margin: 0 auto 24px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(255, 184, 0, .15);
+  }
+
+  .nm-label {
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .nm-time {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 28px;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nm-details {
+    font-size: 12px;
+    color: var(--ink-dim);
+    margin-top: 6px;
   }
 
   .stats {
@@ -2486,6 +2684,151 @@
     }
     html { scroll-behavior: auto; }
   }
+
+  /* =========================================================
+     COMPREHENSIVE RESPONSIVE POLISH
+     Tightens edge cases on small/medium screens.
+     ========================================================= */
+
+  /* Allow long team names to wrap across lines instead of overflowing.
+     "Bosnia & Herzegovina", "Saudi Arabia" etc. are the offenders. */
+  .team-name, .tree-name, .standings-team, .bracket-name {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  /* Tablet (600-900px) — controls fit on one row */
+  @media (min-width: 600px) and (max-width: 900px) {
+    .controls {
+      grid-template-columns: 1fr 1fr;
+    }
+    .control-group:first-child { grid-column: 1 / -1; }
+  }
+
+  /* Mobile (under 600px) — actions row stacks: jump button on its own line */
+  @media (max-width: 600px) {
+    .actions-row {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .actions-row > * { width: 100%; }
+    .view-toggle-wrap { order: 2; }
+    .jump-btn { order: 1; }
+    .clear-btn { order: 3; }
+    .mute-toggle { order: 4; align-self: flex-end; }
+  }
+
+  /* Narrower phones (<480px) — tighten container padding to use every pixel */
+  @media (max-width: 480px) {
+    .topbar-inner { padding: 0; }
+    .topbar { padding: 12px 14px; }
+    .controls, .matches { padding: 0 14px; }
+    .hero { padding: 32px 16px 24px; }
+    .stats { gap: 6px; }
+    .stat { padding: 12px 6px; }
+    .stat-num { font-size: 24px; }
+    .stat-label { font-size: 9px; }
+
+    /* Match cards: more compact on phones */
+    .match { padding: 14px 14px; }
+    .match-meta { gap: 6px; flex-wrap: wrap; }
+    .match-no, .group-tag, .stage-tag, .live-tag {
+      font-size: 9px;
+      padding: 2px 6px;
+    }
+    .team-flag { font-size: 24px; }
+    .team-name { font-size: clamp(12px, 3.5vw, 16px); }
+    .vs { font-size: 10px; padding: 3px 7px; }
+    .venue-info { font-size: 10px; }
+
+    /* Predictions buttons more compact */
+    .predict-buttons {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4px;
+    }
+    .predict-btn {
+      font-size: 10px;
+      padding: 8px 4px;
+      letter-spacing: 0;
+    }
+    .predict-btn.draw { font-size: 10px; }
+  }
+
+  /* Very narrow phones (<360px) — Galaxy Fold-cover style */
+  @media (max-width: 360px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .controls { padding: 0 10px; }
+    .matches { padding: 0 10px; }
+    .topbar { padding: 10px 10px; }
+    .topbar-right { gap: 6px; }
+    .leagues-pill { padding: 4px 6px; font-size: 13px; height: 28px; }
+    .stats-pill { padding: 5px 7px; font-size: 9px; }
+    .theme-picker { padding: 2px; gap: 1px; }
+    .theme-dot { width: 22px; height: 22px; }
+    .theme-dot-emoji { font-size: 11px; }
+  }
+
+  /* Modal panels on small screens — full-bleed */
+  @media (max-width: 600px) {
+    .modal-overlay {
+      padding: 0;
+      align-items: stretch;
+    }
+    .modal-panel {
+      max-width: 100%;
+      min-height: 100%;
+      border-radius: 0;
+      margin: 0;
+    }
+    .modal-actions {
+      flex-direction: column-reverse;
+      gap: 8px;
+    }
+    .modal-actions .modal-btn { width: 100%; }
+    .modal-body { padding: 16px; }
+  }
+
+  /* Standings table on narrow screens — tighter padding, smaller text */
+  @media (max-width: 600px) {
+    .standings-table thead th { padding: 4px 2px; font-size: 8px; }
+    .standings-table tbody td { padding: 6px 2px; font-size: 11px; }
+    .standings-table .standings-team { font-size: 11px; }
+    .standings-card { padding: 10px; }
+    .standings-card-header h3 { font-size: 13px; }
+    .standings-progress { font-size: 9px; }
+  }
+
+  /* Footer on mobile */
+  @media (max-width: 480px) {
+    footer { padding: 28px 16px; font-size: 11px; }
+  }
+
+  /* Day-header on mobile — sticky offset matches smaller topbar */
+  @media (max-width: 480px) {
+    .day-header { top: 60px; padding: 10px 0; }
+    .day-header h2 { font-size: 18px; }
+  }
+
+  /* Touch-friendly tap targets (min 44x44 per Apple HIG) */
+  @media (hover: none) {
+    .predict-btn, .modal-btn, .stats-pill, .leagues-pill,
+    .theme-dot, .scroll-top, .filter-select {
+      min-height: 36px;
+    }
+    /* Disable hover effects on touch devices */
+    .match:hover { transform: none; }
+    .stats-pill:hover, .leagues-pill:hover { transform: none; }
+  }
+
+  /* Landscape phones — reduce hero padding so content shows above the fold */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .hero { padding: 24px 16px 16px; }
+    .hero h1 { font-size: clamp(36px, 6vw, 56px); margin-bottom: 12px; }
+    .tournament-countdown { padding: 14px 12px; margin-bottom: 18px; }
+    .tc-num { font-size: 28px; }
+  }
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
@@ -2514,6 +2857,9 @@
         <button class="theme-dot theme-dot-gold" data-theme-pick="gold" role="radio" aria-checked="false" aria-label="Trophy Gold theme" title="Trophy Gold"><span class="theme-dot-emoji">🏆</span></button>
       </div>
       <span class="theme-hint" id="theme-hint" aria-hidden="true">← Try a theme</span>
+      <button class="leagues-pill" id="open-leagues" aria-label="Private leagues" title="Private leagues">
+        🏆
+      </button>
       <button class="stats-pill" id="open-stats" aria-label="My predictions">
         🎯 <span id="topbar-pts" class="pts">0</span>
       </button>
@@ -2534,6 +2880,41 @@
     <div class="host-bar-stripe usa"></div>
   </div>
   <p class="hero-sub">48 nations. 104 matches. Every kickoff in NZ time. Pick your winners and watch the trophies pile up. June 11 — July 19, 2026.</p>
+
+  <!-- Tournament countdown (auto-hides once tournament begins) -->
+  <div class="tournament-countdown" id="tournament-countdown" data-target="2026-06-11T19:00:00Z">
+    <div class="tc-label">Tournament kicks off in</div>
+    <div class="tc-grid">
+      <div class="tc-cell">
+        <div class="tc-num" id="tc-days">--</div>
+        <div class="tc-unit">days</div>
+      </div>
+      <div class="tc-sep">:</div>
+      <div class="tc-cell">
+        <div class="tc-num" id="tc-hours">--</div>
+        <div class="tc-unit">hours</div>
+      </div>
+      <div class="tc-sep">:</div>
+      <div class="tc-cell">
+        <div class="tc-num" id="tc-minutes">--</div>
+        <div class="tc-unit">mins</div>
+      </div>
+      <div class="tc-sep">:</div>
+      <div class="tc-cell">
+        <div class="tc-num" id="tc-seconds">--</div>
+        <div class="tc-unit">secs</div>
+      </div>
+    </div>
+    <div class="tc-footer">🇲🇽 Mexico vs South Africa 🇿🇦 · Estadio Azteca · Fri 12 Jun 7:00 AM NZ</div>
+  </div>
+
+  <!-- Next match countdown (shows during tournament between matches) -->
+  <div class="next-match-banner" id="next-match-banner" style="display:none;">
+    <div class="nm-label">Next match in</div>
+    <div class="nm-time" id="nm-time">--</div>
+    <div class="nm-details" id="nm-details"></div>
+  </div>
+
   <div class="stats">
     <div class="stat"><div class="stat-num">48</div><div class="stat-label">Teams</div></div>
     <div class="stat"><div class="stat-num">104</div><div class="stat-label">Matches</div></div>
@@ -2659,6 +3040,87 @@
   </div>
 </div>
 
+<!-- ========== LEAGUES MODAL ========== -->
+<div class="modal-overlay" id="leagues-overlay" role="dialog" aria-labelledby="leagues-title">
+  <div class="modal-panel" style="max-width: 600px;">
+    <div class="modal-header">
+      <h2 id="leagues-title">🏆 Private Leagues</h2>
+      <button class="modal-close" id="leagues-close" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- HOME VIEW: list of joined leagues + Create/Join buttons -->
+      <div id="leagues-home-view">
+        <div class="modal-section">
+          <p class="desc" style="margin-bottom: 16px;">Compete with friends in private leagues. Create one, share the code, and track your group's predictions in a private leaderboard. Stakes are settled offline — the app never handles money.</p>
+
+          <div id="leagues-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;"></div>
+
+          <div style="display: flex; gap: 8px;">
+            <button class="modal-btn modal-btn-primary" id="leagues-show-create" style="flex: 1;">➕ Create new</button>
+            <button class="modal-btn" id="leagues-show-join" style="flex: 1;">🔗 Join with code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CREATE VIEW -->
+      <div id="leagues-create-view" style="display: none;">
+        <div class="modal-section">
+          <h3 style="font-family: 'Archivo Black', sans-serif; font-size: 16px; color: var(--gold); text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 12px;">Create a new league</h3>
+          <p class="desc" style="margin-bottom: 14px;">Pick a name. We'll generate an 8-character join code you can share with friends.</p>
+
+          <label style="display: block; font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin-bottom: 6px;">League name</label>
+          <input type="text" id="league-create-name" maxlength="60" placeholder="e.g. Office Pool, The Boys, etc." class="modal-input">
+
+          <label style="display: block; font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin: 14px 0 6px;">Your display name</label>
+          <input type="text" id="league-create-display-name" maxlength="30" placeholder="What should other members see you as?" class="modal-input">
+
+          <label style="display: block; font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin: 14px 0 6px;">Stakes (optional)</label>
+          <input type="text" id="league-create-stakes" maxlength="200" placeholder="e.g. $10 each, loser buys pizza" class="modal-input">
+          <p style="font-size: 11px; color: var(--ink-faint); margin-top: 6px;">⚠️ Display only — the app does NOT handle money. Settle in person, on Splitwise, etc.</p>
+
+          <div id="league-create-message" style="margin-top: 12px; font-size: 12px; min-height: 1.5em;"></div>
+
+          <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <button class="modal-btn" id="leagues-create-cancel" style="flex: 1;">← Back</button>
+            <button class="modal-btn modal-btn-primary" id="leagues-create-submit" style="flex: 2;">Create League</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- JOIN VIEW -->
+      <div id="leagues-join-view" style="display: none;">
+        <div class="modal-section">
+          <h3 style="font-family: 'Archivo Black', sans-serif; font-size: 16px; color: var(--gold); text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 12px;">Join a league</h3>
+          <p class="desc" style="margin-bottom: 14px;">Enter the 8-character code your friend shared with you.</p>
+
+          <label style="display: block; font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin-bottom: 6px;">Join code</label>
+          <input type="text" id="league-join-code" maxlength="8" placeholder="ABC123XY" class="modal-input" style="font-family: 'JetBrains Mono', monospace; letter-spacing: .15em; text-transform: uppercase;">
+
+          <label style="display: block; font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin: 14px 0 6px;">Your display name</label>
+          <input type="text" id="league-join-display-name" maxlength="30" placeholder="What should other members see you as?" class="modal-input">
+
+          <div id="league-join-message" style="margin-top: 12px; font-size: 12px; min-height: 1.5em;"></div>
+
+          <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <button class="modal-btn" id="leagues-join-cancel" style="flex: 1;">← Back</button>
+            <button class="modal-btn modal-btn-primary" id="leagues-join-submit" style="flex: 2;">Join League</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL VIEW (filled dynamically) -->
+      <div id="leagues-detail-view" style="display: none;">
+        <div id="leagues-detail-content"></div>
+      </div>
+
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" id="leagues-cancel">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ========== TOAST ========== -->
 <div class="toast" id="toast"></div>
 
@@ -2673,7 +3135,6 @@
   <p><strong><a href="https://www.nextwave.nz/" target="_blank" rel="noopener noreferrer" style="color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s;" onmouseover="this.style.borderBottomColor='var(--gold)'" onmouseout="this.style.borderBottomColor='transparent'">Built by Next Wave ↗</a></strong> · AI-powered digital marketing in New Zealand</p>
   <p>Schedule data current as of April 2026 · Times auto-converted to NZ local time</p>
   <p>Source: FIFA · Stadium capacities are tournament configurations</p>
-  <p style="margin-top:14px;"><a href="#" id="admin-link" style="color:var(--ink-faint);text-decoration:none;border-bottom:1px dotted var(--ink-faint);font-size:10px;">Admin</a></p>
 </footer>
 
 <!-- ========== ADMIN LOGIN MODAL ========== -->
@@ -2705,31 +3166,31 @@
 <script>
 /* ============================================================
    ADMIN AUTHENTICATION
-   We use Supabase Auth (email magic link) instead of a hard-coded
+   We use cloud Auth (email magic link) instead of a hard-coded
    password. There are NO secrets in this file. To become admin:
      1. Click "Admin" in the footer
      2. Enter your email
-     3. Click the link Supabase sends to your inbox
+     3. Click the link sent to your inbox
    You're then signed in. The DATABASE itself enforces that only
    users in the admin_users table can write to results/bracket —
    not the JavaScript here. So even if someone hacks this code,
    they can't write to your database.
    ============================================================ */
-// (Legacy ADMIN_PASSWORD removed. Admin status now comes from a Supabase
+// (Legacy password removed. Admin status now comes from a cloud-based
 // Auth session and the admin_users table.)
 
 /* ============================================================
-   SUPABASE CONFIGURATION
+   CLOUD API CONFIGURATION
    Set these to enable cloud sync + leaderboard.
    If left as empty strings, the app falls back to localStorage-only.
-   See supabase/SETUP.md for setup instructions.
+   Configuration is set during build/deploy.
    ============================================================ */
-const SUPABASE_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';  
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
-const SUPABASE_ENABLED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
-let db = null; // Supabase client — initialized in init() if enabled.
-               // Renamed from `supabase` to avoid collision with the
-               // global created by the @supabase/supabase-js UMD bundle.
+const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
+const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
+const CLOUD_ENABLED = !!(CLOUD_API_URL && CLOUD_API_KEY);
+let db = null; // Cloud client — initialized in init() if enabled.
+               // Renamed to avoid global name collision.
+
 
 /* ============================================================
    STADIUMS
@@ -3029,6 +3490,101 @@ function tickCountdowns() {
       }
     }
   });
+
+  // Tournament-wide countdown (big timer in hero) + next match banner
+  tickTournamentCountdown();
+}
+
+/* Updates the giant "Tournament kicks off in" timer in the hero,
+   and the "Next match in" banner during the tournament. */
+function tickTournamentCountdown() {
+  const tcEl = document.getElementById('tournament-countdown');
+  const nmEl = document.getElementById('next-match-banner');
+  if (!tcEl || !nmEl) return;
+
+  const now = Date.now();
+  const target = new Date(tcEl.dataset.target).getTime();
+  const msUntilTournament = target - now;
+
+  // Phase 1: Before tournament starts → big tournament countdown visible
+  if (msUntilTournament > 0) {
+    tcEl.style.display = 'block';
+    nmEl.style.display = 'none';
+
+    const totalSeconds = Math.floor(msUntilTournament / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    document.getElementById('tc-days').textContent = String(days).padStart(2, '0');
+    document.getElementById('tc-hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('tc-minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('tc-seconds').textContent = String(seconds).padStart(2, '0');
+    return;
+  }
+
+  // Phase 2: Tournament has started — hide the tournament timer, show next match
+  tcEl.style.display = 'none';
+
+  // Find the next upcoming match
+  const upcoming = MATCHES
+    .map(m => ({ ...m, ts: new Date(m.et).getTime() }))
+    .filter(m => m.ts > now)
+    .sort((a, b) => a.ts - b.ts);
+
+  if (upcoming.length === 0) {
+    // Tournament over
+    nmEl.style.display = 'none';
+    return;
+  }
+
+  const next = upcoming[0];
+  const msToNext = next.ts - now;
+
+  // If a match is currently live (started in the last ~3 hours and another
+  // match is more than 30 min away), show it; otherwise show countdown to next.
+  const liveNow = MATCHES.find(m => {
+    const t = new Date(m.et).getTime();
+    return t <= now && (now - t) < 3 * 60 * 60 * 1000; // live window: 3 hours
+  });
+
+  if (liveNow && msToNext > 30 * 60 * 1000) {
+    // A match is currently live. Show "next match starts in X" with note about live game.
+    nmEl.style.display = 'block';
+    document.getElementById('nm-time').textContent = formatBigCountdown(msToNext);
+    const home = resolveSlot(next.home);
+    const away = resolveSlot(next.away);
+    document.getElementById('nm-details').textContent =
+      `${home} vs ${away} · ${fmtNZTime(new Date(next.et))} NZ`;
+    return;
+  }
+
+  // No live match — show next match countdown if it's within 24 hours
+  if (msToNext < 24 * 60 * 60 * 1000) {
+    nmEl.style.display = 'block';
+    document.getElementById('nm-time').textContent = formatBigCountdown(msToNext);
+    const home = resolveSlot(next.home);
+    const away = resolveSlot(next.away);
+    document.getElementById('nm-details').textContent =
+      `${home} vs ${away} · ${fmtNZTime(new Date(next.et))} NZ`;
+  } else {
+    // Next match is more than a day away (rest day) — hide banner
+    nmEl.style.display = 'none';
+  }
+}
+
+/* Format ms as "Xd Yh Zm" or "Xh Ym Zs" */
+function formatBigCountdown(ms) {
+  if (ms <= 0) return 'NOW';
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+  if (hours > 0) return `${hours}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+  return `${minutes}m ${String(seconds).padStart(2, '0')}s`;
 }
 
 function nzDateKey(date) {
@@ -3179,20 +3735,110 @@ function saveUserData() {
 
 function setPrediction(matchNo, choice) {
   // choice: 'home' | 'away' | 'draw'
-  // Only allowed if match hasn't started yet
+  // Only allowed if match hasn't started yet (locked at kickoff exactly).
+  // We check the actual current time, not state.now, since state.now only
+  // updates every 30s and could let a user sneak a prediction in just-late.
   const m = MATCHES.find(x => x.no === matchNo);
   if (!m) return;
   const matchDate = new Date(m.et);
-  if (state.now >= matchDate) return;
+  const realNow = new Date();
+  if (realNow >= matchDate) {
+    showToast('🔒 Predictions closed — match has started');
+    render(); // re-render to update the UI lock state
+    return;
+  }
 
+  let action;
   if (userPredictions[matchNo] === choice) {
     delete userPredictions[matchNo];
+    action = 'delete';
   } else {
     userPredictions[matchNo] = choice;
+    action = 'upsert';
   }
   saveUserData();
   render();
   updateTopbarStats();
+
+  // Sync the change to the cloud (fire-and-forget; localStorage is the source of truth)
+  cloudSyncOnePrediction(matchNo, action === 'upsert' ? choice : null);
+}
+
+/* Sync a single prediction to the cloud. Pass `pick=null` to delete. */
+async function cloudSyncOnePrediction(matchNo, pick) {
+  if (!CLOUD_ENABLED || !db) return;
+  const visitorId = getVisitorId();
+  try {
+    if (pick === null) {
+      await db.from('user_predictions').delete()
+        .eq('visitor_id', visitorId)
+        .eq('match_no', matchNo);
+    } else {
+      await db.from('user_predictions').upsert({
+        visitor_id: visitorId,
+        match_no: matchNo,
+        pick,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'visitor_id,match_no' });
+    }
+  } catch (e) {
+    console.warn('Cloud prediction sync failed:', e?.message);
+  }
+}
+
+/* Pull all predictions for the current visitor from the cloud and merge with local.
+   Used after sign-in (cross-device) and on first page load. */
+async function cloudPullPredictions() {
+  if (!CLOUD_ENABLED || !db) return { synced: 0 };
+  const visitorId = getVisitorId();
+  try {
+    const { data, error } = await db
+      .rpc('get_user_predictions', { p_visitor_id: visitorId });
+    if (error || !data) return { synced: 0 };
+    let added = 0;
+    data.forEach(row => {
+      if (userPredictions[row.match_no] !== row.pick) {
+        userPredictions[row.match_no] = row.pick;
+        added++;
+      }
+    });
+    if (added > 0) {
+      saveUserData();
+    }
+    return { synced: data.length, added };
+  } catch (e) {
+    console.warn('Cloud pull predictions failed:', e?.message);
+    return { synced: 0 };
+  }
+}
+
+/* Push all local predictions to the cloud. Used right after sign-up
+   so the user's existing local-only data gets saved before they
+   potentially clear their browser. */
+async function cloudPushAllPredictions() {
+  if (!CLOUD_ENABLED || !db) return { synced: 0 };
+  const visitorId = getVisitorId();
+  const entries = Object.entries(userPredictions);
+  if (entries.length === 0) return { synced: 0 };
+  const rows = entries.map(([matchNo, pick]) => ({
+    visitor_id: visitorId,
+    match_no: parseInt(matchNo, 10),
+    pick,
+    updated_at: new Date().toISOString()
+  }));
+  try {
+    const { error } = await db
+      .from('user_predictions')
+      .upsert(rows, { onConflict: 'visitor_id,match_no' });
+    if (error) {
+      console.warn('Cloud push all predictions failed:', error.message);
+      return { synced: 0 };
+    }
+    return { synced: rows.length };
+  } catch (e) {
+    console.warn('Cloud push all predictions failed:', e?.message);
+    return { synced: 0 };
+  }
 }
 
 function getPredictionStats() {
@@ -3418,6 +4064,16 @@ function buildMatchCardHTML(m) {
         <div class="predict-result wrong" style="color:var(--ink-dim);border-color:var(--line);">
           <span class="icon">⏳</span>
           <span>Your pick: ${escapeHtml(pickedTeam)}</span>
+        </div>
+      </div>
+    `;
+  } else if (!canPredict && !homeIsTBD && !awayIsTBD && status !== 'finished' && winner === null) {
+    // Match has started but user didn't predict — show locked-out message
+    predictHTML = `
+      <div class="predict-section">
+        <div class="predict-result" style="color:var(--ink-faint);border-color:var(--line);background:transparent;">
+          <span class="icon">🔒</span>
+          <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;">Predictions closed at kickoff</span>
         </div>
       </div>
     `;
@@ -4374,16 +5030,16 @@ function initShare() {
    ============================================================ */
 let adminTab = 'results';
 let isAdminMode = false;
-let currentUser = null; // Supabase Auth user object once signed in
+let currentUser = null; // Auth user object once signed in
 
 async function checkAdminMode() {
   // Admin status is determined by:
-  //   1. Are you signed into Supabase Auth?
+  //   1. Are you authenticated?
   //   2. Is your user_id in the admin_users table?
   // We rely on the database's RLS policy "admin_users readable by admins only"
   // — if the query returns a row, you're an admin. If it returns nothing,
   // you're not (either not signed in, or signed in but not in admin_users).
-  if (!SUPABASE_ENABLED || !db) return false;
+  if (!CLOUD_ENABLED || !db) return false;
   try {
     const { data: { user } } = await db.auth.getUser();
     if (!user) return false;
@@ -4403,8 +5059,8 @@ async function checkAdminMode() {
 
 async function adminSignInWithEmail(email) {
   // Sends a magic link. User clicks the link, comes back signed in.
-  if (!SUPABASE_ENABLED || !db) {
-    return { ok: false, error: 'Supabase not configured' };
+  if (!CLOUD_ENABLED || !db) {
+    return { ok: false, error: 'Cloud sync not configured' };
   }
   try {
     const { error } = await db.auth.signInWithOtp({
@@ -4419,7 +5075,7 @@ async function adminSignInWithEmail(email) {
 }
 
 async function adminSignOut() {
-  if (!SUPABASE_ENABLED || !db) return;
+  if (!CLOUD_ENABLED || !db) return;
   await db.auth.signOut();
   currentUser = null;
   isAdminMode = false;
@@ -4648,10 +5304,10 @@ function wireAdminInputs() {
       const value = sel.value;
       if (value) {
         BRACKET_RESULTS[slot] = value;
-        await supabaseSaveBracketSlot(slot, value);
+        await cloudSaveBracketSlot(slot, value);
       } else {
         delete BRACKET_RESULTS[slot];
-        await supabaseDeleteBracketSlot(slot);
+        await cloudDeleteBracketSlot(slot);
       }
       saveAdminData();
       render();
@@ -4681,15 +5337,15 @@ function wireAdminInputs() {
       render();
       updateTopbarStats();
 
-      // Debounced Supabase sync (only when both sides are entered)
+      // Debounced cloud sync (only when both sides are entered)
       clearTimeout(input._syncTimer);
       input._syncTimer = setTimeout(async () => {
         const r = MATCH_RESULTS[matchNo];
         if (r && typeof r.home === 'number' && typeof r.away === 'number') {
-          const ok = await supabaseSaveResult(matchNo, r.home, r.away);
+          const ok = await cloudSaveResult(matchNo, r.home, r.away);
           if (ok) showToast(`✓ Match ${matchNo} synced to cloud`);
         } else if (!r) {
-          await supabaseDeleteResult(matchNo);
+          await cloudDeleteResult(matchNo);
         }
       }, 800);
     });
@@ -4907,9 +5563,9 @@ function buildBest3Helper() {
   return html;
 }
 
-// Save all bracket results to Supabase in one batch
+// Save all bracket results in one batch
 async function saveBracketBatch() {
-  if (!SUPABASE_ENABLED || !db) return false;
+  if (!CLOUD_ENABLED || !db) return false;
   try {
     const rows = Object.keys(BRACKET_RESULTS).map(slot_code => ({
       slot_code,
@@ -4971,30 +5627,34 @@ function downloadUpdatedHTML() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast('✓ index.html downloaded — upload it to GitHub to publish');
+  showToast('✓ index.html downloaded — upload to publish');
 }
 
 function initAdmin() {
-  // Wire up the footer "Admin" link — visible to everyone
-  const adminLink = document.getElementById('admin-link');
   const loginOverlay = document.getElementById('login-overlay');
-  if (adminLink && loginOverlay) {
-    adminLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (isAdminMode) {
-        // Already signed in — open admin editor
-        buildAdminUI();
-        document.getElementById('admin-overlay').classList.add('open');
-        document.body.style.overflow = 'hidden';
-      } else {
-        // Show login modal
-        loginOverlay.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => document.getElementById('login-email')?.focus(), 100);
-      }
-    });
 
-    // Login modal handlers
+  // Hidden admin entry — only triggered by ?admin=1 in URL.
+  // No visible link anywhere on the page; bookmark fifawc.kiwi/?admin=1 to access.
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('admin') === '1' && loginOverlay) {
+    if (isAdminMode) {
+      // Already signed in — open the admin editor directly
+      buildAdminUI();
+      document.getElementById('admin-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Not signed in — show the magic link modal
+      loginOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('login-email')?.focus(), 100);
+    }
+    // Clean the URL so the param doesn't stick around (avoids re-opening on every refresh)
+    const cleanUrl = window.location.pathname + window.location.hash;
+    window.history.replaceState({}, '', cleanUrl);
+  }
+
+  // Login modal handlers — always wire these so the modal works whenever opened
+  if (loginOverlay) {
     const closeLogin = () => {
       loginOverlay.classList.remove('open');
       document.body.style.overflow = '';
@@ -5055,7 +5715,7 @@ function initAdmin() {
     Object.keys(BRACKET_RESULTS).forEach(k => delete BRACKET_RESULTS[k]);
     Object.keys(MATCH_RESULTS).forEach(k => delete MATCH_RESULTS[k]);
     saveAdminData();
-    // Note: not deleting from Supabase on reset — admin can do that via SQL editor if needed.
+    // Note: not deleting from cloud on reset — admin can manage that elsewhere if needed.
     // This avoids accidental wipe of the cloud copy.
     render();
     updateTopbarStats();
@@ -5067,13 +5727,13 @@ function initAdmin() {
   // Sync from FIFA — calls Edge Function to fetch openfootball data
   document.getElementById('admin-sync').addEventListener('click', async () => {
     const btn = document.getElementById('admin-sync');
-    if (!SUPABASE_ENABLED) {
-      showToast('⚠️ Supabase not configured — see SETUP.md');
+    if (!CLOUD_ENABLED) {
+      showToast('⚠️ Cloud sync not configured');
       return;
     }
     btn.textContent = '⏳ Syncing...';
     btn.disabled = true;
-    const result = await supabaseSyncFromAPI();
+    const result = await cloudSyncFromAPI();
     btn.textContent = '🔄 Sync from FIFA';
     btn.disabled = false;
     if (!result.ok) {
@@ -5081,7 +5741,7 @@ function initAdmin() {
       return;
     }
     // Reload results from cloud after sync
-    await supabaseLoadResults();
+    await cloudLoadResults();
     render();
     updateTopbarStats();
     buildAdminUI();
@@ -5165,10 +5825,12 @@ async function buildStatsUI() {
       </div>
       <p class="desc" style="margin-top:10px;font-size:11px;">Current streak: <strong style="color:var(--gold)">${stats.currentStreak}</strong></p>
     </div>
+
+    ${buildAccountSectionHTML()}
   `;
 
   // ===== GLOBAL LEADERBOARD =====
-  if (SUPABASE_ENABLED) {
+  if (CLOUD_ENABLED) {
     const currentName = getDisplayName();
     html += `<div class="modal-section">
       <h3>🌍 Global Leaderboard</h3>
@@ -5223,8 +5885,11 @@ async function buildStatsUI() {
 
   body.innerHTML = html;
 
+  // Wire account section interactions
+  wireAccountSection();
+
   // Wire leaderboard interactions
-  if (SUPABASE_ENABLED) {
+  if (CLOUD_ENABLED) {
     const saveBtn = document.getElementById('display-name-save');
     const nameInput = document.getElementById('display-name-input');
     if (saveBtn && nameInput) {
@@ -5237,7 +5902,7 @@ async function buildStatsUI() {
         setDisplayName(name);
         saveBtn.textContent = '⏳ Submitting...';
         saveBtn.disabled = true;
-        const ok = await supabaseSubmitToLeaderboard();
+        const ok = await cloudSubmitToLeaderboard();
         saveBtn.textContent = 'Submit';
         saveBtn.disabled = false;
         if (ok) {
@@ -5256,7 +5921,7 @@ async function buildStatsUI() {
 async function refreshLeaderboardList() {
   const listEl = document.getElementById('leaderboard-list');
   if (!listEl) return;
-  const data = await supabaseLoadLeaderboard(20);
+  const data = await cloudLoadLeaderboard(20);
   if (data.length === 0) {
     listEl.innerHTML = `<p class="desc" style="text-align:center;padding:20px 0;">No predictions on the leaderboard yet. Be the first!</p>`;
     return;
@@ -5333,10 +5998,727 @@ function initMute() {
 }
 
 /* ============================================================
+   USER ACCOUNTS — optional cross-device sync via email magic link
+   Visitors play anonymously by default. Tapping "Save my picks"
+   sends them a magic link. Once they click it, their browser's
+   visitor_id gets linked to their email. From any device, signing
+   in with the same email pulls their picks + leagues.
+   ============================================================ */
+
+const ACCOUNT_AUTH_TOAST_KEY = 'wc2026_account_authed';
+
+/* Detect if the current Auth user is an admin OR an account user.
+   Both share Supabase Auth, but admin flag comes from admin_users table. */
+let accountUser = null;  // populated after sign-in: { auth_user_id, email, visitor_id }
+
+async function loadAccountForCurrentSession() {
+  if (!CLOUD_ENABLED || !db) return null;
+  // If they're not signed in, nothing to do
+  const { data: { session } } = await db.auth.getSession();
+  if (!session?.user) return null;
+  const authUser = session.user;
+  // Check if there's a user_accounts row for this auth_user_id
+  const { data, error } = await db
+    .from('user_accounts')
+    .select('*')
+    .eq('auth_user_id', authUser.id)
+    .maybeSingle();
+  if (error) {
+    console.warn('Load account failed:', error.message);
+    return null;
+  }
+  if (!data) {
+    // First time signing in — create the account record linking to current visitor_id.
+    // This means: the device they sign in on becomes their canonical visitor_id.
+    const visitorId = getVisitorId();
+    const insertResult = await db.from('user_accounts').insert({
+      auth_user_id: authUser.id,
+      email: authUser.email,
+      visitor_id: visitorId,
+      display_name: getDisplayName() || ''
+    });
+    if (insertResult.error) {
+      console.warn('Create account failed:', insertResult.error.message);
+      return null;
+    }
+    accountUser = {
+      auth_user_id: authUser.id,
+      email: authUser.email,
+      visitor_id: visitorId
+    };
+    // Push all local predictions to cloud right after signup so nothing is lost
+    await cloudPushAllPredictions();
+    return accountUser;
+  }
+  // Existing account — adopt the stored visitor_id (cross-device login)
+  accountUser = data;
+  // If the stored visitor_id differs from the local one, switch to it.
+  // This makes the new device behave like the old one.
+  const localVisitorId = getVisitorId();
+  if (data.visitor_id !== localVisitorId) {
+    try { localStorage.setItem(VISITOR_ID_KEY, data.visitor_id); } catch (e) {}
+    // Pull the cloud predictions for this account's visitor_id
+    await cloudPullPredictions();
+  }
+  // Update last_seen
+  await db.from('user_accounts')
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq('auth_user_id', authUser.id);
+  return accountUser;
+}
+
+async function accountSignInWithEmail(email) {
+  if (!CLOUD_ENABLED || !db) return { ok: false, error: 'Cloud sync not configured' };
+  const trimmed = (email || '').trim().toLowerCase();
+  if (!trimmed || !/.+@.+\..+/.test(trimmed)) {
+    return { ok: false, error: 'Please enter a valid email address' };
+  }
+  const { error } = await db.auth.signInWithOtp({
+    email: trimmed,
+    options: {
+      emailRedirectTo: window.location.origin + window.location.pathname
+    }
+  });
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
+async function accountSignOut() {
+  if (!CLOUD_ENABLED || !db) return;
+  await db.auth.signOut();
+  accountUser = null;
+  // Don't clear localStorage — visitor stays anonymous with their existing data
+}
+
+/* Build the HTML for the account section in the stats modal. Three states:
+   - Cloud sync not configured → don't show the section
+   - Not signed in → "Save my picks across devices" button
+   - Signed in as account → "Signed in as you@email.com" + Sign out */
+function buildAccountSectionHTML() {
+  if (!CLOUD_ENABLED) return '';
+  if (accountUser) {
+    return `
+      <div class="modal-section" style="border: 1px solid var(--gold); background: rgba(255, 184, 0, .04);">
+        <h3 style="color: var(--gold);">✓ Cross-device sync active</h3>
+        <p class="desc">Your picks are saved to your account. Sign in with <strong style="color:var(--ink);">${escapeHtml(accountUser.email)}</strong> on any device to load them.</p>
+        <button class="modal-btn" id="account-signout-btn" style="margin-top: 10px;">Sign out</button>
+      </div>
+    `;
+  }
+  return `
+    <div class="modal-section" style="border: 1px dashed var(--gold); background: rgba(255, 184, 0, .03);">
+      <h3 style="color: var(--gold);">💾 Save your picks across devices</h3>
+      <p class="desc">Your picks currently live only in this browser. If you clear your browser or switch devices, you'll lose them.</p>
+      <p class="desc" style="margin-top: 6px;">Add your email to sync your picks across all your devices. We'll only use it for sign-in — no spam, no marketing.</p>
+      <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+        <input type="email" id="account-email-input" placeholder="your.email@example.com"
+          class="modal-input" style="flex: 1; min-width: 200px;" />
+        <button class="modal-btn modal-btn-primary" id="account-signin-btn" style="flex-shrink: 0;">Send magic link</button>
+      </div>
+      <div id="account-message" style="margin-top: 10px; font-size: 12px; min-height: 1.4em;"></div>
+    </div>
+  `;
+}
+
+/* Wire up the buttons inside the account section. Called after innerHTML replace. */
+function wireAccountSection() {
+  if (!CLOUD_ENABLED) return;
+  const signinBtn = document.getElementById('account-signin-btn');
+  const emailInput = document.getElementById('account-email-input');
+  const msgEl = document.getElementById('account-message');
+  if (signinBtn && emailInput && msgEl) {
+    signinBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      if (!email || !/.+@.+\..+/.test(email)) {
+        msgEl.style.color = 'var(--can-red-2)';
+        msgEl.textContent = 'Please enter a valid email address';
+        return;
+      }
+      signinBtn.disabled = true;
+      signinBtn.textContent = 'Sending…';
+      msgEl.style.color = 'var(--ink-dim)';
+      msgEl.textContent = 'Sending magic link…';
+      const result = await accountSignInWithEmail(email);
+      signinBtn.disabled = false;
+      signinBtn.textContent = 'Send magic link';
+      if (result.ok) {
+        msgEl.style.color = 'var(--gold)';
+        msgEl.textContent = '✓ Check your inbox — click the link to finish signing in';
+      } else {
+        msgEl.style.color = 'var(--can-red-2)';
+        msgEl.textContent = '✗ ' + (result.error || 'Failed to send link');
+      }
+    });
+    // Submit on Enter
+    emailInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') signinBtn.click();
+    });
+  }
+
+  const signoutBtn = document.getElementById('account-signout-btn');
+  if (signoutBtn) {
+    signoutBtn.addEventListener('click', async () => {
+      if (!confirm('Sign out? Your picks stay on this device.')) return;
+      await accountSignOut();
+      showToast('✓ Signed out');
+      // Re-render the stats UI to reflect signed-out state
+      buildStatsUI();
+    });
+  }
+}
+
+
+
+const MY_LEAGUES_KEY = 'wc2026_my_leagues';   // local cache of joined league IDs
+let leaguesCache = null;                       // cached array of league objects
+let currentLeagueId = null;                    // when viewing a league's leaderboard
+
+/* Visitor's "joined leagues" cache (just IDs) — used to render the list quickly */
+function getJoinedLeagueIds() {
+  try {
+    return JSON.parse(localStorage.getItem(MY_LEAGUES_KEY) || '[]');
+  } catch (e) { return []; }
+}
+
+function addJoinedLeagueId(leagueId) {
+  const ids = getJoinedLeagueIds();
+  if (!ids.includes(leagueId)) {
+    ids.push(leagueId);
+    try { localStorage.setItem(MY_LEAGUES_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+}
+
+function removeJoinedLeagueId(leagueId) {
+  const ids = getJoinedLeagueIds().filter(id => id !== leagueId);
+  try { localStorage.setItem(MY_LEAGUES_KEY, JSON.stringify(ids)); } catch (e) {}
+}
+
+/* Generate a random 8-character join code (uppercase letters + digits, no confusing chars) */
+function generateJoinCode() {
+  // Removed: 0/O, 1/I/L for clarity when reading aloud
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+
+/* ----- Cloud API for leagues ----- */
+
+async function leaguesCreate(name, stakesText, displayName) {
+  if (!CLOUD_ENABLED || !db) {
+    return { ok: false, error: 'Cloud sync not configured' };
+  }
+  const visitorId = getVisitorId();
+  // Try up to 5 times in case of join_code collision (extremely unlikely with 30^8 codes)
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const joinCode = generateJoinCode();
+    // Insert WITHOUT .select() — the new RLS doesn't grant read on this table.
+    // Provide our own id so we can read it back via RPC after.
+    const newId = crypto.randomUUID
+      ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = Math.random() * 16 | 0;
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    const { error: createErr } = await db
+      .from('leagues')
+      .insert({
+        id: newId,
+        name: name.trim(),
+        join_code: joinCode,
+        creator_visitor_id: visitorId,
+        stakes_text: (stakesText || '').trim()
+      });
+    if (createErr) {
+      if (attempt < 4 && (createErr.code === '23505' || /duplicate/i.test(createErr.message || ''))) {
+        continue; // collision — try a new code
+      }
+      console.warn('Cloud create league failed:', createErr.message);
+      return { ok: false, error: createErr.message };
+    }
+    // Auto-join the creator as the first member
+    const { error: joinErr } = await db
+      .from('league_members')
+      .insert({
+        league_id: newId,
+        visitor_id: visitorId,
+        display_name: displayName.trim()
+      });
+    if (joinErr) {
+      console.warn('Auto-join after create failed:', joinErr.message);
+    }
+    addJoinedLeagueId(newId);
+    // Build league object locally (we have all the info)
+    const league = {
+      id: newId,
+      name: name.trim(),
+      join_code: joinCode,
+      creator_visitor_id: visitorId,
+      stakes_text: (stakesText || '').trim()
+    };
+    return { ok: true, league };
+  }
+  return { ok: false, error: 'Could not generate a unique join code. Try again.' };
+}
+
+async function leaguesJoin(joinCode, displayName) {
+  if (!CLOUD_ENABLED || !db) {
+    return { ok: false, error: 'Cloud sync not configured' };
+  }
+  const cleaned = joinCode.trim().toUpperCase();
+  if (cleaned.length !== 8) {
+    return { ok: false, error: 'Join code must be 8 characters' };
+  }
+  const visitorId = getVisitorId();
+  // Find the league by code via RPC (the leagues table is no longer
+  // directly readable for privacy reasons).
+  const { data: matches, error: findErr } = await db
+    .rpc('find_league_by_code', { code: cleaned });
+  if (findErr) return { ok: false, error: findErr.message };
+  if (!matches || matches.length === 0) {
+    return { ok: false, error: 'No league found with that code' };
+  }
+  const league = matches[0];
+  // Add as member (upsert to handle re-joins gracefully)
+  const { error: joinErr } = await db
+    .from('league_members')
+    .upsert({
+      league_id: league.id,
+      visitor_id: visitorId,
+      display_name: displayName.trim()
+    }, { onConflict: 'league_id,visitor_id' });
+  if (joinErr) return { ok: false, error: joinErr.message };
+  addJoinedLeagueId(league.id);
+  return { ok: true, league };
+}
+
+async function leaguesLeave(leagueId) {
+  if (!CLOUD_ENABLED || !db) return { ok: false, error: 'Cloud sync not configured' };
+  const visitorId = getVisitorId();
+  const { error } = await db
+    .from('league_members')
+    .delete()
+    .eq('league_id', leagueId)
+    .eq('visitor_id', visitorId);
+  if (error) return { ok: false, error: error.message };
+  removeJoinedLeagueId(leagueId);
+  return { ok: true };
+}
+
+/* Fetch all leagues the current visitor is a member of, with their members */
+async function leaguesLoadMyLeagues() {
+  if (!CLOUD_ENABLED || !db) return [];
+  const visitorId = getVisitorId();
+  // RPC: get all leagues for this visitor in a single query, with member counts.
+  const { data, error } = await db
+    .rpc('get_my_leagues', { p_visitor_id: visitorId });
+  if (error) {
+    console.warn('Cloud load my leagues failed:', error.message);
+    return [];
+  }
+  return data || [];
+}
+
+/* Fetch a single league + its members with scores joined in */
+async function leaguesLoadLeagueDetail(leagueId) {
+  if (!CLOUD_ENABLED || !db) return null;
+  // 1. Get league info via RPC
+  const { data: leagueRows, error: lgErr } = await db
+    .rpc('get_league_by_id', { p_league_id: leagueId });
+  if (lgErr || !leagueRows || leagueRows.length === 0) {
+    console.warn('Cloud load league detail failed:', lgErr?.message);
+    return null;
+  }
+  const league = leagueRows[0];
+  // 2. Get members + scores via RPC (joins league_members + leaderboard, ordered)
+  const { data: members, error: memErr } = await db
+    .rpc('get_league_members_with_scores', { p_league_id: leagueId });
+  if (memErr) {
+    console.warn('Cloud load members failed:', memErr.message);
+    return { league, members: [] };
+  }
+  // RPC already orders by points desc; apply secondary tiebreakers locally
+  const sorted = (members || []).slice().sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    const aAcc = a.total > 0 ? a.correct / a.total : 0;
+    const bAcc = b.total > 0 ? b.correct / b.total : 0;
+    if (bAcc !== aAcc) return bAcc - aAcc;
+    return (a.display_name || '').localeCompare(b.display_name || '');
+  });
+  return { league, members: sorted };
+}
+
+/* ----- League UI ----- */
+
+async function openLeagues() {
+  document.getElementById('leagues-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Reset to home view
+  showLeaguesHomeView();
+  await renderMyLeagues();
+}
+
+function closeLeagues() {
+  document.getElementById('leagues-overlay').classList.remove('open');
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+  currentLeagueId = null;
+}
+
+function showLeaguesHomeView() {
+  document.getElementById('leagues-home-view').style.display = 'block';
+  document.getElementById('leagues-create-view').style.display = 'none';
+  document.getElementById('leagues-join-view').style.display = 'none';
+  document.getElementById('leagues-detail-view').style.display = 'none';
+}
+
+function showLeaguesCreateView() {
+  document.getElementById('leagues-home-view').style.display = 'none';
+  document.getElementById('leagues-create-view').style.display = 'block';
+  document.getElementById('leagues-join-view').style.display = 'none';
+  document.getElementById('leagues-detail-view').style.display = 'none';
+  // Pre-fill display name if known
+  const nameInput = document.getElementById('league-create-display-name');
+  if (nameInput) nameInput.value = getDisplayName();
+  setTimeout(() => document.getElementById('league-create-name')?.focus(), 100);
+}
+
+function showLeaguesJoinView() {
+  document.getElementById('leagues-home-view').style.display = 'none';
+  document.getElementById('leagues-create-view').style.display = 'none';
+  document.getElementById('leagues-join-view').style.display = 'block';
+  document.getElementById('leagues-detail-view').style.display = 'none';
+  const nameInput = document.getElementById('league-join-display-name');
+  if (nameInput) nameInput.value = getDisplayName();
+  setTimeout(() => document.getElementById('league-join-code')?.focus(), 100);
+}
+
+async function showLeaguesDetailView(leagueId) {
+  document.getElementById('leagues-home-view').style.display = 'none';
+  document.getElementById('leagues-create-view').style.display = 'none';
+  document.getElementById('leagues-join-view').style.display = 'none';
+  document.getElementById('leagues-detail-view').style.display = 'block';
+  currentLeagueId = leagueId;
+  const root = document.getElementById('leagues-detail-content');
+  root.innerHTML = '<p style="text-align:center; padding: 40px; color: var(--ink-faint);">Loading…</p>';
+  const detail = await leaguesLoadLeagueDetail(leagueId);
+  if (!detail) {
+    root.innerHTML = '<p style="text-align:center; padding: 40px; color: var(--can-red-2);">Could not load league details. Please try again.</p>';
+    return;
+  }
+  renderLeagueDetail(detail);
+}
+
+async function renderMyLeagues() {
+  const root = document.getElementById('leagues-list');
+  if (!CLOUD_ENABLED || !db) {
+    root.innerHTML = '<p style="color: var(--ink-faint); padding: 16px; text-align: center;">Cloud sync not configured. Leagues require a connection.</p>';
+    return;
+  }
+  root.innerHTML = '<p style="color: var(--ink-faint); padding: 16px; text-align: center;">Loading your leagues…</p>';
+  const myLeagues = await leaguesLoadMyLeagues();
+  if (myLeagues.length === 0) {
+    root.innerHTML = `
+      <div style="text-align:center; padding: 24px 16px; color: var(--ink-dim);">
+        <div style="font-size: 36px; margin-bottom: 12px;">🏆</div>
+        <p style="font-size: 14px; margin-bottom: 6px;"><strong style="color: var(--ink);">No leagues yet</strong></p>
+        <p style="font-size: 12px; color: var(--ink-faint);">Create one for you and your friends, or join an existing league with a code.</p>
+      </div>
+    `;
+    return;
+  }
+  let html = '';
+  for (const lg of myLeagues) {
+    // member_count is included in the get_my_leagues RPC result
+    const memberCount = lg.member_count || 0;
+    const stakesPreview = lg.stakes_text
+      ? `<div style="font-size: 11px; color: var(--gold); margin-top: 4px;">💰 ${escapeHtml(lg.stakes_text.slice(0, 50))}${lg.stakes_text.length > 50 ? '…' : ''}</div>`
+      : '';
+    html += `
+      <button class="league-card" data-league-id="${lg.id}">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap: 12px;">
+          <div style="flex:1; min-width: 0;">
+            <div style="font-family: 'Archivo Black',sans-serif; font-size: 15px; color: var(--ink); margin-bottom: 4px;">${escapeHtml(lg.name)}</div>
+            <div style="font-size: 11px; color: var(--ink-faint); letter-spacing: .12em; text-transform: uppercase;">
+              ${memberCount} member${memberCount === 1 ? '' : 's'} · Code: <span style="font-family:'JetBrains Mono',monospace; color: var(--gold); letter-spacing: .05em;">${lg.join_code}</span>
+            </div>
+            ${stakesPreview}
+          </div>
+          <span style="color: var(--gold); font-size: 18px; flex-shrink: 0;">→</span>
+        </div>
+      </button>
+    `;
+  }
+  root.innerHTML = html;
+  // Wire click handlers
+  root.querySelectorAll('.league-card').forEach(card => {
+    card.addEventListener('click', () => {
+      showLeaguesDetailView(card.dataset.leagueId);
+    });
+  });
+}
+
+// (leaguesCountMembers removed — member_count comes from get_my_leagues RPC)
+
+function renderLeagueDetail(detail) {
+  const root = document.getElementById('leagues-detail-content');
+  const { league, members } = detail;
+  const myVisitorId = getVisitorId();
+  const isMember = members.some(m => m.visitor_id === myVisitorId);
+
+  // Build leaderboard rows
+  let rowsHTML = '';
+  members.forEach((m, i) => {
+    const isMe = m.visitor_id === myVisitorId;
+    const rankBadge = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+    const accuracy = m.total > 0 ? Math.round((m.correct / m.total) * 100) : 0;
+    rowsHTML += `
+      <tr style="${isMe ? 'background: rgba(255, 184, 0, .12);' : ''}">
+        <td style="padding: 10px 8px; font-family: 'Archivo Black', sans-serif; text-align: center; width: 40px;">${rankBadge}</td>
+        <td style="padding: 10px 8px;">
+          <span style="color: ${isMe ? 'var(--gold)' : 'var(--ink)'}; font-weight: ${isMe ? '900' : '700'};">${escapeHtml(m.display_name)}</span>
+          ${isMe ? '<span style="color: var(--gold); font-size: 9px; letter-spacing: .15em; text-transform: uppercase; margin-left: 6px;">YOU</span>' : ''}
+        </td>
+        <td style="padding: 10px 8px; text-align: right; font-family: 'Archivo Black', sans-serif; color: var(--gold); font-size: 16px;">${m.points}</td>
+        <td style="padding: 10px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-dim);">${m.correct}/${m.total}</td>
+        <td style="padding: 10px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-faint); width: 50px;">${accuracy}%</td>
+      </tr>
+    `;
+  });
+
+  // Settlement generator preview (only when group stage is over, to keep it relevant)
+  const groupsDone = allGroupsComplete();
+  let settlementHTML = '';
+  if (groupsDone && members.length >= 2) {
+    settlementHTML = `
+      <div style="margin-top: 24px; padding: 16px; background: var(--surface); border: 1px solid var(--gold); border-radius: 8px;">
+        <h4 style="font-family: 'Archivo Black', sans-serif; font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 8px;">💰 Settlement Generator</h4>
+        <p style="font-size: 12px; color: var(--ink-dim); margin-bottom: 12px;">Calculate who owes what at the end. Enter a stake amount per person, and we'll generate a copy-paste message for your group chat.</p>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <input type="number" id="settle-amount" min="0" step="1" placeholder="e.g. 10" style="background: var(--black-3); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; color: var(--ink); font-family: inherit; width: 90px; font-size: 13px;">
+          <select id="settle-currency" style="background: var(--black-3); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; color: var(--ink); font-family: inherit; font-size: 13px;">
+            <option value="$">NZD ($)</option>
+            <option value="A$">AUD (A$)</option>
+            <option value="US$">USD (US$)</option>
+            <option value="€">EUR (€)</option>
+            <option value="£">GBP (£)</option>
+          </select>
+          <button class="modal-btn modal-btn-primary" id="settle-generate" style="padding: 8px 16px; font-size: 11px;">Generate</button>
+        </div>
+        <pre id="settle-output" style="display: none; margin-top: 12px; padding: 12px; background: var(--black-3); border-radius: 4px; color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 12px; white-space: pre-wrap; line-height: 1.6;"></pre>
+        <button id="settle-copy" class="modal-btn" style="display: none; margin-top: 8px; font-size: 11px; padding: 6px 12px;">📋 Copy to clipboard</button>
+      </div>
+    `;
+  }
+
+  root.innerHTML = `
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px;">
+      <div style="flex: 1; min-width: 0;">
+        <h3 style="font-family: 'Archivo Black', sans-serif; font-size: 22px; color: var(--ink); letter-spacing: -.02em; margin-bottom: 4px;">${escapeHtml(league.name)}</h3>
+        <p style="font-size: 11px; color: var(--ink-faint); letter-spacing: .12em; text-transform: uppercase;">
+          ${members.length} member${members.length === 1 ? '' : 's'}
+        </p>
+      </div>
+      <button class="modal-btn" id="leagues-back" style="font-size: 11px; padding: 6px 12px; flex-shrink: 0;">← Back</button>
+    </div>
+
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+      <div style="font-size: 10px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin-bottom: 4px;">Invite friends</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <code style="flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 18px; color: var(--gold); letter-spacing: .1em; padding: 8px; background: var(--black-3); border-radius: 4px; text-align: center; font-weight: 700;">${league.join_code}</code>
+        <button class="modal-btn" id="copy-join-code" style="font-size: 11px; padding: 8px 12px; flex-shrink: 0;">📋 Copy</button>
+      </div>
+      <p style="font-size: 11px; color: var(--ink-faint); margin-top: 6px;">Friends visit fifawc.kiwi → Leagues → Join with code → enter <code style="color: var(--gold);">${league.join_code}</code></p>
+    </div>
+
+    ${league.stakes_text ? `
+    <div style="background: rgba(255, 184, 0, .08); border: 1px solid var(--gold); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+      <div style="font-size: 10px; color: var(--gold); letter-spacing: .15em; text-transform: uppercase; font-weight: 800; margin-bottom: 4px;">💰 Stakes</div>
+      <div style="font-size: 13px; color: var(--ink);">${escapeHtml(league.stakes_text)}</div>
+    </div>
+    ` : ''}
+
+    <h4 style="font-family: 'Archivo Black', sans-serif; font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 8px;">🏅 Leaderboard</h4>
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="background: var(--black-3); border-bottom: 1px solid var(--line);">
+            <th style="padding: 8px; font-size: 9px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; text-align: center;">#</th>
+            <th style="padding: 8px; font-size: 9px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; text-align: left;">Player</th>
+            <th style="padding: 8px; font-size: 9px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; text-align: right;">Pts</th>
+            <th style="padding: 8px; font-size: 9px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; text-align: right;">Correct</th>
+            <th style="padding: 8px; font-size: 9px; color: var(--ink-faint); letter-spacing: .15em; text-transform: uppercase; text-align: right;">Acc</th>
+          </tr>
+        </thead>
+        <tbody>${rowsHTML}</tbody>
+      </table>
+    </div>
+
+    ${settlementHTML}
+
+    ${isMember ? `
+    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); text-align: center;">
+      <button class="modal-btn" id="leagues-leave" style="font-size: 11px; color: var(--can-red-2); border-color: var(--can-red-2);">Leave league</button>
+    </div>
+    ` : ''}
+  `;
+
+  // Wire up handlers
+  document.getElementById('leagues-back')?.addEventListener('click', () => {
+    showLeaguesHomeView();
+    renderMyLeagues();
+  });
+
+  document.getElementById('copy-join-code')?.addEventListener('click', () => {
+    const code = league.join_code;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(
+        () => showToast('✓ Code copied'),
+        () => showToast('✗ Copy failed')
+      );
+    }
+  });
+
+  document.getElementById('leagues-leave')?.addEventListener('click', async () => {
+    if (!confirm(`Leave "${league.name}"? You can re-join later with the code ${league.join_code}.`)) return;
+    const result = await leaguesLeave(league.id);
+    if (result.ok) {
+      showToast('✓ Left league');
+      showLeaguesHomeView();
+      await renderMyLeagues();
+    } else {
+      showToast('✗ ' + (result.error || 'Could not leave'));
+    }
+  });
+
+  // Settlement generator
+  document.getElementById('settle-generate')?.addEventListener('click', () => {
+    const amount = parseFloat(document.getElementById('settle-amount').value);
+    const currency = document.getElementById('settle-currency').value;
+    if (!amount || amount <= 0) {
+      showToast('Enter a valid stake amount');
+      return;
+    }
+    const text = generateSettlementText(detail, amount, currency);
+    const out = document.getElementById('settle-output');
+    out.textContent = text;
+    out.style.display = 'block';
+    document.getElementById('settle-copy').style.display = 'inline-block';
+  });
+
+  document.getElementById('settle-copy')?.addEventListener('click', () => {
+    const text = document.getElementById('settle-output').textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(
+        () => showToast('✓ Settlement copied — paste it in your group chat'),
+        () => showToast('✗ Copy failed')
+      );
+    }
+  });
+}
+
+/* Generate a settlement text message — winner takes all from losers, OR
+   ranked payouts where everyone below 1st pays their position fee.
+   Simple model: each member contributed `amount`. Winner takes the pot.
+   That's the most common friend-league format. */
+function generateSettlementText(detail, amount, currency) {
+  const { league, members } = detail;
+  if (members.length < 2) return 'Need at least 2 members to settle.';
+  const winner = members[0];
+  const losers = members.slice(1);
+  const totalPot = amount * losers.length;
+  let lines = [];
+  lines.push(`🏆 ${league.name} — World Cup 2026 Settlement`);
+  lines.push('');
+  lines.push(`Stake: ${currency}${amount} per person`);
+  lines.push('');
+  lines.push(`🥇 1st place: ${winner.display_name} (${winner.points} pts) — wins ${currency}${totalPot}`);
+  lines.push('');
+  lines.push('Everyone else pays the winner:');
+  losers.forEach((loser, i) => {
+    const rank = i === 0 ? '🥈' : i === 1 ? '🥉' : `${i + 2}.`;
+    lines.push(`  ${rank} ${loser.display_name} (${loser.points} pts) → owes ${currency}${amount} to ${winner.display_name}`);
+  });
+  lines.push('');
+  lines.push(`Generated by fifawc.kiwi`);
+  return lines.join('\n');
+}
+
+function initLeagues() {
+  const overlay = document.getElementById('leagues-overlay');
+  if (!overlay) return;
+
+  document.getElementById('open-leagues')?.addEventListener('click', openLeagues);
+  document.getElementById('leagues-close')?.addEventListener('click', closeLeagues);
+  document.getElementById('leagues-cancel')?.addEventListener('click', closeLeagues);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeLeagues(); });
+
+  // Home view buttons
+  document.getElementById('leagues-show-create')?.addEventListener('click', showLeaguesCreateView);
+  document.getElementById('leagues-show-join')?.addEventListener('click', showLeaguesJoinView);
+
+  // Create form
+  document.getElementById('leagues-create-cancel')?.addEventListener('click', () => {
+    showLeaguesHomeView();
+  });
+  document.getElementById('leagues-create-submit')?.addEventListener('click', async () => {
+    const name = document.getElementById('league-create-name').value.trim();
+    const stakes = document.getElementById('league-create-stakes').value.trim();
+    const displayName = document.getElementById('league-create-display-name').value.trim();
+    const msgEl = document.getElementById('league-create-message');
+    if (!name) { msgEl.style.color = 'var(--can-red-2)'; msgEl.textContent = 'League name is required.'; return; }
+    if (!displayName) { msgEl.style.color = 'var(--can-red-2)'; msgEl.textContent = 'Your display name is required.'; return; }
+    msgEl.style.color = 'var(--ink-dim)'; msgEl.textContent = 'Creating…';
+    setDisplayName(displayName);
+    const result = await leaguesCreate(name, stakes, displayName);
+    if (result.ok) {
+      msgEl.textContent = '';
+      showToast(`✓ League "${result.league.name}" created`);
+      // Clear form
+      document.getElementById('league-create-name').value = '';
+      document.getElementById('league-create-stakes').value = '';
+      // Open the new league directly
+      showLeaguesDetailView(result.league.id);
+    } else {
+      msgEl.style.color = 'var(--can-red-2)';
+      msgEl.textContent = '✗ ' + (result.error || 'Could not create league');
+    }
+  });
+
+  // Join form
+  document.getElementById('leagues-join-cancel')?.addEventListener('click', () => {
+    showLeaguesHomeView();
+  });
+  document.getElementById('leagues-join-submit')?.addEventListener('click', async () => {
+    const code = document.getElementById('league-join-code').value.trim().toUpperCase();
+    const displayName = document.getElementById('league-join-display-name').value.trim();
+    const msgEl = document.getElementById('league-join-message');
+    if (code.length !== 8) { msgEl.style.color = 'var(--can-red-2)'; msgEl.textContent = 'Join code must be 8 characters.'; return; }
+    if (!displayName) { msgEl.style.color = 'var(--can-red-2)'; msgEl.textContent = 'Your display name is required.'; return; }
+    msgEl.style.color = 'var(--ink-dim)'; msgEl.textContent = 'Joining…';
+    setDisplayName(displayName);
+    const result = await leaguesJoin(code, displayName);
+    if (result.ok) {
+      msgEl.textContent = '';
+      showToast(`✓ Joined "${result.league.name}"`);
+      document.getElementById('league-join-code').value = '';
+      showLeaguesDetailView(result.league.id);
+    } else {
+      msgEl.style.color = 'var(--can-red-2)';
+      msgEl.textContent = '✗ ' + (result.error || 'Could not join');
+    }
+  });
+}
+
+/* ============================================================
    INIT
    ============================================================ */
+
 /* ============================================================
-   SUPABASE — cloud sync for results, bracket, and leaderboard
+   CLOUD SYNC — for results, bracket, and leaderboard
    Falls back gracefully to localStorage-only if not configured
    ============================================================ */
 const VISITOR_ID_KEY = 'wc2026_visitor_id';
@@ -5363,8 +6745,8 @@ function setDisplayName(name) {
   localStorage.setItem(DISPLAY_NAME_KEY, name);
 }
 
-async function supabaseLoadResults() {
-  if (!SUPABASE_ENABLED || !db) return;
+async function cloudLoadResults() {
+  if (!CLOUD_ENABLED || !db) return;
   try {
     const { data, error } = await db.from('match_results').select('*');
     if (error) throw error;
@@ -5373,12 +6755,12 @@ async function supabaseLoadResults() {
       MATCH_RESULTS[row.match_no] = { home: row.home_score, away: row.away_score };
     });
   } catch (e) {
-    console.warn('Supabase load results failed, falling back to local:', e?.message);
+    console.warn('Cloud load results failed, falling back to local:', e?.message);
   }
 }
 
-async function supabaseLoadBracket() {
-  if (!SUPABASE_ENABLED || !db) return;
+async function cloudLoadBracket() {
+  if (!CLOUD_ENABLED || !db) return;
   try {
     const { data, error } = await db.from('bracket_results').select('*');
     if (error) throw error;
@@ -5387,12 +6769,12 @@ async function supabaseLoadBracket() {
       BRACKET_RESULTS[row.slot_code] = row.team_name;
     });
   } catch (e) {
-    console.warn('Supabase load bracket failed, falling back to local:', e?.message);
+    console.warn('Cloud load bracket failed, falling back to local:', e?.message);
   }
 }
 
-async function supabaseSaveResult(matchNo, homeScore, awayScore) {
-  if (!SUPABASE_ENABLED || !db) return false;
+async function cloudSaveResult(matchNo, homeScore, awayScore) {
+  if (!CLOUD_ENABLED || !db) return false;
   try {
     const payload = {
       match_no: matchNo,
@@ -5407,13 +6789,13 @@ async function supabaseSaveResult(matchNo, homeScore, awayScore) {
     if (error) throw error;
     return true;
   } catch (e) {
-    console.warn('Supabase save result failed:', e?.message);
+    console.warn('Cloud save result failed:', e?.message);
     return false;
   }
 }
 
-async function supabaseDeleteResult(matchNo) {
-  if (!SUPABASE_ENABLED || !db) return false;
+async function cloudDeleteResult(matchNo) {
+  if (!CLOUD_ENABLED || !db) return false;
   try {
     const { error } = await db
       .from('match_results')
@@ -5422,13 +6804,13 @@ async function supabaseDeleteResult(matchNo) {
     if (error) throw error;
     return true;
   } catch (e) {
-    console.warn('Supabase delete result failed:', e?.message);
+    console.warn('Cloud delete result failed:', e?.message);
     return false;
   }
 }
 
-async function supabaseSaveBracketSlot(slotCode, teamName) {
-  if (!SUPABASE_ENABLED || !db) return false;
+async function cloudSaveBracketSlot(slotCode, teamName) {
+  if (!CLOUD_ENABLED || !db) return false;
   try {
     const { error } = await db
       .from('bracket_results')
@@ -5436,13 +6818,13 @@ async function supabaseSaveBracketSlot(slotCode, teamName) {
     if (error) throw error;
     return true;
   } catch (e) {
-    console.warn('Supabase save bracket failed:', e?.message);
+    console.warn('Cloud save bracket failed:', e?.message);
     return false;
   }
 }
 
-async function supabaseDeleteBracketSlot(slotCode) {
-  if (!SUPABASE_ENABLED || !db) return false;
+async function cloudDeleteBracketSlot(slotCode) {
+  if (!CLOUD_ENABLED || !db) return false;
   try {
     const { error } = await db
       .from('bracket_results')
@@ -5451,23 +6833,23 @@ async function supabaseDeleteBracketSlot(slotCode) {
     if (error) throw error;
     return true;
   } catch (e) {
-    console.warn('Supabase delete bracket failed:', e?.message);
+    console.warn('Cloud delete bracket failed:', e?.message);
     return false;
   }
 }
 
-async function supabaseSyncFromAPI() {
+async function cloudSyncFromAPI() {
   // Calls our Edge Function which fetches openfootball data
-  if (!SUPABASE_ENABLED || !db) {
-    return { ok: false, error: 'Supabase not configured' };
+  if (!CLOUD_ENABLED || !db) {
+    return { ok: false, error: 'Cloud sync not configured' };
   }
   try {
-    const url = `${SUPABASE_URL}/functions/v1/sync-results`;
+    const url = `${CLOUD_API_URL}/functions/v1/sync-results`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${CLOUD_API_KEY}`,
+        'apikey': CLOUD_API_KEY,
         'Content-Type': 'application/json'
       }
     });
@@ -5478,8 +6860,8 @@ async function supabaseSyncFromAPI() {
   }
 }
 
-async function supabaseSubmitToLeaderboard() {
-  if (!SUPABASE_ENABLED || !db) return false;
+async function cloudSubmitToLeaderboard() {
+  if (!CLOUD_ENABLED || !db) return false;
   const name = getDisplayName();
   if (!name) return false;
   const stats = getPredictionStats();
@@ -5504,8 +6886,8 @@ async function supabaseSubmitToLeaderboard() {
   }
 }
 
-async function supabaseLoadLeaderboard(limit = 50) {
-  if (!SUPABASE_ENABLED || !db) return [];
+async function cloudLoadLeaderboard(limit = 50) {
+  if (!CLOUD_ENABLED || !db) return [];
   try {
     const { data, error } = await db
       .from('leaderboard')
@@ -5527,17 +6909,31 @@ async function supabaseLoadLeaderboard(limit = 50) {
 async function init() {
   loadUserData();
 
-  // Initialize Supabase if configured (graceful fallback to local-only)
-  if (SUPABASE_ENABLED && window.supabase) {
+  // Initialize cloud sync if configured (graceful fallback to local-only)
+  if (CLOUD_ENABLED && window.supabase) {
     try {
-      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      db = window.supabase.createClient(CLOUD_API_URL, CLOUD_API_KEY);
       // Load remote state — overrides local if available
       await Promise.all([
-        supabaseLoadResults(),
-        supabaseLoadBracket()
+        cloudLoadResults(),
+        cloudLoadBracket()
       ]);
+      // Restore the visitor's predictions from cloud (covers cross-device sync)
+      await cloudPullPredictions();
+      // Check if there's an active auth session and load account info
+      // (supports magic-link redirect-back flow on any device)
+      const account = await loadAccountForCurrentSession();
+      if (account) {
+        // Show a one-time toast on first auth (so they know it worked)
+        try {
+          if (!sessionStorage.getItem(ACCOUNT_AUTH_TOAST_KEY)) {
+            sessionStorage.setItem(ACCOUNT_AUTH_TOAST_KEY, '1');
+            setTimeout(() => showToast('✓ Signed in as ' + account.email), 600);
+          }
+        } catch (e) {}
+      }
     } catch (e) {
-      console.warn('Supabase init failed, running in local-only mode:', e?.message);
+      console.warn('Cloud init failed, running in local-only mode:', e?.message);
       db = null;
     }
   }
@@ -5594,6 +6990,7 @@ async function init() {
   initStats();
   initMute();
   initShare();
+  initLeagues();
 
   // Theme picker — wire each of the 3 dots
   document.querySelectorAll('.theme-dot[data-theme-pick]').forEach(dot => {
@@ -5619,11 +7016,11 @@ async function init() {
     checkForCelebrations();
   }, 5 * 60 * 1000);
 
-  // Periodically refresh results from Supabase (every 2 minutes)
+  // Periodically refresh results from cloud (every 2 minutes)
   // so visitors see new scores without manual refresh
-  if (SUPABASE_ENABLED) {
+  if (CLOUD_ENABLED) {
     setInterval(async () => {
-      await supabaseLoadResults();
+      await cloudLoadResults();
       render();
       checkForCelebrations();
     }, 2 * 60 * 1000);
@@ -5682,8 +7079,8 @@ function checkForCelebrations() {
     setTimeout(() => showToast(`+${newly.length - 1} more correct picks!`), 3500);
   }
   // Auto-update leaderboard if user has a display name
-  if (SUPABASE_ENABLED && getDisplayName()) {
-    supabaseSubmitToLeaderboard();
+  if (CLOUD_ENABLED && getDisplayName()) {
+    cloudSubmitToLeaderboard();
   }
 }
 
