@@ -2722,12 +2722,26 @@
     .actions-row {
       flex-direction: column;
       gap: 8px;
+      align-items: stretch;
     }
-    .actions-row > * { width: 100%; }
+    /* Reset all action items to content-sized height; full row width */
+    .actions-row > * {
+      width: 100%;
+      flex: 0 0 auto;
+      min-height: 0;
+      height: auto;
+    }
     .view-toggle-wrap { order: 2; }
-    .jump-btn { order: 1; padding: 10px 14px; font-size: 11px; }
-    .clear-btn { order: 3; }
-    .mute-toggle { order: 4; align-self: flex-end; }
+    .jump-btn {
+      order: 1;
+      padding: 12px 16px;
+      font-size: 12px;
+      flex: 0 0 auto;
+      min-height: 44px;
+      height: auto;
+    }
+    .clear-btn { order: 3; min-height: 40px; }
+    .mute-toggle { order: 4; align-self: flex-end; min-height: 36px; }
   }
 
   /* Narrower phones (<480px) — tighten container padding to use every pixel */
@@ -3206,7 +3220,7 @@
    If left as empty strings, the app falls back to localStorage-only.
    Configuration is set during build/deploy.
    ============================================================ */
-const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co'; 
+const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
 const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
 const CLOUD_ENABLED = !!(CLOUD_API_URL && CLOUD_API_KEY);
 let db = null; // Cloud client — initialized in init() if enabled.
