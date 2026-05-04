@@ -3220,8 +3220,8 @@
    If left as empty strings, the app falls back to localStorage-only.
    Configuration is set during build/deploy.
    ============================================================ */
-const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';
-const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY';
+const CLOUD_API_URL  = 'https://tjihuaxfyouxheqymzpl.supabase.co';   
+const CLOUD_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqaWh1YXhmeW91eGhlcXltenBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjQwMDQsImV4cCI6MjA5MjgwMDAwNH0.IT1UBziZeBBE4n3VsXFp48h5mKTevFMBTWRABKwAFJY'; 
 const CLOUD_ENABLED = !!(CLOUD_API_URL && CLOUD_API_KEY);
 let db = null; // Cloud client — initialized in init() if enabled.
                // Renamed to avoid global name collision.
@@ -6377,6 +6377,28 @@ async function leaguesLeave(leagueId) {
   return { ok: true };
 }
 
+/* Remove a member from a league. Only the league creator should call this -
+   the front-end gates this to creators, but the database also enforces it
+   via RLS-like logic in the kick_member RPC (security definer with checks). */
+async function leaguesKickMember(leagueId, targetVisitorId) {
+  if (!CLOUD_ENABLED || !db) return { ok: false, error: 'Cloud sync not configured' };
+  const myVisitorId = getVisitorId();
+  // Use an RPC so the SQL function can verify the caller is the creator.
+  // This prevents random members from kicking each other even if they
+  // discover the API directly.
+  const { data, error } = await db.rpc('kick_league_member', {
+    p_league_id: leagueId,
+    p_caller_visitor_id: myVisitorId,
+    p_target_visitor_id: targetVisitorId
+  });
+  if (error) return { ok: false, error: error.message };
+  // RPC returns true on success, false if caller isn't the creator
+  if (data === false) {
+    return { ok: false, error: 'Only the league creator can remove members' };
+  }
+  return { ok: true };
+}
+
 /* Fetch all leagues the current visitor is a member of, with their members */
 async function leaguesLoadMyLeagues() {
   if (!CLOUD_ENABLED || !db) return [];
@@ -6491,11 +6513,17 @@ async function renderMyLeagues() {
   root.innerHTML = '<p style="color: var(--ink-faint); padding: 16px; text-align: center;">Loading your leagues…</p>';
   const myLeagues = await leaguesLoadMyLeagues();
   if (myLeagues.length === 0) {
+    // Check if user has an account - if so, suggest signing in on this device.
+    // Otherwise, suggest using "Join with code" to re-find an existing league.
+    const accountHint = accountUser
+      ? `<p style="font-size: 11px; color: var(--ink-faint); margin-top: 12px;">Signed in as ${escapeHtml(accountUser.email)}. If your leagues are missing, they may be tied to a different browser or device.</p>`
+      : `<p style="font-size: 11px; color: var(--ink-faint); margin-top: 12px;">Tip: If you created a league on another device, use <strong style="color: var(--gold);">Join with code</strong> below to find it again, or sign in via My Predictions to sync across devices.</p>`;
     root.innerHTML = `
       <div style="text-align:center; padding: 24px 16px; color: var(--ink-dim);">
         <div style="font-size: 36px; margin-bottom: 12px;">🏆</div>
         <p style="font-size: 14px; margin-bottom: 6px;"><strong style="color: var(--ink);">No leagues yet</strong></p>
         <p style="font-size: 12px; color: var(--ink-faint);">Create one for you and your friends, or join an existing league with a code.</p>
+        ${accountHint}
       </div>
     `;
     return;
@@ -6538,19 +6566,31 @@ function renderLeagueDetail(detail) {
   const { league, members } = detail;
   const myVisitorId = getVisitorId();
   const isMember = members.some(m => m.visitor_id === myVisitorId);
+  // Creator can manage members (kick people who joined with wrong info, etc.)
+  const isCreator = league.creator_visitor_id === myVisitorId;
 
   // Build leaderboard rows
   let rowsHTML = '';
   members.forEach((m, i) => {
     const isMe = m.visitor_id === myVisitorId;
+    const isThisCreator = m.visitor_id === league.creator_visitor_id;
     const rankBadge = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
     const accuracy = m.total > 0 ? Math.round((m.correct / m.total) * 100) : 0;
+    // Show a kick button only if I am the creator AND this row isn't me
+    // (creator can't kick themselves; they should use "Leave" if they want out).
+    const kickBtn = (isCreator && !isMe) ? `
+      <button class="kick-member-btn" data-visitor-id="${escapeHtml(m.visitor_id)}" data-display-name="${escapeHtml(m.display_name)}"
+        style="background:transparent;border:1px solid var(--can-red-2);color:var(--can-red-2);border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;margin-left:6px;"
+        title="Remove this member from the league">Kick</button>
+    ` : '';
     rowsHTML += `
       <tr style="${isMe ? 'background: rgba(255, 184, 0, .12);' : ''}">
         <td style="padding: 10px 8px; font-family: 'Archivo Black', sans-serif; text-align: center; width: 40px;">${rankBadge}</td>
         <td style="padding: 10px 8px;">
           <span style="color: ${isMe ? 'var(--gold)' : 'var(--ink)'}; font-weight: ${isMe ? '900' : '700'};">${escapeHtml(m.display_name)}</span>
           ${isMe ? '<span style="color: var(--gold); font-size: 9px; letter-spacing: .15em; text-transform: uppercase; margin-left: 6px;">YOU</span>' : ''}
+          ${isThisCreator ? '<span style="color: var(--ink-faint); font-size: 9px; letter-spacing: .15em; text-transform: uppercase; margin-left: 6px;">CREATOR</span>' : ''}
+          ${kickBtn}
         </td>
         <td style="padding: 10px 8px; text-align: right; font-family: 'Archivo Black', sans-serif; color: var(--gold); font-size: 16px;">${m.points}</td>
         <td style="padding: 10px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-dim);">${m.correct}/${m.total}</td>
@@ -6687,6 +6727,27 @@ function renderLeagueDetail(detail) {
         () => showToast('✗ Copy failed')
       );
     }
+  });
+
+  // Kick member handler - only wired if user is creator (buttons only render for creator)
+  root.querySelectorAll('.kick-member-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const targetVisitorId = btn.dataset.visitorId;
+      const displayName = btn.dataset.displayName;
+      if (!confirm(`Remove "${displayName}" from "${league.name}"?\n\nThey can re-join later if you give them the code.`)) return;
+      btn.disabled = true;
+      btn.textContent = '...';
+      const result = await leaguesKickMember(league.id, targetVisitorId);
+      if (result.ok) {
+        showToast('✓ Removed ' + displayName);
+        // Re-fetch and re-render the league detail
+        await showLeaguesDetailView(league.id);
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Kick';
+        showToast('✗ ' + (result.error || 'Could not remove member'));
+      }
+    });
   });
 }
 
