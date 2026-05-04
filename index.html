@@ -3019,6 +3019,7 @@
       <div class="modal-tabs" role="tablist">
         <button class="modal-tab active" data-admin-tab="results">Match Results</button>
         <button class="modal-tab" data-admin-tab="bracket">Bracket</button>
+        <button class="modal-tab" data-admin-tab="leaderboard">Leaderboard</button>
       </div>
       <div id="admin-content"></div>
     </div>
@@ -5172,6 +5173,13 @@ function saveAdminData() {
 function buildAdminUI() {
   const content = document.getElementById('admin-content');
   if (adminTab === 'results') content.innerHTML = buildResultsTab();
+  else if (adminTab === 'leaderboard') {
+    content.innerHTML = '<p style="padding:20px;color:var(--ink-faint);text-align:center;">Loading leaderboard…</p>';
+    buildLeaderboardTab().then(html => {
+      content.innerHTML = html;
+      wireLeaderboardTab();
+    });
+  }
   else content.innerHTML = buildBracketTab();
   wireAdminInputs();
 }
@@ -5350,6 +5358,133 @@ function buildBracketTab() {
 
   return html;
 }
+
+/* Admin: leaderboard cleanup tab.
+   Shows all rows currently in the global leaderboard with a "Remove" button
+   for each, plus a danger-zone "Clear all" button. Useful for cleaning up
+   test data before the tournament starts. */
+async function buildLeaderboardTab() {
+  if (!CLOUD_ENABLED || !db) {
+    return '<p style="padding:20px; color: var(--ink-faint); text-align:center;">Cloud sync is not configured. Cannot manage leaderboard.</p>';
+  }
+  const { data: rows, error } = await db
+    .from('leaderboard')
+    .select('visitor_id, display_name, points, correct, total, best_streak, updated_at')
+    .order('points', { ascending: false })
+    .limit(500);
+  if (error) {
+    return `<p style="padding:20px; color: var(--can-red-2); text-align:center;">Failed to load leaderboard: ${escapeHtml(error.message)}</p>`;
+  }
+
+  let bodyHTML = '';
+  if (!rows || rows.length === 0) {
+    bodyHTML = '<p style="padding:20px; color: var(--ink-faint); text-align:center;">No entries on the global leaderboard yet.</p>';
+  } else {
+    bodyHTML = `
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+          <thead>
+            <tr style="background: var(--black-3); border-bottom: 1px solid var(--line);">
+              <th style="padding:8px; text-align:left; font-size:10px; color: var(--ink-faint); letter-spacing:.12em; text-transform:uppercase;">Display name</th>
+              <th style="padding:8px; text-align:right; font-size:10px; color: var(--ink-faint); letter-spacing:.12em; text-transform:uppercase;">Pts</th>
+              <th style="padding:8px; text-align:right; font-size:10px; color: var(--ink-faint); letter-spacing:.12em; text-transform:uppercase;">Correct</th>
+              <th style="padding:8px; text-align:center; font-size:10px; color: var(--ink-faint); letter-spacing:.12em; text-transform:uppercase;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    rows.forEach(r => {
+      bodyHTML += `
+        <tr style="border-bottom: 1px solid var(--line-2);">
+          <td style="padding:10px 8px; color: var(--ink); word-break: break-all;">${escapeHtml(r.display_name || '(unnamed)')}</td>
+          <td style="padding:10px 8px; text-align:right; font-family:'Archivo Black',sans-serif; color: var(--gold);">${r.points || 0}</td>
+          <td style="padding:10px 8px; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11px; color: var(--ink-dim);">${r.correct || 0}/${r.total || 0}</td>
+          <td style="padding:10px 8px; text-align:center;">
+            <button class="lb-remove-btn"
+              data-visitor-id="${escapeHtml(r.visitor_id)}"
+              data-display-name="${escapeHtml(r.display_name || '')}"
+              style="background:transparent;border:1px solid var(--can-red-2);color:var(--can-red-2);border-radius:4px;padding:4px 10px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;">
+              Remove
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+    bodyHTML += `</tbody></table></div>`;
+  }
+
+  return `
+    <div class="modal-stage-info">
+      ${rows ? rows.length : 0} entries on the global leaderboard. Remove individual entries or clear all to reset before the tournament.
+    </div>
+
+    <div class="modal-section">
+      <h3>Global Leaderboard</h3>
+      <p class="desc">Anyone who submitted a display name on the public leaderboard appears here. Use the Remove buttons to clean up test data, inappropriate names, or stale accounts.</p>
+      ${bodyHTML}
+    </div>
+
+    <div class="modal-section" style="border-color: var(--can-red-2); background: rgba(220,40,40,.04);">
+      <h3 style="color: var(--can-red-2);">⚠ Danger zone</h3>
+      <p class="desc">Permanently remove ALL entries from the global leaderboard. Use this once before the tournament starts to clear test data. This does NOT affect predictions or private leagues.</p>
+      <button class="modal-btn modal-btn-danger" id="lb-clear-all" style="margin-top:10px;">Clear entire leaderboard</button>
+    </div>
+  `;
+}
+
+function wireLeaderboardTab() {
+  // Individual remove buttons
+  document.querySelectorAll('.lb-remove-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const visitorId = btn.dataset.visitorId;
+      const displayName = btn.dataset.displayName || '(unnamed)';
+      if (!confirm(`Remove "${displayName}" from the global leaderboard?\n\nThis cannot be undone. They can re-submit a display name later.`)) return;
+      btn.disabled = true;
+      btn.textContent = '...';
+      try {
+        const { data, error } = await db.rpc('admin_remove_leaderboard_entry', {
+          p_visitor_id: visitorId
+        });
+        if (error) throw error;
+        if (data === false) {
+          showToast('✗ Permission denied. Sign in as admin first.');
+          btn.disabled = false;
+          btn.textContent = 'Remove';
+          return;
+        }
+        showToast('✓ Removed ' + displayName);
+        // Reload the tab to reflect the change
+        buildAdminUI();
+      } catch (e) {
+        showToast('✗ ' + (e?.message || 'Failed to remove'));
+        btn.disabled = false;
+        btn.textContent = 'Remove';
+      }
+    });
+  });
+
+  // Clear all
+  document.getElementById('lb-clear-all')?.addEventListener('click', async () => {
+    if (!confirm('Clear the ENTIRE global leaderboard?\n\nAll display names and scores will be permanently removed. Use this once before the tournament starts to wipe test data.\n\nThis cannot be undone.')) return;
+    if (!confirm('Are you absolutely sure? Type-confirm in your head: "Yes, wipe it."\n\nClick OK to proceed.')) return;
+    const btn = document.getElementById('lb-clear-all');
+    if (btn) { btn.disabled = true; btn.textContent = 'Clearing…'; }
+    try {
+      const { data, error } = await db.rpc('admin_clear_leaderboard');
+      if (error) throw error;
+      if (data === -1) {
+        showToast('✗ Permission denied. Sign in as admin first.');
+      } else {
+        showToast(`✓ Cleared ${data} entries from leaderboard`);
+      }
+      buildAdminUI();
+    } catch (e) {
+      showToast('✗ ' + (e?.message || 'Failed to clear'));
+      if (btn) { btn.disabled = false; btn.textContent = 'Clear entire leaderboard'; }
+    }
+  });
+}
+
 
 function buildSelect(slot, options, disabled = false) {
   const current = BRACKET_RESULTS[slot] || '';
@@ -6377,24 +6512,24 @@ async function leaguesLeave(leagueId) {
   return { ok: true };
 }
 
-/* Remove a member from a league. Only the league creator should call this -
-   the front-end gates this to creators, but the database also enforces it
-   via RLS-like logic in the kick_member RPC (security definer with checks). */
+/* Remove a member from a league. Allowed if the caller is:
+   - The league creator (matched by visitor_id), OR
+   - A signed-in admin user (matched by Supabase auth session)
+   The SQL function checks both paths server-side via security definer. */
 async function leaguesKickMember(leagueId, targetVisitorId) {
   if (!CLOUD_ENABLED || !db) return { ok: false, error: 'Cloud sync not configured' };
   const myVisitorId = getVisitorId();
-  // Use an RPC so the SQL function can verify the caller is the creator.
-  // This prevents random members from kicking each other even if they
-  // discover the API directly.
+  // The function checks: caller is creator OR caller has an active admin session.
+  // It uses auth.uid() internally, which is the auth user id from the client's
+  // active Supabase session (set when admin signs in via magic link).
   const { data, error } = await db.rpc('kick_league_member', {
     p_league_id: leagueId,
     p_caller_visitor_id: myVisitorId,
     p_target_visitor_id: targetVisitorId
   });
   if (error) return { ok: false, error: error.message };
-  // RPC returns true on success, false if caller isn't the creator
   if (data === false) {
-    return { ok: false, error: 'Only the league creator can remove members' };
+    return { ok: false, error: 'Only the league creator or an admin can remove members' };
   }
   return { ok: true };
 }
@@ -6566,8 +6701,12 @@ function renderLeagueDetail(detail) {
   const { league, members } = detail;
   const myVisitorId = getVisitorId();
   const isMember = members.some(m => m.visitor_id === myVisitorId);
-  // Creator can manage members (kick people who joined with wrong info, etc.)
+  // Creator can manage members (kick people who joined with wrong info, etc.).
+  // Admins (signed in via admin sign-in) can also manage ANY league - this is
+  // useful for cleanup when a league creator's visitor_id has changed across
+  // browsers/devices and they can no longer be detected as creator.
   const isCreator = league.creator_visitor_id === myVisitorId;
+  const canManage = isCreator || isAdminMode;
 
   // Build leaderboard rows
   let rowsHTML = '';
@@ -6576,9 +6715,9 @@ function renderLeagueDetail(detail) {
     const isThisCreator = m.visitor_id === league.creator_visitor_id;
     const rankBadge = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
     const accuracy = m.total > 0 ? Math.round((m.correct / m.total) * 100) : 0;
-    // Show a kick button only if I am the creator AND this row isn't me
-    // (creator can't kick themselves; they should use "Leave" if they want out).
-    const kickBtn = (isCreator && !isMe) ? `
+    // Show a kick button when I can manage (am creator, or signed in as admin).
+    // Don't show it on my own row (use Leave league instead).
+    const kickBtn = (canManage && !isMe) ? `
       <button class="kick-member-btn" data-visitor-id="${escapeHtml(m.visitor_id)}" data-display-name="${escapeHtml(m.display_name)}"
         style="background:transparent;border:1px solid var(--can-red-2);color:var(--can-red-2);border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;margin-left:6px;"
         title="Remove this member from the league">Kick</button>
