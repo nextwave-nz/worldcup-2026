@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Privacy Policy — Road to Glory</title>
-<meta name="description" content="Privacy Policy for the Road to Glory app and fifawc.kiwi — FIFA World Cup 2026 predictions." />
+<meta name="description" content="Privacy Policy for the Road to Glory app and fifawc.kiwi — World Cup 2026 predictions." />
 <style>
   :root {
     --black: #000; --surface: #141414; --line: rgba(255,255,255,.1);
@@ -16,10 +16,18 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.65; -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 22px 80px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 36px 22px 80px; }
+  .nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-ball { font-size: 26px; }
+  .logo-text { color: var(--gold); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; font-size: 13px; }
+  .home-btn {
+    color: var(--ink-dim); text-decoration: none; font-size: 13px; font-weight: 700;
+    border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px;
+  }
+  .home-btn:hover { color: var(--gold); border-color: var(--gold); }
   header { border-bottom: 1px solid var(--line); padding-bottom: 22px; margin-bottom: 30px; }
-  .badge { color: var(--gold); font-weight: 800; letter-spacing: .18em; text-transform: uppercase; font-size: 12px; }
-  h1 { font-size: clamp(28px, 6vw, 40px); margin: 8px 0 6px; letter-spacing: -.02em; }
+  h1 { font-size: clamp(28px, 6vw, 40px); margin: 0 0 6px; letter-spacing: -.02em; }
   h2 { color: var(--gold); font-size: 18px; margin: 34px 0 10px; }
   .meta { color: var(--ink-faint); font-size: 13px; }
   p, li { color: var(--ink-dim); font-size: 15px; }
@@ -33,14 +41,21 @@
 </head>
 <body>
   <div class="wrap">
+    <nav class="nav">
+      <a class="logo" href="https://fifawc.kiwi/" title="Back to Road to Glory">
+        <span class="logo-ball">⚽</span>
+        <span class="logo-text">Road to Glory</span>
+      </a>
+      <a class="home-btn" href="https://fifawc.kiwi/">← Home</a>
+    </nav>
+
     <header>
-      <div class="badge">⚽ Road to Glory</div>
       <h1>Privacy Policy</h1>
       <div class="meta">Effective 12 June 2026 · Applies to the Road to Glory mobile app and the website at fifawc.kiwi</div>
     </header>
 
     <p>
-      Road to Glory is a FIFA World Cup 2026 schedule and prediction game. We built it to be fun and
+      Road to Glory is a World Cup 2026 schedule and prediction game. We built it to be fun and
       private. This policy explains exactly what we collect, why, and the choices you have. We keep it
       short because we collect very little.
     </p>
@@ -91,10 +106,10 @@
 
     <h2>Keeping or deleting your data</h2>
     <p>
-      If you never sign in, your data is tied only to an anonymous ID — clearing the app's data or
-      uninstalling removes the local copy. If you did sign in with email, you can delete your account
-      and all associated data at any time. See our
-      <a href="delete-account.html">Account &amp; Data Deletion</a> page.
+      You can delete your account and all associated data at any time, directly inside the app
+      (More → Delete my account) or by request. Full details on our
+      <a href="delete-account.html">Account &amp; Data Deletion</a> page. If you never signed in, your
+      data is tied only to an anonymous ID — clearing the app's data or uninstalling removes it.
     </p>
 
     <h2>Children</h2>
@@ -105,10 +120,10 @@
     <p>If we change this policy we'll update the date above and post the new version here.</p>
 
     <h2>Contact</h2>
-    <p>Questions about your privacy? Email <a href="mailto:hello@nextwave.nz">hello@nextwave.nz</a>.</p>
+    <p>Questions about your privacy? Email <a href="mailto:contact@fifawc.kiwi">contact@fifawc.kiwi</a>.</p>
 
     <footer>
-      Road to Glory · An independent FIFA World Cup 2026 companion · fifawc.kiwi<br />
+      <a href="https://fifawc.kiwi/">⚽ Road to Glory — fifawc.kiwi</a> · An independent World Cup 2026 companion<br />
       Not affiliated with, endorsed by, or sponsored by FIFA.
     </footer>
   </div>
