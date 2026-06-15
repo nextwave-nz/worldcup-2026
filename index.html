@@ -2865,6 +2865,43 @@
     .tc-num { font-size: 28px; }
   }
 
+  /* ===== Match details (lineups / stats / scorers) ===== */
+  .md-card { cursor: pointer; }
+  .md-tabs { display:flex; gap:8px; margin-bottom:14px; }
+  .md-tab { flex:1; padding:9px; border-radius:8px; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-dim); font-weight:800; font-size:13px; cursor:pointer; text-align:center; }
+  .md-tab.active { background:var(--gold); color:var(--on-gold); border-color:var(--gold); }
+  .md-score-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .md-team { flex:1; text-align:center; }
+  .md-team .flag { font-size:34px; }
+  .md-team .nm { font-weight:700; margin-top:4px; }
+  .md-center { width:110px; text-align:center; }
+  .md-bigscore { font-family:'Archivo Black',sans-serif; font-size:30px; color:var(--gold); }
+  .md-scorers { display:flex; gap:12px; border-top:1px solid var(--line); margin-top:14px; padding-top:12px; }
+  .md-scorers > div { flex:1; }
+  .md-scorers .s { color:var(--ink-dim); font-size:12px; margin-bottom:3px; }
+  .md-stat { margin-bottom:12px; }
+  .md-stat-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; font-size:13px; }
+  .md-stat-top .lab { color:var(--ink-faint); text-transform:uppercase; font-size:11px; letter-spacing:.4px; }
+  .md-stat-track { height:4px; border-radius:2px; background:var(--line); overflow:hidden; }
+  .md-stat-fill { height:100%; background:var(--gold); border-radius:2px; }
+  .md-pitch { background:#1f7a47; border:1px solid rgba(255,255,255,.28); border-radius:12px; position:relative; overflow:hidden; padding:16px 4px; }
+  .md-pitch .hw { position:absolute; top:50%; left:6px; right:6px; height:1px; background:rgba(255,255,255,.28); }
+  .md-pitch .cc { position:absolute; top:50%; left:50%; width:74px; height:74px; margin:-37px 0 0 -37px; border:1px solid rgba(255,255,255,.28); border-radius:50%; }
+  .md-pitch .pb { position:absolute; left:50%; width:150px; height:42px; margin-left:-75px; border:1px solid rgba(255,255,255,.28); }
+  .md-pitch .pb.t { top:0; border-top:0; }
+  .md-pitch .pb.b { bottom:0; border-bottom:0; }
+  .md-pitch-rows { position:relative; z-index:1; display:flex; flex-direction:column; gap:14px; }
+  .md-row { display:flex; justify-content:space-evenly; }
+  .md-tok { flex:1; display:flex; flex-direction:column; align-items:center; padding:0 2px; min-width:0; }
+  .md-shirt { width:34px; height:34px; border-radius:9px; background:rgba(0,0,0,.28); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:14px; position:relative; }
+  .md-shirt .g { position:absolute; top:-9px; left:-7px; font-size:11px; }
+  .md-shirt .c { position:absolute; top:-5px; right:-5px; width:11px; height:11px; border-radius:2px; transform:rotate(45deg); }
+  .md-nm { margin-top:4px; max-width:100%; background:rgba(0,0,0,.5); color:#fff; border-radius:8px; padding:2px 6px; font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .md-sub { display:flex; align-items:center; gap:12px; padding:8px 0; border-top:1px solid var(--line); }
+  .md-av { width:34px; height:34px; border-radius:50%; border:1px solid var(--line-2); background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px; color:var(--ink-dim); }
+  .md-muted { color:var(--ink-dim); text-align:center; padding:14px; font-size:13px; }
+  .md-more { color:var(--gold); text-align:center; font-weight:800; font-size:12px; cursor:pointer; margin-top:6px; }
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
@@ -2986,6 +3023,12 @@
       <option value="upcoming">Upcoming only</option>
       <option value="today">Today only</option>
       <option value="past">Past only</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="tz-filter">Time zone</label>
+    <select class="control-input" id="tz-filter">
+      <option value="auto">📍 Auto-detect</option>
     </select>
   </div>
   <div class="actions-row">
@@ -3447,7 +3490,8 @@ function isPlaceholderTeam(name) {
 /* ============================================================
    TIME UTILITIES
    ============================================================ */
-const NZ_TZ = 'Pacific/Auckland';
+let NZ_TZ = 'Pacific/Auckland';   // active timezone (switchable via the Time zone picker)
+let ZONE_SHORT = 'NZ';            // short label shown next to times
 
 const state = {
   team: '', stage: '', status: '', view: 'cards',
@@ -3484,7 +3528,7 @@ function buildCountdownOrTime(matchDate, status) {
       <div class="match-countdown" data-countdown-target="${targetTs}">
         <div class="countdown-label">Kicks off in</div>
         <div class="countdown-value">${formatCountdown(msUntil)}</div>
-        <div class="countdown-time">${fmtNZTime(matchDate)} NZ</div>
+        <div class="countdown-time">${fmtNZTime(matchDate)} ${ZONE_SHORT}</div>
       </div>
     `;
   }
@@ -3592,7 +3636,7 @@ function tickTournamentCountdown() {
     const home = resolveSlot(next.home);
     const away = resolveSlot(next.away);
     document.getElementById('nm-details').textContent =
-      `${home} vs ${away} · ${fmtNZTime(new Date(next.et))} NZ`;
+      `${home} vs ${away} · ${fmtNZTime(new Date(next.et))} ${ZONE_SHORT}`;
     return;
   }
 
@@ -3603,7 +3647,7 @@ function tickTournamentCountdown() {
     const home = resolveSlot(next.home);
     const away = resolveSlot(next.away);
     document.getElementById('nm-details').textContent =
-      `${home} vs ${away} · ${fmtNZTime(new Date(next.et))} NZ`;
+      `${home} vs ${away} · ${fmtNZTime(new Date(next.et))} ${ZONE_SHORT}`;
   } else {
     // Next match is more than a day away (rest day) — hide banner
     nmEl.style.display = 'none';
@@ -4206,7 +4250,7 @@ function renderCards(filtered, root) {
       <section class="day-group" id="${dayId}">
         <div class="${headerCls}">
           <div>
-            <div class="day-title">${fmtNZDateShort(day.date)}<small>${day.matches.length} match${day.matches.length === 1 ? '' : 'es'} · NZ Time</small></div>
+            <div class="day-title">${fmtNZDateShort(day.date)}<small>${day.matches.length} match${day.matches.length === 1 ? '' : 'es'} · ${ZONE_SHORT}</small></div>
           </div>
           ${badge}
         </div>
@@ -4998,7 +5042,7 @@ function renderShareCard(m, pick) {
     timeZone: NZ_TZ, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
   });
   const timeStr = fmtNZTime(matchDate);
-  ctx.fillText(`${dateStr} · ${timeStr} NZ`, W / 2, 730);
+  ctx.fillText(`${dateStr} · ${timeStr} ${ZONE_SHORT}`, W / 2, 730);
   ctx.fillStyle = '#707070';
   ctx.font = '600 16px Inter, system-ui, sans-serif';
   ctx.fillText(`${m.venue} · ${stadium.city}, ${stadium.country}`, W / 2, 758);
@@ -7367,6 +7411,368 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
   }
 });
+</script>
+
+<!-- ========== MATCH DETAILS (lineups / stats / scorers) ========== -->
+<div class="modal-overlay" id="match-overlay" role="dialog" aria-labelledby="match-title">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h2 id="match-title">Match</h2>
+      <button class="modal-close" id="match-close" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" id="match-body"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   TIME ZONE PICKER + MATCH DETAILS (lineups, stats, scorers)
+   Added for parity with the Road to Glory app. Self-contained;
+   relies only on globals already defined above (NZ_TZ, ZONE_SHORT,
+   render, tickClock, MATCHES, resolveSlot, FLAGS, escapeHtml,
+   getMatchWinner, MATCH_RESULTS).
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---------- Time zones ---------- */
+  var ZONES = [
+    { key: 'NZ', label: 'New Zealand', tz: 'Pacific/Auckland', short: 'NZ' },
+    { key: 'AU-SYD', label: 'Australia (Sydney)', tz: 'Australia/Sydney', short: 'Sydney' },
+    { key: 'AU-BNE', label: 'Australia (Brisbane)', tz: 'Australia/Brisbane', short: 'Brisbane' },
+    { key: 'AU-ADL', label: 'Australia (Adelaide)', tz: 'Australia/Adelaide', short: 'Adelaide' },
+    { key: 'AU-PER', label: 'Australia (Perth)', tz: 'Australia/Perth', short: 'Perth' },
+    { key: 'BD', label: 'Bangladesh', tz: 'Asia/Dhaka', short: 'BD' },
+    { key: 'CA-STJ', label: "Canada (St John's)", tz: 'America/St_Johns', short: "St John's" },
+    { key: 'CA-HAL', label: 'Canada (Halifax)', tz: 'America/Halifax', short: 'Halifax' },
+    { key: 'CA-TOR', label: 'Canada (Toronto)', tz: 'America/Toronto', short: 'Toronto' },
+    { key: 'CA-WPG', label: 'Canada (Winnipeg)', tz: 'America/Winnipeg', short: 'Winnipeg' },
+    { key: 'CA-EDM', label: 'Canada (Edmonton)', tz: 'America/Edmonton', short: 'Edmonton' },
+    { key: 'CA-VAN', label: 'Canada (Vancouver)', tz: 'America/Vancouver', short: 'Vancouver' },
+    { key: 'GB', label: 'United Kingdom', tz: 'Europe/London', short: 'UK' },
+    { key: 'SE', label: 'Sweden', tz: 'Europe/Stockholm', short: 'SE' },
+    { key: 'FI', label: 'Finland', tz: 'Europe/Helsinki', short: 'FI' },
+    { key: 'NO', label: 'Norway', tz: 'Europe/Oslo', short: 'NO' },
+    { key: 'US-NYC', label: 'United States (New York)', tz: 'America/New_York', short: 'New York' },
+    { key: 'US-CHI', label: 'United States (Chicago)', tz: 'America/Chicago', short: 'Chicago' },
+    { key: 'US-DEN', label: 'United States (Denver)', tz: 'America/Denver', short: 'Denver' },
+    { key: 'US-PHX', label: 'United States (Phoenix)', tz: 'America/Phoenix', short: 'Phoenix' },
+    { key: 'US-LAX', label: 'United States (Los Angeles)', tz: 'America/Los_Angeles', short: 'Los Angeles' },
+    { key: 'US-ANC', label: 'United States (Anchorage)', tz: 'America/Anchorage', short: 'Anchorage' },
+    { key: 'US-HNL', label: 'United States (Honolulu)', tz: 'Pacific/Honolulu', short: 'Honolulu' },
+    { key: 'DE', label: 'Germany', tz: 'Europe/Berlin', short: 'DE' }
+  ];
+  var TZ_KEY = 'wc2026_tz';
+
+  function applyZone(key) {
+    var z = null;
+    if (key && key !== 'auto') z = ZONES.find(function (x) { return x.key === key; });
+    if (!z) {
+      // Auto: match the device's IANA zone to our list, else use it directly.
+      var devTz = '';
+      try { devTz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+      z = ZONES.find(function (x) { return x.tz === devTz; });
+      if (!z) {
+        var city = (devTz.split('/').pop() || 'Local').replace(/_/g, ' ');
+        z = { key: 'auto', label: city, tz: devTz || 'Pacific/Auckland', short: city };
+      }
+    }
+    NZ_TZ = z.tz;
+    ZONE_SHORT = z.short;
+    var lbl = document.querySelector('.nz-clock .label');
+    if (lbl) lbl.textContent = z.short + ' Time';
+    try { if (typeof render === 'function') render(); } catch (e) {}
+    try { if (typeof tickClock === 'function') tickClock(); } catch (e) {}
+  }
+
+  function initZones() {
+    var sel = document.getElementById('tz-filter');
+    if (!sel) return;
+    ZONES.forEach(function (z) {
+      var o = document.createElement('option');
+      o.value = z.key;
+      o.textContent = z.label;
+      sel.appendChild(o);
+    });
+    var saved = 'auto';
+    try { saved = localStorage.getItem(TZ_KEY) || 'auto'; } catch (e) {}
+    sel.value = saved;
+    sel.addEventListener('change', function () {
+      try { localStorage.setItem(TZ_KEY, sel.value); } catch (e) {}
+      applyZone(sel.value);
+    });
+    applyZone(saved);
+  }
+
+  /* ---------- ESPN match details ---------- */
+  var LEAGUE = 'fifa.world';
+  var SB = 'https://site.api.espn.com/apis/site/v2/sports/soccer/' + LEAGUE + '/scoreboard';
+  var SUMMARY = 'https://site.api.espn.com/apis/site/v2/sports/soccer/' + LEAGUE + '/summary';
+  var ALIASES = {
+    'korea republic': 'south korea', 'czech republic': 'czechia', 'united states': 'usa',
+    'united states of america': 'usa', 'turkey': 'turkiye', 'cote divoire': 'ivory coast',
+    'cabo verde': 'cape verde', 'ir iran': 'iran', 'congo dr': 'dr congo',
+    'bosnia herzegovina': 'bosnia and herzegovina'
+  };
+  function norm(n) {
+    var f = (n || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/&/g, ' and ').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+    return ALIASES[f] || f;
+  }
+  function nameMatch(list, ours) {
+    var t = norm(ours);
+    return !!t && list.some(function (n) { return n && norm(n) === t; });
+  }
+  function ymd(et, off) {
+    var d = new Date(et); d.setUTCDate(d.getUTCDate() + (off || 0));
+    return d.toISOString().slice(0, 10).replace(/-/g, '');
+  }
+  function posLetter(p) {
+    if (!p) return '';
+    var c = p[0].toUpperCase();
+    if ('GDMF'.indexOf(c) >= 0) return c;
+    if (c === 'S' || c === 'W' || c === 'A') return 'F';
+    return c;
+  }
+  function lastName(n) { var p = (n || '').trim().split(' '); return p.length > 1 ? p[p.length - 1] : n; }
+  function inits(n) { var p = (n || '').trim().split(' ').filter(Boolean); if (!p.length) return '?'; return (p.length === 1 ? p[0].slice(0, 2) : p[0][0] + p[p.length - 1][0]).toUpperCase(); }
+
+  var sbCache = {}, evCache = {}, detCache = {};
+
+  function scoreboard(day) {
+    if (sbCache[day]) return Promise.resolve(sbCache[day]);
+    return fetch(SB + '?dates=' + day).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { sbCache[day] = j; return j; });
+  }
+  function resolveEvent(m, home, away) {
+    if (evCache[m.no] !== undefined) return Promise.resolve(evCache[m.no]);
+    var days = [ymd(m.et, 0), ymd(m.et, 1), ymd(m.et, -1)];
+    var i = 0;
+    function tryDay() {
+      if (i >= days.length) { evCache[m.no] = null; return null; }
+      return scoreboard(days[i++]).then(function (sb) {
+        var evs = (sb && sb.events) || [];
+        for (var e = 0; e < evs.length; e++) {
+          var comp = evs[e].competitions && evs[e].competitions[0];
+          var cs = (comp && comp.competitors) || [];
+          var names = [];
+          cs.forEach(function (x) { var tm = x.team || {}; names.push(tm.displayName, tm.shortDisplayName, tm.name, tm.abbreviation); });
+          if (nameMatch(names, home) && nameMatch(names, away)) { evCache[m.no] = evs[e].id; return evs[e].id; }
+        }
+        return tryDay();
+      }).catch(function () { return tryDay(); });
+    }
+    return Promise.resolve(tryDay());
+  }
+  function numOf(v) { var x = String(v == null ? '' : v).match(/-?\d+(\.\d+)?/); return x ? parseFloat(x[0]) : null; }
+
+  function parseSummary(j) {
+    var comp = j && j.header && j.header.competitions && j.header.competitions[0];
+    var cs = (comp && comp.competitors) || [];
+    var homeC = cs.filter(function (c) { return c.homeAway === 'home'; })[0] || cs[0] || {};
+    var awayC = cs.filter(function (c) { return c.homeAway === 'away'; })[0] || cs[1] || {};
+    var homeId = homeC.id || (homeC.team && homeC.team.id), awayId = awayC.id || (awayC.team && awayC.team.id);
+    var scorers = [], cards = [], subs = [];
+    var evs = j.keyEvents || j.scoringPlays || [];
+    evs.forEach(function (e) {
+      var tt = ((e.type && (e.type.text || e.type.name)) || '').toString();
+      var tid = e.team && e.team.id;
+      var side = (tid && String(tid) === String(awayId)) ? 'away' : 'home';
+      var min = (e.clock && e.clock.displayValue) || (e.time ? e.time + "'" : '');
+      var p0 = (e.athletesInvolved && e.athletesInvolved[0] && e.athletesInvolved[0].displayName) ||
+        (e.participants && e.participants[0] && e.participants[0].athlete && e.participants[0].athlete.displayName) ||
+        (e.athlete && e.athlete.displayName) || '';
+      if (/goal/i.test(tt) || e.scoringPlay === true) {
+        scorers.push({ side: side, player: p0 || 'Goal', minute: min, note: /own/i.test(tt) ? 'OG' : (/pen/i.test(tt) ? 'pen' : '') });
+      } else if (/red card/i.test(tt) || /second yellow/i.test(tt)) {
+        cards.push({ side: side, player: p0, type: 'red', minute: min });
+      } else if (/yellow card/i.test(tt)) {
+        cards.push({ side: side, player: p0, type: 'yellow', minute: min });
+      } else if (/substitution/i.test(tt)) {
+        var inN = '', outN = '', txt = (e.text || '').toString(), idx = txt.toLowerCase().indexOf(' replaces ');
+        if (idx > 0) { var left = txt.slice(0, idx).trim(); var dot = left.lastIndexOf('. '); if (dot >= 0) left = left.slice(dot + 2).trim(); inN = left; outN = txt.slice(idx + 10).replace(/\.$/, '').trim(); }
+        else { inN = (e.athletesInvolved && e.athletesInvolved[0] && e.athletesInvolved[0].displayName) || ''; outN = (e.athletesInvolved && e.athletesInvolved[1] && e.athletesInvolved[1].displayName) || ''; }
+        if (inN || outN) subs.push({ side: side, inName: inN, outName: outN, minute: min });
+      }
+    });
+    // stats
+    var stats = [], teams = (j.boxscore && j.boxscore.teams) || [];
+    function smap(t) { var m = {}; ((t && t.statistics) || []).forEach(function (s) { var l = s.label || s.name; if (l) m[l] = s.displayValue == null ? '' : s.displayValue; }); return m; }
+    var ht = teams.filter(function (t) { return t.homeAway ? t.homeAway === 'home' : String(t.team && t.team.id) === String(homeId); })[0] || teams[0];
+    var at = teams.filter(function (t) { return t.homeAway ? t.homeAway === 'away' : String(t.team && t.team.id) === String(awayId); })[0] || teams[1];
+    var hm = smap(ht), am = smap(at), labels = [];
+    Object.keys(hm).forEach(function (k) { labels.push(k); });
+    Object.keys(am).forEach(function (k) { if (labels.indexOf(k) < 0) labels.push(k); });
+    labels.forEach(function (l) { var h = hm[l] || '', a = am[l] || ''; if (h || a) stats.push({ label: l, home: h, away: a, hn: numOf(h), an: numOf(a) }); });
+    // rosters
+    function roster(r) {
+      var all = ((r && r.roster) || []).map(function (p) {
+        return {
+          name: (p.athlete && (p.athlete.displayName || p.athlete.shortName)) || '',
+          jersey: p.jersey || (p.athlete && p.athlete.jersey),
+          position: (p.position && p.position.abbreviation) || (p.athlete && p.athlete.position && p.athlete.position.abbreviation),
+          starter: p.starter === true,
+          fp: Number(p.formationPlace || 0) || 0
+        };
+      }).filter(function (p) { return p.name; });
+      var st = all.filter(function (p) { return p.starter; });
+      if (st.length !== 11) { var bp = all.filter(function (p) { return p.fp > 0; }); if (bp.length === 11) st = bp; else if (!st.length) st = all.slice(0, 11); }
+      var setS = st.slice(); st = st.slice().sort(function (a, b) { return (a.fp || 99) - (b.fp || 99); });
+      var subsP = all.filter(function (p) { return setS.indexOf(p) < 0; });
+      var mgr = (r && ((r.coach && (r.coach[0] && r.coach[0].displayName || r.coach.displayName)) || (r.coaches && r.coaches[0] && r.coaches[0].displayName))) || '';
+      return { formation: (r && (r.formation && (r.formation.displayName || r.formation.name) || r.formation || r.formationName)) || '', manager: mgr, starters: st, subs: subsP };
+    }
+    var rs = j.rosters || [];
+    var hr = rs.filter(function (r) { return r.homeAway === 'home'; })[0] || rs[0];
+    var ar = rs.filter(function (r) { return r.homeAway === 'away'; })[0] || rs[1];
+    var home = hr ? roster(hr) : { starters: [], subs: [] };
+    var away = ar ? roster(ar) : { starters: [], subs: [] };
+    return { scorers: scorers, cards: cards, subs: subs, stats: stats, home: home, away: away,
+      hasLineups: home.starters.length > 0 || away.starters.length > 0 };
+  }
+
+  function loadDetails(m, home, away) {
+    if (detCache[m.no]) return Promise.resolve(detCache[m.no]);
+    return resolveEvent(m, home, away).then(function (id) {
+      if (!id) return null;
+      return fetch(SUMMARY + '?event=' + id).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (j) { var d = parseSummary(j); detCache[m.no] = d; return d; });
+    }).catch(function () { return null; });
+  }
+
+  /* ---------- Rendering ---------- */
+  function parseForm(f) { return (f || '').split(/[^0-9]+/).filter(Boolean).map(Number).filter(function (n) { return n > 0; }); }
+
+  function badge(d, side, name) {
+    var goals = d.scorers.filter(function (s) { return s.side === side && lastName(s.player) === lastName(name); }).length;
+    var card = d.cards.filter(function (c) { return c.side === side && lastName(c.player) === lastName(name); })[0];
+    var h = '';
+    if (goals > 0) h += '<span class="g">⚽</span>';
+    if (card) h += '<span class="c" style="background:' + (card.type === 'red' ? '#e4172b' : '#f5c518') + '"></span>';
+    return h;
+  }
+  function tokenHTML(d, side, p) {
+    return '<div class="md-tok"><div class="md-shirt">' + (p.jersey || '') + badge(d, side, p.name) +
+      '</div><div class="md-nm">' + escapeHtml(lastName(p.name)) + '</div></div>';
+  }
+  function pitchHTML(d, side, lu) {
+    var starters = lu.starters || [];
+    if (starters.length < 7) return '';
+    var gk = starters.filter(function (p) { return posLetter(p.position) === 'G'; })[0] || starters[0];
+    var out = starters.filter(function (p) { return p !== gk; });
+    var rows = parseForm(lu.formation), sum = rows.reduce(function (a, b) { return a + b; }, 0), lines = [];
+    if (rows.length && sum === out.length) { var rest = out; rows.forEach(function (n) { lines.push(rest.slice(0, n)); rest = rest.slice(n); }); }
+    else {
+      var def = [], mid = [], fwd = [];
+      out.forEach(function (p) { var L = posLetter(p.position); if (L === 'D') def.push(p); else if (L === 'F') fwd.push(p); else mid.push(p); });
+      lines = [def, mid, fwd].filter(function (l) { return l.length; });
+      if (!lines.length) lines = [out];
+    }
+    var html = '<div class="md-pitch"><div class="hw"></div><div class="cc"></div><div class="pb t"></div><div class="pb b"></div><div class="md-pitch-rows">';
+    lines.slice().reverse().forEach(function (line) {
+      html += '<div class="md-row">' + line.map(function (p) { return tokenHTML(d, side, p); }).join('') + '</div>';
+    });
+    html += '<div class="md-row">' + tokenHTML(d, side, gk) + '</div></div></div>';
+    return html;
+  }
+  function subsHTML(d, side, lu) {
+    if (!lu.subs || !lu.subs.length) return '';
+    var mine = d.subs.filter(function (s) { return s.side === side; });
+    var html = '<div style="margin-top:14px"><div class="control-label" style="margin-bottom:8px">Available Subs</div>';
+    lu.subs.forEach(function (p) {
+      var ev = mine.filter(function (s) { return lastName(s.inName) === lastName(p.name); })[0];
+      html += '<div class="md-sub"><div class="md-av">' + inits(p.name) + '</div><div style="flex:1">' +
+        '<div style="font-weight:600">' + escapeHtml(p.name) + ' ' + badge(d, side, p.name) + '</div>' +
+        (ev ? '<div style="color:var(--ink-faint);font-size:11px;margin-top:1px">🔄 ' + (ev.minute || 'on') + (ev.outName ? ' for ' + escapeHtml(ev.outName) : '') + '</div>' : '') +
+        '</div>' + (p.position ? '<div style="color:var(--ink-faint);font-weight:800">' + posLetter(p.position) + '</div>' : '') + '</div>';
+    });
+    return html + '</div>';
+  }
+  var KEY_STATS = ['possession', 'shots on', 'total shots', 'shots', 'pass', 'foul', 'corner', 'offside', 'save'];
+  function statsHTML(d) {
+    if (!d.stats.length) return '<div class="md-muted">Stats will appear once the match is underway.</div>';
+    var key = [], used = {};
+    KEY_STATS.forEach(function (kw) { if (key.length >= 7) return; d.stats.forEach(function (s) { if (used[s.label]) return; if (s.label.toLowerCase().indexOf(kw) >= 0) { key.push(s); used[s.label] = 1; } }); });
+    var rest = d.stats.filter(function (s) { return !used[s.label]; });
+    function bar(s) {
+      var t = (s.hn || 0) + (s.an || 0), hp = t > 0 ? (s.hn / t) * 100 : 50;
+      return '<div class="md-stat"><div class="md-stat-top"><b>' + (s.home || '-') + '</b><span class="lab">' + escapeHtml(s.label) + '</span><b>' + (s.away || '-') + '</b></div><div class="md-stat-track"><div class="md-stat-fill" style="width:' + hp + '%"></div></div></div>';
+    }
+    var html = key.map(bar).join('');
+    if (rest.length) html += '<div id="md-rest" style="display:none">' + rest.map(bar).join('') + '</div>' +
+      '<div class="md-more" id="md-more">▾ Show all ' + d.stats.length + ' stats</div>';
+    return html;
+  }
+
+  var curTeam = 'home';
+  function renderDetails(m, home, away, d) {
+    var body = document.getElementById('match-body');
+    var result = MATCH_RESULTS[m.no];
+    var winner = getMatchWinner(m.no);
+    var head = '<div class="md-score-row"><div class="md-team"><div class="flag">' + (FLAGS[home] || '') + '</div><div class="nm" style="color:' + (winner === 'home' ? 'var(--gold)' : 'var(--ink)') + '">' + escapeHtml(home) + '</div></div>' +
+      '<div class="md-center">' + (result ? '<div class="md-bigscore">' + result.home + ' - ' + result.away + '</div>' : '<div style="font-family:\'JetBrains Mono\',monospace;font-size:15px">' + fmtNZTime(new Date(m.et)) + '</div>') +
+      '<div style="color:var(--ink-faint);font-size:11px;margin-top:4px">' + fmtNZDateShort(new Date(m.et)) + '</div></div>' +
+      '<div class="md-team"><div class="flag">' + (FLAGS[away] || '') + '</div><div class="nm" style="color:' + (winner === 'away' ? 'var(--gold)' : 'var(--ink)') + '">' + escapeHtml(away) + '</div></div></div>';
+    if (d && d.scorers.length) {
+      head += '<div class="md-scorers"><div>' + d.scorers.filter(function (s) { return s.side === 'home'; }).map(function (s) { return '<div class="s">⚽ ' + escapeHtml(s.player) + ' ' + s.minute + (s.note ? ' (' + s.note + ')' : '') + '</div>'; }).join('') + '</div>' +
+        '<div style="text-align:right">' + d.scorers.filter(function (s) { return s.side === 'away'; }).map(function (s) { return '<div class="s">' + escapeHtml(s.player) + ' ' + s.minute + (s.note ? ' (' + s.note + ')' : '') + ' ⚽</div>'; }).join('') + '</div></div>';
+    }
+    var statsBlock = '<h3 style="margin:22px 0 10px">Match Stats</h3>' + (d ? statsHTML(d) : '<div class="md-muted">Loading…</div>');
+    var lineupBlock = '<h3 style="margin:22px 0 10px">Lineups</h3>';
+    if (d && d.hasLineups) {
+      var lu = curTeam === 'home' ? d.home : d.away;
+      lineupBlock += '<div class="md-tabs"><div class="md-tab ' + (curTeam === 'home' ? 'active' : '') + '" data-mdteam="home">' + (FLAGS[home] || '') + ' ' + escapeHtml(home) + '</div>' +
+        '<div class="md-tab ' + (curTeam === 'away' ? 'active' : '') + '" data-mdteam="away">' + (FLAGS[away] || '') + ' ' + escapeHtml(away) + '</div></div>';
+      if (lu.formation || lu.manager) lineupBlock += '<div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px">' + (lu.formation ? '<span>Formation <b style="color:var(--gold)">' + lu.formation + '</b></span>' : '<span></span>') + (lu.manager ? '<span style="color:var(--ink-dim)">Mgr: <b>' + escapeHtml(lu.manager) + '</b></span>' : '') + '</div>';
+      lineupBlock += (pitchHTML(d, curTeam, lu) || '<div class="md-muted">Lineup unavailable.</div>') + subsHTML(d, curTeam, lu);
+    } else {
+      lineupBlock += '<div class="md-muted">' + (d ? 'Lineups are usually published about an hour before kickoff.' : 'Loading…') + '</div>';
+    }
+    body.innerHTML = head + statsBlock + lineupBlock;
+
+    var more = document.getElementById('md-more');
+    if (more) more.addEventListener('click', function () { var r = document.getElementById('md-rest'); if (r) { var open = r.style.display !== 'none'; r.style.display = open ? 'none' : 'block'; more.textContent = open ? ('▾ Show all ' + d.stats.length + ' stats') : '▲ Show fewer stats'; } });
+    body.querySelectorAll('[data-mdteam]').forEach(function (tab) {
+      tab.addEventListener('click', function () { curTeam = tab.getAttribute('data-mdteam'); renderDetails(m, home, away, d); });
+    });
+    if (typeof twemoji !== 'undefined' && twemoji.parse) { try { twemoji.parse(body); } catch (e) {} }
+  }
+
+  function openMatch(no) {
+    var m = MATCHES.find(function (x) { return x.no === no; });
+    if (!m) return;
+    var home = resolveSlot(m.home), away = resolveSlot(m.away);
+    curTeam = 'home';
+    document.getElementById('match-title').textContent = 'M' + String(m.no).padStart(2, '0');
+    renderDetails(m, home, away, null);
+    var ov = document.getElementById('match-overlay');
+    ov.classList.add('open');
+    loadDetails(m, home, away).then(function (d) {
+      if (ov.classList.contains('open')) renderDetails(m, home, away, d || { scorers: [], cards: [], subs: [], stats: [], home: { starters: [], subs: [] }, away: { starters: [], subs: [] }, hasLineups: false });
+    });
+  }
+
+  function closeMatch() { document.getElementById('match-overlay').classList.remove('open'); }
+
+  function wire() {
+    initZones();
+    var ov = document.getElementById('match-overlay');
+    document.getElementById('match-close').addEventListener('click', closeMatch);
+    ov.addEventListener('click', function (e) { if (e.target === ov) closeMatch(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('open')) closeMatch(); });
+    // Open details when a match card is tapped (ignore predict/share buttons).
+    var matches = document.getElementById('matches');
+    if (matches) matches.addEventListener('click', function (e) {
+      if (e.target.closest('button')) return;
+      var card = e.target.closest('.match[data-match-no]');
+      if (!card) return;
+      openMatch(parseInt(card.getAttribute('data-match-no'), 10));
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
+  else wire();
+})();
 </script>
 
 </body>
