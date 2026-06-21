@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Road to Glory - FIFA World Cup 2026 (NZ Time)</title>
-<meta name="description" content="FIFA World Cup 2026 schedule in New Zealand time. Predict winners, track your record, filter by team, switch views." />
+<title>Matchday NZ - Football Fixtures & Predictions (NZ Time)</title>
+<meta name="description" content="2026 football tournament schedule in New Zealand time. Predict winners, track your record, filter by team, switch views." />
 <meta name="theme-color" content="#000000" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,7 +13,7 @@
 
 <style>
   /* =========================================================
-     FIFA WORLD CUP 26 OFFICIAL-INSPIRED THEME
+     TROPHY GOLD THEME
      Black + white + championship gold
      Host country accents: CAN red, MEX green, USA blue
      ========================================================= */
@@ -65,7 +65,7 @@
 
   /* =========================================================
      EMERALD PITCH — deep saturated forest green theme
-     The look: a freshly-cut World Cup pitch under stadium floodlights.
+     The look: a freshly-cut pitch under stadium floodlights.
      Rich emerald base, warm gold accents, subtle "mowing stripe" gradient.
      ========================================================= */
   [data-theme="pitch"] {
@@ -125,7 +125,7 @@
 
   /* =========================================================
      TROPHY GOLD — warm cream + emerald + gold theme
-     The look: FIFA trophy on a cream marble plinth, glossy magazine spread.
+     The look: a gold trophy on a cream marble plinth, glossy magazine spread.
      Cream surfaces (not pure white), deep emerald accents, premium gold.
      ========================================================= */
   [data-theme="gold"] {
@@ -2919,7 +2919,7 @@
     <div class="brand">
       <div class="brand-mark"><span>2<br>6</span></div>
       <div class="brand-text">
-        <div class="brand-title">FIFA World Cup</div>
+        <div class="brand-title">Matchday NZ</div>
         <div class="brand-sub">NZ Time Schedule</div>
       </div>
     </div>
@@ -3070,7 +3070,7 @@
     <div class="modal-actions">
       <button class="modal-btn modal-btn-danger" id="admin-reset">Reset all</button>
       <button class="modal-btn" id="admin-cancel">Close</button>
-      <button class="modal-btn" id="admin-sync">🔄 Sync from FIFA</button>
+      <button class="modal-btn" id="admin-sync">🔄 Sync scores</button>
       <button class="modal-btn modal-btn-primary" id="admin-download">📥 Download HTML</button>
     </div>
   </div>
@@ -3080,7 +3080,7 @@
 <div class="modal-overlay" id="stats-overlay" role="dialog" aria-labelledby="stats-title">
   <div class="modal-panel">
     <div class="modal-header">
-      <h2 id="stats-title">🎯 My Predictions<small>Your World Cup record</small></h2>
+      <h2 id="stats-title">🎯 My Predictions<small>Your prediction record</small></h2>
       <button class="modal-close" id="stats-close" aria-label="Close">×</button>
     </div>
     <div class="modal-body" id="stats-body"></div>
@@ -3213,7 +3213,7 @@
 
 <footer>
   <p>Schedule data current as of April 2026. Times auto-converted to NZ local time.</p>
-  <p>Source: FIFA. Stadium capacities are tournament configurations.</p>
+  <p>Stadium capacities are tournament configurations.</p>
 </footer>
 
 <!-- ========== ADMIN LOGIN MODAL ========== -->
@@ -4956,11 +4956,11 @@ function renderShareCard(m, pick) {
   ctx.fillStyle = grad2;
   ctx.fillRect(0, 0, W, H);
 
-  // === Top tag — "FIFA WORLD CUP 2026 PREDICTION" ===
+  // === Top tag — "MATCHDAY PREDICTION" ===
   ctx.fillStyle = '#ffb800';
   ctx.font = '900 22px "Archivo Black", system-ui, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('• MY WORLD CUP 26 PICK •', W / 2, 80);
+  ctx.fillText('• MY MATCHDAY PICK •', W / 2, 80);
 
   // === Host country stripe (CAN red / MEX green / USA blue) ===
   const stripeY = 100;
@@ -5081,7 +5081,7 @@ async function downloadShareCard() {
           try {
             await navigator.share({
               files: [file],
-              title: 'My World Cup 2026 prediction',
+              title: 'My 2026 prediction',
               text: 'Check out my pick!'
             });
             return;
@@ -5298,7 +5298,7 @@ function buildBracketTab() {
 
     <div class="modal-section" style="border-color: var(--gold); background: linear-gradient(135deg, var(--surface), rgba(255,184,0,.04));">
       <h3 style="color: var(--gold);">⚡ Auto-Advance Bracket</h3>
-      <p class="desc">Automatically fills bracket slots from the match scores you've entered. Standings calculated using FIFA tiebreaker rules (points → goal difference → goals scored).</p>
+      <p class="desc">Automatically fills bracket slots from the match scores you've entered. Standings calculated using standard tiebreaker rules (points → goal difference → goals scored).</p>
 
       <div style="display:grid; gap:10px; margin-top:14px;">
         <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
@@ -5323,7 +5323,7 @@ function buildBracketTab() {
       ${groupsDone ? buildBest3Helper() : ''}
 
       <p class="desc" style="margin-top:14px; font-size:11px;">
-        💡 Best-3rd assignments still require your input - FIFA's matrix has 495 scenarios. We'll show the ranked third-place teams below to make it easy.
+        💡 Best-3rd assignments still require your input - the matrix has 495 scenarios. We'll show the ranked third-place teams below to make it easy.
       </p>
     </div>
   `;
@@ -5352,7 +5352,7 @@ function buildBracketTab() {
   // Best 3rd
   html += `<div class="modal-section">
     <h3>② Best Third-Place <span class="counter-pill">${countBest3Results()}/8</span></h3>
-    <p class="desc">8 of the 12 third-place teams advance. FIFA assigns each to a specific R32 match.</p>
+    <p class="desc">8 of the 12 third-place teams advance. Each is assigned to a specific R32 match.</p>
     <div class="modal-grid two-col">`;
   BEST_3RD_SLOTS.forEach(slot => {
     const eligible = [];
@@ -5687,13 +5687,13 @@ function computeGroupStandings(groupLetter) {
   // Add goal difference for sorting
   Object.values(stats).forEach(s => { s.gd = s.gf - s.ga; });
 
-  // FIFA group-stage tiebreakers (in order):
+  // Group-stage tiebreakers (in order):
   //   1. Most points
   //   2. Goal difference
   //   3. Goals scored
   //   4. Head-to-head points (between tied teams) — partial impl
   //   5. Fair play (we don't track cards — fall through)
-  //   6. FIFA ranking (we don't have it — fall through)
+  //   6. official ranking (we don't have it — fall through)
   const sorted = Object.values(stats).sort((a, b) => {
     if (b.pts !== a.pts) return b.pts - a.pts;
     if (b.gd !== a.gd) return b.gd - a.gd;
@@ -5717,7 +5717,7 @@ function allGroupsComplete() {
   return Object.keys(GROUPS).every(g => groupComplete(g));
 }
 
-// Rank all 12 third-place teams by FIFA criteria
+// Rank all 12 third-place teams by the standard criteria
 function rankAllThirdPlaceTeams() {
   const thirdTeams = [];
   Object.keys(GROUPS).forEach(g => {
@@ -5883,7 +5883,7 @@ function initAdmin() {
   const loginOverlay = document.getElementById('login-overlay');
 
   // Hidden admin entry — only triggered by ?admin=1 in URL.
-  // No visible link anywhere on the page; bookmark fifawc.kiwi/?admin=1 to access.
+  // No visible link anywhere on the page; bookmark /?admin=1 to access.
   const params = new URLSearchParams(window.location.search);
   if (params.get('admin') === '1' && loginOverlay) {
     if (isAdminMode) {
@@ -5973,7 +5973,7 @@ function initAdmin() {
   });
   document.getElementById('admin-download').addEventListener('click', downloadUpdatedHTML);
 
-  // Sync from FIFA — calls Edge Function to fetch openfootball data
+  // Sync scores — calls Edge Function to fetch openfootball data
   document.getElementById('admin-sync').addEventListener('click', async () => {
     const btn = document.getElementById('admin-sync');
     if (!CLOUD_ENABLED) {
@@ -5983,7 +5983,7 @@ function initAdmin() {
     btn.textContent = '⏳ Syncing...';
     btn.disabled = true;
     const result = await cloudSyncFromAPI();
-    btn.textContent = '🔄 Sync from FIFA';
+    btn.textContent = '🔄 Sync scores';
     btn.disabled = false;
     if (!result.ok) {
       showToast(`✗ Sync failed: ${result.error || 'unknown'}`, 4000);
@@ -6824,7 +6824,7 @@ function renderLeagueDetail(detail) {
         <code style="flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 18px; color: var(--gold); letter-spacing: .1em; padding: 8px; background: var(--black-3); border-radius: 4px; text-align: center; font-weight: 700;">${league.join_code}</code>
         <button class="modal-btn" id="copy-join-code" style="font-size: 11px; padding: 8px 12px; flex-shrink: 0;">📋 Copy</button>
       </div>
-      <p style="font-size: 11px; color: var(--ink-faint); margin-top: 6px;">Friends visit fifawc.kiwi → Leagues → Join with code → enter <code style="color: var(--gold);">${league.join_code}</code></p>
+      <p style="font-size: 11px; color: var(--ink-faint); margin-top: 6px;">Friends open the site → Leagues → Join with code → enter <code style="color: var(--gold);">${league.join_code}</code></p>
     </div>
 
     ${league.stakes_text ? `
@@ -6945,7 +6945,7 @@ function generateSettlementText(detail, amount, currency) {
   const losers = members.slice(1);
   const totalPot = amount * losers.length;
   let lines = [];
-  lines.push(`🏆 ${league.name} - World Cup 2026 Settlement`);
+  lines.push(`🏆 ${league.name} - Final Settlement`);
   lines.push('');
   lines.push(`Stake: ${currency}${amount} per person`);
   lines.push('');
@@ -6957,7 +6957,7 @@ function generateSettlementText(detail, amount, currency) {
     lines.push(`  ${rank} ${loser.display_name} (${loser.points} pts) → owes ${currency}${amount} to ${winner.display_name}`);
   });
   lines.push('');
-  lines.push(`Generated by fifawc.kiwi`);
+  lines.push(`Generated by Matchday`);
   return lines.join('\n');
 }
 
@@ -7427,7 +7427,7 @@ window.addEventListener('resize', () => {
 <script>
 /* ============================================================
    TIME ZONE PICKER + MATCH DETAILS (lineups, stats, scorers)
-   Added for parity with the Road to Glory app. Self-contained;
+   Added for parity with the Matchday NZ app. Self-contained;
    relies only on globals already defined above (NZ_TZ, ZONE_SHORT,
    render, tickClock, MATCHES, resolveSlot, FLAGS, escapeHtml,
    getMatchWinner, MATCH_RESULTS).
